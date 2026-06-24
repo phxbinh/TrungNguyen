@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
 import { google } from '@ai-sdk/google';
 import { convertToModelMessages, streamText, tool } from 'ai';
-import { z } from 'zod'; // Dùng zod để định nghĩa schema cho tham số của tool
+import { z } from 'zod';
 
 export const runtime = 'edge';
 
@@ -30,17 +30,18 @@ export async function POST(req: Request) {
   const result = streamText({
     model: google('gemini-2.5-flash'),
     messages: await convertToModelMessages(messages),
-    // 1. KHAI BÁO CÁC TOOL Ở ĐÂY
     tools: {
-      // Tool 1: Hỏi giờ hiện tại
+      // Tool 1: Hỏi giờ hiện tại (Đã fix lỗi Type bằng tham số dummy)
       getCurrentTime: tool({
         description: 'Lấy thời gian và ngày hiện tại.',
-        parameters: z.object({}), // Không cần tham số đầu vào
+        parameters: z.object({
+          timezone: z.string().optional().describe('Múi giờ, mặc định là Asia/Ho_Chi_Minh'),
+        }),
         execute: async () => {
           const now = new Date();
           return {
-            time: now.toLocaleTimeString('vi-VN'),
-            date: now.toLocaleDateString('vi-VN'),
+            time: now.toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            date: now.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
           };
         },
       }),
@@ -52,9 +53,8 @@ export async function POST(req: Request) {
           location: z.string().describe('Tên thành phố hoặc quốc gia, ví dụ: Hà Nội, Tokyo'),
         }),
         execute: async ({ location }) => {
-          // Thực tế bạn sẽ gọi API thời tiết ở đây (ví dụ: OpenWeatherMap)
-          // Dưới đây là dữ liệu giả lập (Mock data)
-          const temperature = Math.floor(Math.random() * 15) + 20; // 20°C - 35°C
+          // Thực tế bạn sẽ gọi API thời tiết (như OpenWeatherMap) ở đây
+          const temperature = Math.floor(Math.random() * 15) + 20; // Ngẫu nhiên 20°C - 35°C
           return {
             location,
             temperature: `${temperature}°C`,
@@ -63,9 +63,10 @@ export async function POST(req: Request) {
         },
       }),
     },
-    // Tùy chọn: Tự động chạy tool và trả kết quả về cho Model xử lý tiếp câu trả lời
+    // Cho phép Model tự động chạy tool và phản hồi lại kết quả tối đa 5 bước liên tiếp
     maxSteps: 5, 
   });
 
   return result.toUIMessageStreamResponse();
 }
+
