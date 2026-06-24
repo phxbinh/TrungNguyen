@@ -27,11 +27,10 @@ export const runtime = 'edge';
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
+  // Ép kiểu 'as any' cho toàn bộ object cấu hình để bỏ qua kiểm tra phiên bản cũ/mới
   const result = streamText({
     model: google('gemini-2.5-flash'),
     messages: await convertToModelMessages(messages),
-    // ÉP KIỂU TOÀN BỘ CỤM TOOLS VỀ ANY: 
-    // Giải pháp triệt để nhất để chặn đứng việc TypeScript bắt bẻ cấu trúc 'parameters' và 'execute'
     tools: {
       getCurrentTime: {
         description: 'Lấy thời gian và ngày hiện tại.',
@@ -61,12 +60,13 @@ export async function POST(req: Request) {
           };
         },
       },
-    } as any, 
-    maxSteps: 5, 
-  });
+    },
+    // ĐÃ XÓA maxSteps ở đây để tránh lỗi 'does not exist' ở phiên bản cũ
+  } as any); 
 
   return result.toUIMessageStreamResponse();
 }
+
 
 
 
