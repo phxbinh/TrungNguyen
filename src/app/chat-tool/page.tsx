@@ -54,32 +54,45 @@ export default function Chat() {
 }
 */
 
+
 'use client';
 
-import { useChat } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
 import { useState } from 'react';
+import { useChat } from '@ai-sdk/react';
+import {
+  DefaultChatTransport,
+  type UIMessage,
+} from 'ai';
 
-export default function Chat() {
-  const [input, setInput] = useState('');
-
-  const { messages, sendMessage, status, error } = useChat({
-    transport: new DefaultChatTransport({
-      api: '/api/chat-tool',
-    }),
-
-    messages: [
+const initialMessages: UIMessage[] = [
+  {
+    id: 'welcome',
+    role: 'assistant',
+    parts: [
       {
-        id: 'welcome',
-        role: 'assistant',
-        parts: [
-          {
-            type: 'text',
-            text: 'Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?',
-          },
-        ],
+        type: 'text',
+        text: 'Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?',
       },
     ],
+  },
+];
+
+export default function Chat() {
+  const [input, setInput] =
+    useState('');
+
+  const {
+    messages,
+    sendMessage,
+    status,
+    error,
+  } = useChat({
+    transport:
+      new DefaultChatTransport({
+        api: '/api/chat-tool',
+      }),
+
+    messages: initialMessages,
   });
 
   const isLoading =
@@ -91,7 +104,8 @@ export default function Chat() {
   ) => {
     e.preventDefault();
 
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading)
+      return;
 
     sendMessage({
       role: 'user',
@@ -108,12 +122,14 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col h-screen max-w-3xl mx-auto bg-gray-50">
+      {/* Header */}
       <div className="border-b bg-white p-4">
         <h1 className="text-2xl font-semibold text-center">
           AI Chat - SDK v6
         </h1>
       </div>
 
+      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((message) => {
           const isUser =
@@ -137,7 +153,9 @@ export default function Chat() {
               >
                 {message.parts.map(
                   (part, index) => {
-                    if (part.type !== 'text')
+                    if (
+                      part.type !== 'text'
+                    )
                       return null;
 
                     return (
@@ -152,6 +170,7 @@ export default function Chat() {
           );
         })}
 
+        {/* Loading */}
         {isLoading && (
           <div className="flex justify-start">
             <div className="bg-white border px-5 py-4 rounded-2xl">
@@ -161,14 +180,18 @@ export default function Chat() {
         )}
       </div>
 
+      {/* Error */}
       {error && (
         <div className="px-6 pb-4">
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl">
-            Lỗi: {error.message}
+            Lỗi:{' '}
+            {error.message ||
+              'Có lỗi xảy ra'}
           </div>
         </div>
       )}
 
+      {/* Input */}
       <div className="border-t bg-white p-4">
         <form
           onSubmit={handleSubmit}
@@ -177,21 +200,26 @@ export default function Chat() {
           <input
             value={input}
             onChange={(e) =>
-              setInput(e.target.value)
+              setInput(
+                e.target.value
+              )
             }
             placeholder="Nhập tin nhắn..."
-            className="flex-1 px-6 py-4 border border-gray-300 rounded-full"
+            className="flex-1 px-6 py-4 border border-gray-300 rounded-full focus:outline-none focus:border-blue-500"
             disabled={isLoading}
           />
 
           <button
             type="submit"
             disabled={
-              isLoading || !input.trim()
+              isLoading ||
+              !input.trim()
             }
-            className="px-8 py-4 bg-blue-600 text-white rounded-full"
+            className="px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-full transition"
           >
-            {isLoading ? '...' : 'Gửi'}
+            {isLoading
+              ? '...'
+              : 'Gửi'}
           </button>
         </form>
       </div>
