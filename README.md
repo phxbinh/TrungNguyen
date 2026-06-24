@@ -4,4 +4,4 @@ Latest version 6.2026
 Tạo ai agent
 ## 2. Trainning
 change package.json version
-node.js: ^22.0.0
+node.js: ^22.7.4
