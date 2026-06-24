@@ -24,49 +24,53 @@ import { z } from 'zod';
 
 export const runtime = 'edge';
 
+// Định nghĩa các tool độc lập ở ngoài để TypeScript infer kiểu dữ liệu chính xác trước khi đưa vào streamText
+const getCurrentTimeTool = tool({
+  description: 'Lấy thời gian và ngày hiện tại.',
+  parameters: z.object({
+    timezone: z.string().optional().describe('Múi giờ, mặc định là Asia/Ho_Chi_Minh'),
+  }),
+  execute: async ({ timezone }) => {
+    const tz = timezone || 'Asia/Ho_Chi_Minh';
+    const now = new Date();
+    return {
+      time: now.toLocaleTimeString('vi-VN', { timeZone: tz }),
+      date: now.toLocaleDateString('vi-VN', { timeZone: tz }),
+    };
+  },
+});
+
+const getWeatherTool = tool({
+  description: 'Lấy thông tin thời tiết hiện tại của một địa điểm cụ thể.',
+  parameters: z.object({
+    location: z.string().describe('Tên thành phố hoặc quốc gia, ví dụ: Hà Nội, Tokyo'),
+  }),
+  execute: async ({ location }) => {
+    const temperature = Math.floor(Math.random() * 15) + 20;
+    return {
+      location,
+      temperature: `${temperature}°C`,
+      condition: 'Nhiều mây, có lúc có mưa rào',
+    };
+  },
+});
+
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
   const result = streamText({
     model: google('gemini-2.5-flash'),
     messages: await convertToModelMessages(messages),
-    // CÚ PHÁP ĐÚNG CHO AI SDK V6+: 
-    // Khai báo thẳng Object chứa description, parameters và execute mà KHÔNG BỌC qua hàm tool() ở đây.
+    // Truyền các trường tool đã được gán kiểu sạch sẽ từ trước
     tools: {
-      getCurrentTime: {
-        description: 'Lấy thời gian và ngày hiện tại.',
-        parameters: z.object({
-          timezone: z.string().optional().describe('Múi giờ, mặc định là Asia/Ho_Chi_Minh'),
-        }),
-        execute: async ({ timezone }) => {
-          const tz = timezone || 'Asia/Ho_Chi_Minh';
-          const now = new Date();
-          return {
-            time: now.toLocaleTimeString('vi-VN', { timeZone: tz }),
-            date: now.toLocaleDateString('vi-VN', { timeZone: tz }),
-          };
-        },
-      },
-
-      getWeather: {
-        description: 'Lấy thông tin thời tiết hiện tại của một địa điểm cụ thể.',
-        parameters: z.object({
-          location: z.string().describe('Tên thành phố hoặc quốc gia, ví dụ: Hà Nội, Tokyo'),
-        }),
-        execute: async ({ location }) => {
-          const temperature = Math.floor(Math.random() * 15) + 20;
-          return {
-            location,
-            temperature: `${temperature}°C`,
-            condition: 'Nhiều mây, có lúc có mưa rào',
-          };
-        },
-      },
+      getCurrentTime: getCurrentTimeTool,
+      getWeather: getWeatherTool,
     },
     maxSteps: 5, 
   });
 
   return result.toUIMessageStreamResponse();
 }
+
 
 
