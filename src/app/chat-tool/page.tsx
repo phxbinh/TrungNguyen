@@ -58,6 +58,7 @@ export default function Chat() {
 'use client';
 
 import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
 import { useState } from 'react';
 
 export default function Chat() {
@@ -66,11 +67,12 @@ export default function Chat() {
   const { 
     messages, 
     sendMessage, 
-    isLoading, 
-    error,
-    status 
+    status, 
+    error 
   } = useChat({
-    api: '/api/chat-tool',
+    transport: new DefaultChatTransport({
+      api: '/api/chat-tool',
+    }),
     initialMessages: [
       {
         id: 'welcome',
@@ -82,20 +84,22 @@ export default function Chat() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || status !== 'ready') return;
 
-    sendMessage({ text: input });   // Gửi tin nhắn
-    setInput('');                   // Xóa input
+    sendMessage({ text: input });
+    setInput('');
   };
+
+  const isLoading = status === 'submitted' || status === 'streaming';
 
   return (
     <div className="flex flex-col h-screen max-w-3xl mx-auto bg-gray-50">
       {/* Header */}
       <div className="border-b bg-white p-4">
-        <h1 className="text-2xl font-semibold text-center">AI Chat</h1>
+        <h1 className="text-2xl font-semibold text-center">AI Chat (SDK v6)</h1>
       </div>
 
-      {/* Messages Area */}
+      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((message) => (
           <div
