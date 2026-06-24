@@ -4,112 +4,6 @@
 import { useState } from 'react';
 import { useChat } from '@ai-sdk/react';
 
-export default function ChatbotTest() {
-  const [inputValue, setInputValue] = useState('');
-  const { messages, sendMessage } = useChat();
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
-
-    sendMessage({ text: inputValue });
-    setInputValue('');
-  };
-
-  return (
-    <div className="flex flex-col w-full max-w-2xl h-[85vh] mx-auto my-8 p-4 bg-white rounded-2xl shadow-xl border border-gray-100">
-      {/* Header */}
-      <div className="border-b pb-4 mb-4">
-        <h1 className="text-xl font-bold text-center text-gray-800">Gemini Chatbot v6 Test</h1>
-      </div>
-      
-      {/* Khung hiển thị tin nhắn */}
-      <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-4 scroll-behavior-smooth">
-        {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-gray-400 space-y-2">
-            <p className="text-sm">Hãy nhập gì đó để bắt đầu kiểm tra...</p>
-          </div>
-        )}
-        
-        {messages.map(m => {
-          const isUser = m.role === 'user';
-          return (
-            <div 
-              key={m.id} 
-              className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}
-            >
-              <span className="text-xs font-semibold text-gray-400 mb-1 px-1">
-                {isUser ? 'Bạn' : 'AI'}
-              </span>
-              
-              <div 
-                className={`max-w-[80%] p-3 rounded-2xl shadow-sm text-sm leading-relaxed ${
-                  isUser 
-                    ? 'bg-blue-600 text-white rounded-tr-none whitespace-pre-wrap' 
-                    : 'bg-gray-100 text-gray-800 rounded-tl-none border border-gray-200'
-                }`}
-              >
-                <div className="space-y-2">
-                  {m.parts.map((part, index) => {
-                    // 1. Text thông thường
-                    if (part.type === 'text') {
-                      return <p key={index} className="whitespace-pre-wrap">{part.text}</p>;
-                    }
-
-                    // 2. Ép kiểu 'as any' cục bộ cho tool-call để lấy toolName không bị lỗi TypeScript Union
-                    if (part.type === 'tool-call') {
-                      const toolCall = part as any;
-                      return (
-                        <div key={index} className="text-xs italic text-blue-500 flex items-center gap-1 font-medium bg-blue-50 p-2 rounded-lg border border-blue-100">
-                          <span className="animate-pulse">⏳</span> 
-                          Đang gọi công cụ: <strong className="underline">{toolCall.toolName}</strong>...
-                        </div>
-                      );
-                    }
-
-                    // 3. Ép kiểu 'as any' cục bộ cho tool-result để lấy toolName và result sạch sẽ
-                    if (part.type === 'tool-result') {
-                      const toolResult = part as any;
-                      return (
-                        <div key={index} className="text-xs text-green-700 bg-green-50 p-2 rounded-lg border border-green-100 font-mono">
-                          <div className="font-bold mb-1">✅ Kết quả [{toolResult.toolName}]:</div>
-                          <pre className="whitespace-pre-wrap text-[11px] bg-white p-1.5 rounded border border-green-200">
-                            {JSON.stringify(toolResult.result, null, 2)}
-                          </pre>
-                        </div>
-                      );
-                    }
-
-                    return null;
-                  })}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Form nhập liệu */}
-      <form onSubmit={handleFormSubmit} className="flex gap-2 items-center pt-2 border-t">
-        <input
-          className="flex-1 p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200"
-          value={inputValue}
-          placeholder="Hỏi thời tiết hoặc thời gian xem sao..."
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <button 
-          type="submit" 
-          className="px-5 py-3 bg-blue-600 text-white font-medium text-sm rounded-xl hover:bg-blue-700 active:scale-95 transition-all duration-200 shadow-md shadow-blue-100"
-        >
-          Gửi
-        </button>
-      </form>
-    </div>
-  );
-}
-
-
-
 
 //export default 
 function ChatbotTest__() {
@@ -213,8 +107,7 @@ import { useState } from 'react';
 import { useChat } from '@ai-sdk/react';
 */
 
-//export default 
-function ChatbotTest_() {
+export default function ChatbotTest() {
   // Tự quản lý trạng thái input theo chuẩn AI SDK v6
   const [inputValue, setInputValue] = useState('');
   
