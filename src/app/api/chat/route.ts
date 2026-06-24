@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
     }
 
     const result = streamText({
-      model: google('gemini-1.5-flash'), // hoặc gemini-1.5-pro, gemini-2.0-flash-exp...
+      model: google('gemini-2.5-flash'), // hoặc gemini-1.5-pro, gemini-2.0-flash-exp...
       // system prompt
       system: `Bạn là một chatbot hữu ích, trả lời bằng tiếng Việt một cách tự nhiên và lịch sự.
                Khi cần dùng tool, hãy sử dụng chúng để lấy thông tin chính xác.`,
