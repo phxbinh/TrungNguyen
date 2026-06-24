@@ -52,20 +52,20 @@ import { useState } from 'react';
 import { useChat } from '@ai-sdk/react';
 
 export default function ChatbotTest() {
-  // Tự quản lý state input theo chuẩn AI SDK v6
+  // Tự quản lý trạng thái input theo chuẩn AI SDK v6
   const [inputValue, setInputValue] = useState('');
   
-  // useChat bản mới chỉ trả về danh sách messages và hàm sendMessage
+  // useChat chỉ trả về danh sách messages và hàm sendMessage
   const { messages, sendMessage } = useChat();
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
 
-    // Gửi tin nhắn đi theo cấu trúc mới
+    // Gửi tin nhắn đi dưới cấu trúc object mới
     sendMessage({ text: inputValue });
     
-    // Xóa trống ô nhập sau khi gửi
+    // Xóa sạch ô nhập sau khi gửi
     setInputValue('');
   };
 
@@ -78,12 +78,22 @@ export default function ChatbotTest() {
         {messages.length === 0 && (
           <p className="text-gray-400 text-center">Hãy nhập gì đó để bắt đầu kiểm tra...</p>
         )}
+        
         {messages.map(m => (
           <div key={m.id} className={`p-2 rounded ${m.role === 'user' ? 'bg-blue-100 text-right' : 'bg-green-100 text-left'}`}>
-            <span className="font-bold block text-xs text-gray-500">
+            <span className="font-bold block text-xs text-gray-500 mb-1">
               {m.role === 'user' ? 'Bạn' : 'AI'}
             </span>
-            <p className="whitespace-pre-wrap">{m.content}</p>
+            
+            {/* CẤU TRÚC MỚI: Quét qua mảng parts để lấy nội dung text */}
+            <div className="whitespace-pre-wrap">
+              {m.parts.map((part, index) => {
+                if (part.type === 'text') {
+                  return <span key={index}>{part.text}</span>;
+                }
+                return null;
+              })}
+            </div>
           </div>
         ))}
       </div>
@@ -103,7 +113,6 @@ export default function ChatbotTest() {
     </div>
   );
 }
-
 
 
 
