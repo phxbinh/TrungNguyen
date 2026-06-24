@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
     const { messages } = await req.json();
 
     const result = await streamText({   // ← giữ await
-      model: google('gemini-1.5-flash'),
+      model: google('gemini-2.5-flash'),
       tools: { getWeather: weatherTool },
       system: 'Bạn là trợ lý AI thân thiện, trả lời bằng tiếng Việt.',
       
