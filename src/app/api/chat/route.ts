@@ -144,8 +144,8 @@ export async function POST(req: NextRequest) {
         getWeather: weatherTool,
       },
 
-      maxRetries: 3,
-maxSteps: 5
+      maxRetries: 3
+//maxSteps: 5
     });
 
     return result.toUIMessageStreamResponse();
