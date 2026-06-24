@@ -73,7 +73,7 @@ export default function Chat() {
     transport: new DefaultChatTransport({
       api: '/api/chat-tool',
     }),
-    initialMessages: [
+    messages: [   // ← Đổi từ initialMessages thành messages
       {
         id: 'welcome',
         role: 'assistant',
@@ -94,12 +94,10 @@ export default function Chat() {
 
   return (
     <div className="flex flex-col h-screen max-w-3xl mx-auto bg-gray-50">
-      {/* Header */}
       <div className="border-b bg-white p-4">
         <h1 className="text-2xl font-semibold text-center">AI Chat (SDK v6)</h1>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((message) => (
           <div
@@ -127,7 +125,6 @@ export default function Chat() {
         )}
       </div>
 
-      {/* Error */}
       {error && (
         <div className="px-6 pb-4">
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl">
@@ -136,7 +133,6 @@ export default function Chat() {
         </div>
       )}
 
-      {/* Input */}
       <div className="border-t bg-white p-4">
         <form onSubmit={handleSubmit} className="flex gap-3">
           <input
@@ -158,7 +154,6 @@ export default function Chat() {
     </div>
   );
 }
-
 
 
 
