@@ -12,7 +12,9 @@
     "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "ai": "^6.0.0"
+    "ai": "^6.0.0",
+    "ai-sdk/goole": "^3.0.0",
+    "ai-sdk/react": "^3.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
