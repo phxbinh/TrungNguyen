@@ -24,20 +24,12 @@ import { z } from 'zod';
 
 export const runtime = 'edge';
 
-// Định nghĩa các tool độc lập ở ngoài để TypeScript infer kiểu dữ liệu chính xác trước khi đưa vào streamText
+// 1. Chỉ khai báo Description và Parameters (Tuyệt đối không có 'execute' ở đây để tránh lỗi Type)
 const getCurrentTimeTool = tool({
   description: 'Lấy thời gian và ngày hiện tại.',
   parameters: z.object({
     timezone: z.string().optional().describe('Múi giờ, mặc định là Asia/Ho_Chi_Minh'),
   }),
-  execute: async ({ timezone }) => {
-    const tz = timezone || 'Asia/Ho_Chi_Minh';
-    const now = new Date();
-    return {
-      time: now.toLocaleTimeString('vi-VN', { timeZone: tz }),
-      date: now.toLocaleDateString('vi-VN', { timeZone: tz }),
-    };
-  },
 });
 
 const getWeatherTool = tool({
@@ -45,14 +37,6 @@ const getWeatherTool = tool({
   parameters: z.object({
     location: z.string().describe('Tên thành phố hoặc quốc gia, ví dụ: Hà Nội, Tokyo'),
   }),
-  execute: async ({ location }) => {
-    const temperature = Math.floor(Math.random() * 15) + 20;
-    return {
-      location,
-      temperature: `${temperature}°C`,
-      condition: 'Nhiều mây, có lúc có mưa rào',
-    };
-  },
 });
 
 export async function POST(req: Request) {
@@ -61,16 +45,53 @@ export async function POST(req: Request) {
   const result = streamText({
     model: google('gemini-2.5-flash'),
     messages: await convertToModelMessages(messages),
-    // Truyền các trường tool đã được gán kiểu sạch sẽ từ trước
     tools: {
       getCurrentTime: getCurrentTimeTool,
       getWeather: getWeatherTool,
+    },
+    // 2. Chuyển toàn bộ logic chạy hàm vào onToolCall. 
+    // Đây là cách duy nhất hoạt động độc lập không phụ thuộc vào Type cấu hình của Model Provider.
+    onToolCall: async ({ toolCalls }) => {
+      const results = [];
+
+      for (const call of toolCalls) {
+        if (call.toolName === 'getCurrentTime') {
+          const args = call.args as { timezone?: string };
+          const tz = args.timezone || 'Asia/Ho_Chi_Minh';
+          const now = new Date();
+          
+          results.push({
+            toolCallId: call.toolCallId,
+            result: {
+              time: now.toLocaleTimeString('vi-VN', { timeZone: tz }),
+              date: now.toLocaleDateString('vi-VN', { timeZone: tz }),
+            },
+          });
+        } 
+        
+        else if (call.toolName === 'getWeather') {
+          const args = call.args as { location: string };
+          const temperature = Math.floor(Math.random() * 15) + 20;
+          
+          results.push({
+            toolCallId: call.toolCallId,
+            result: {
+              location: args.location,
+              temperature: `${temperature}°C`,
+              condition: 'Nhiều mây, có lúc có mưa rào',
+            },
+          });
+        }
+      }
+
+      return results;
     },
     maxSteps: 5, 
   });
 
   return result.toUIMessageStreamResponse();
 }
+
 
 
 
