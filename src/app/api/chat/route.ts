@@ -18,14 +18,13 @@ export async function POST(req: Request) {
   return result.toUIMessageStreamResponse();
 }
 */
-
 import { streamText, tool } from 'ai';
 import { google } from '@ai-sdk/google';
 import { z } from 'zod';
 import { NextRequest } from 'next/server';
 
 // ======================
-// Định nghĩa Tool
+// Tool Definition
 // ======================
 
 const weatherTool = tool({
@@ -34,7 +33,6 @@ const weatherTool = tool({
     city: z.string().describe('Tên thành phố, ví dụ: Hanoi, Ho Chi Minh, Da Nang'),
   }),
   execute: async ({ city }) => {
-    // Mock data - bạn có thể thay bằng API thật sau
     const mockWeather: Record<string, { temp: number; condition: string }> = {
       Hanoi: { temp: 28, condition: 'Sunny' },
       'Ho Chi Minh': { temp: 32, condition: 'Cloudy' },
@@ -64,10 +62,9 @@ export async function POST(req: NextRequest) {
     }
 
     const result = streamText({
-      model: google('gemini-1.5-flash'), // hoặc gemini-1.5-pro, gemini-2.0-flash...
-      
-      system: `Bạn là một chatbot hữu ích, trả lời bằng tiếng Việt một cách tự nhiên, lịch sự và ngắn gọn.
-               Khi cần thông tin chính xác, hãy sử dụng tool.`,
+      model: google('gemini-2.5-flash'), // hoặc gemini-1.5-pro, gemini-2.0-flash-exp
+
+      system: `Bạn là một chatbot thông minh, hữu ích và trả lời bằng tiếng Việt tự nhiên, lịch sự.`,
 
       messages,
       tools: {
@@ -77,9 +74,9 @@ export async function POST(req: NextRequest) {
       maxRetries: 3,
     });
 
-    return result.toDataStreamResponse({
-      sendUsage: true,
-    });
+    // ✅ Dùng toUIMessageStreamResponse() cho AI SDK v6 + useChat
+    return result.toUIMessageStreamResponse();
+
   } catch (error: any) {
     console.error('Chat API error:', error);
     return new Response(
