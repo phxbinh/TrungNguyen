@@ -46,9 +46,11 @@ export async function POST(req: NextRequest) {
 
 // src/app/api/chat/route.ts
 import { google } from '@ai-sdk/google';
-import { streamText, tool, stepCountIs } from 'ai';
+import { convertToModelMessages, streamText, tool, stepCountIs } from 'ai';
 import { z } from 'zod';
 import { NextRequest } from 'next/server';
+
+export const runtime = 'edge';
 
 const weatherTool = tool({
   description: 'Get the weather for a city.',
@@ -67,7 +69,7 @@ export async function POST(req: NextRequest) {
       
       stopWhen: stepCountIs(5),
 
-      messages,
+      messages: await convertToModelMessages(messages),
     });
 
     // ✅ Dùng toDataStreamResponse (phù hợp với useChat + tools)
