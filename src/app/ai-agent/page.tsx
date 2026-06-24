@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useChat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 
-
 export default function ChatbotTest() {
   const [inputValue, setInputValue] = useState('');
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
@@ -23,11 +23,22 @@ export default function ChatbotTest() {
 
   const isLoading = status === 'streaming' || status === 'submitted';
 
+  // Auto scroll xuống dưới
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages, isLoading]);
+
   return (
     <div className="flex flex-col w-full max-w-2xl mx-auto py-8 px-4 min-h-screen">
       <h1 className="text-3xl font-bold mb-8 text-center">Gemini Chatbot (AI SDK v6)</h1>
 
-      <div className="flex-1 border border-gray-200 rounded-2xl bg-gray-50 p-6 mb-6 overflow-y-auto max-h-[600px] space-y-6">
+      {/* Khu vực hiển thị tin nhắn */}
+      <div 
+        ref={scrollRef}
+        className="flex-1 border border-gray-200 rounded-2xl bg-gray-50 p-6 mb-6 overflow-y-auto max-h-[600px] space-y-6"
+      >
         {messages.length === 0 && (
           <div className="text-center text-gray-400 py-12">
             Hãy gửi tin nhắn để bắt đầu...
@@ -50,30 +61,27 @@ export default function ChatbotTest() {
                 {message.role === 'user' ? 'Bạn' : 'AI Assistant'}
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {message.parts.map((part, index) => {
-                  // Text
                   if (part.type === 'text') {
                     return (
-                      <div key={index} className="whitespace-pre-wrap">
+                      <div key={index} className="whitespace-pre-wrap leading-relaxed">
                         {part.text}
                       </div>
                     );
                   }
 
-                  // Tool Call
-                  if (part.type === 'tool-call' || part.type.startsWith('tool-')) {
-                    const toolName = (part as any).toolName || part.type.replace('tool-', '');
+                  if (part.type === 'tool-call' || part.type.includes('tool')) {
+                    const toolName = (part as any).toolName || part.type.replace('tool-', '') || 'Tool';
                     return (
-                      <div key={index} className="text-amber-600 bg-amber-50 p-3 rounded-xl border border-amber-200 text-sm">
+                      <div key={index} className="text-amber-600 bg-amber-50 p-3 rounded-xl border border-amber-200 text-sm flex items-center gap-2">
                         🔧 Đang gọi tool: <strong>{toolName}</strong>
                       </div>
                     );
                   }
 
-                  // Tool Result
-                  if (part.type === 'tool-result' || part.type.startsWith('tool-')) {
-                    const toolName = (part as any).toolName || part.type.replace('tool-', '');
+                  if (part.type === 'tool-result' || part.type.includes('tool')) {
+                    const toolName = (part as any).toolName || 'Tool';
                     const result = (part as any).output || (part as any).result || part;
                     return (
                       <div key={index} className="text-green-700 bg-green-50 p-3 rounded-xl border border-green-200 text-sm">
@@ -101,6 +109,7 @@ export default function ChatbotTest() {
         )}
       </div>
 
+      {/* Form nhập tin nhắn */}
       <form onSubmit={handleFormSubmit} className="flex gap-3">
         <input
           className="flex-1 p-4 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
@@ -120,7 +129,6 @@ export default function ChatbotTest() {
     </div>
   );
 }
-
 
 
 
