@@ -31,17 +31,19 @@ export async function POST(req: Request) {
     model: google('gemini-2.5-flash'),
     messages: await convertToModelMessages(messages),
     tools: {
-      // Tool 1: Hỏi giờ hiện tại (Đã fix lỗi Type bằng tham số dummy)
+      // Tool 1: Hỏi giờ hiện tại (Đã sửa lỗi nhận tham số đầu vào)
       getCurrentTime: tool({
         description: 'Lấy thời gian và ngày hiện tại.',
         parameters: z.object({
           timezone: z.string().optional().describe('Múi giờ, mặc định là Asia/Ho_Chi_Minh'),
         }),
-        execute: async () => {
+        // FIX: Đưa { timezone } vào đây để TypeScript không bắt lỗi nữa
+        execute: async ({ timezone }) => {
+          const tz = timezone || 'Asia/Ho_Chi_Minh';
           const now = new Date();
           return {
-            time: now.toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
-            date: now.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+            time: now.toLocaleTimeString('vi-VN', { timeZone: tz }),
+            date: now.toLocaleDateString('vi-VN', { timeZone: tz }),
           };
         },
       }),
