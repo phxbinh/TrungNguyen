@@ -63,12 +63,12 @@ import { useState } from 'react';
 export default function Chat() {
   const [input, setInput] = useState('');
 
-  const { messages, status, error } = useChat({
+  const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/chat-tool',
     }),
 
-    messages: [
+    sendMessage: [
       {
         id: 'welcome',
         role: 'assistant',
@@ -93,7 +93,7 @@ export default function Chat() {
 
     if (!input.trim() || isLoading) return;
 
-    messages({
+    sendMessage({
       role: 'user',
       parts: [
         {
