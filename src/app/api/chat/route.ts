@@ -91,15 +91,12 @@ export async function POST(req: NextRequest) {
 }
 */
 
-import { streamText, tool } from 'ai';
+import { streamText, tool, convertToModelMessages } from 'ai';
 import { google } from '@ai-sdk/google';
 import { z } from 'zod';
 import { NextRequest } from 'next/server';
 
-// ======================
-// Tool Definition
-// ======================
-
+// Tool (giữ nguyên)
 const weatherTool = tool({
   description: 'Lấy thông tin thời tiết cho một thành phố',
   inputSchema: z.object({
@@ -134,12 +131,15 @@ export async function POST(req: NextRequest) {
       return new Response('Messages array is required', { status: 400 });
     }
 
+    // ✅ Chuyển đổi UIMessage → ModelMessage
+    const modelMessages = await convertToModelMessages(messages);
+
     const result = streamText({
-      model: google('gemini-2.5-flash'),
+      model: google('gemini-1.5-flash'),
 
       system: `Bạn là một chatbot thông minh, hữu ích và trả lời bằng tiếng Việt tự nhiên, lịch sự.`,
 
-      messages,
+      messages: modelMessages,        // ← Dùng modelMessages
       tools: {
         getWeather: weatherTool,
       },
@@ -152,7 +152,10 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error('Chat API error:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
+      JSON.stringify({ 
+        error: error.message || 'Internal server error',
+        details: error.cause ? error.cause.message : undefined 
+      }),
       { 
         status: 500, 
         headers: { 'Content-Type': 'application/json' } 
