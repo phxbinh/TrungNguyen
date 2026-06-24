@@ -30,9 +30,10 @@ export async function POST(req: Request) {
   const result = streamText({
     model: google('gemini-2.5-flash'),
     messages: await convertToModelMessages(messages),
-    // Ép kiểu 'as any' ngay tại đây để TypeScript không bóc tách thuộc tính 'execute' nữa
+    // CÚ PHÁP ĐÚNG CHO AI SDK V6+: 
+    // Khai báo thẳng Object chứa description, parameters và execute mà KHÔNG BỌC qua hàm tool() ở đây.
     tools: {
-      getCurrentTime: tool({
+      getCurrentTime: {
         description: 'Lấy thời gian và ngày hiện tại.',
         parameters: z.object({
           timezone: z.string().optional().describe('Múi giờ, mặc định là Asia/Ho_Chi_Minh'),
@@ -45,8 +46,9 @@ export async function POST(req: Request) {
             date: now.toLocaleDateString('vi-VN', { timeZone: tz }),
           };
         },
-      }),
-      getWeather: tool({
+      },
+
+      getWeather: {
         description: 'Lấy thông tin thời tiết hiện tại của một địa điểm cụ thể.',
         parameters: z.object({
           location: z.string().describe('Tên thành phố hoặc quốc gia, ví dụ: Hà Nội, Tokyo'),
@@ -59,13 +61,12 @@ export async function POST(req: Request) {
             condition: 'Nhiều mây, có lúc có mưa rào',
           };
         },
-      }),
-    } as any, 
+      },
+    },
     maxSteps: 5, 
   });
 
   return result.toUIMessageStreamResponse();
 }
-
 
 
