@@ -1,3 +1,4 @@
+/*
 import { google } from '@ai-sdk/google';
 import { generateText, tool, stepCountIs } from 'ai';   // ← thêm stepCountIs
 import { z } from 'zod';
@@ -40,3 +41,40 @@ export async function POST(req: NextRequest) {
     }, { status: 500 });
   }
 }
+*/
+
+
+import { google } from '@ai-sdk/google';
+import { streamText, tool } from 'ai';
+import { z } from 'zod';
+import { NextRequest } from 'next/server';
+
+const weatherTool = tool({
+  description: 'Get the weather for a city.',
+  inputSchema: z.object({ city: z.string() }),
+  execute: async ({ city }) => `Thời tiết hiện tại ở ${city} rất sunny và đẹp trời.`,
+});
+
+export async function POST(req: NextRequest) {
+  try {
+    const { messages } = await req.json();   // Nhận toàn bộ lịch sử chat
+
+    const result = await streamText({
+      model: google('gemini-1.5-flash'),
+      tools: { getWeather: weatherTool },
+      system: 'Bạn là trợ lý thân thiện, trả lời bằng tiếng Việt khi người dùng hỏi bằng tiếng Việt.',
+      messages,                               // Truyền toàn bộ lịch sử
+      maxSteps: 5,                            // Giới hạn số bước tool calling
+    });
+
+    return result.toDataStreamResponse();     // Quan trọng: streaming
+  } catch (error: any) {
+    console.error(error);
+    return new Response('Error', { status: 500 });
+  }
+}
+
+
+
+
+
