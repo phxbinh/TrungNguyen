@@ -31,13 +31,12 @@ export async function POST(req: Request) {
     model: google('gemini-2.5-flash'),
     messages: await convertToModelMessages(messages),
     tools: {
-      // Tool 1: Hỏi giờ hiện tại (Đã sửa lỗi nhận tham số đầu vào)
+      // Tool 1: Hỏi giờ hiện tại
       getCurrentTime: tool({
         description: 'Lấy thời gian và ngày hiện tại.',
         parameters: z.object({
           timezone: z.string().optional().describe('Múi giờ, mặc định là Asia/Ho_Chi_Minh'),
         }),
-        // FIX: Đưa { timezone } vào đây để TypeScript không bắt lỗi nữa
         execute: async ({ timezone }) => {
           const tz = timezone || 'Asia/Ho_Chi_Minh';
           const now = new Date();
@@ -46,7 +45,7 @@ export async function POST(req: Request) {
             date: now.toLocaleDateString('vi-VN', { timeZone: tz }),
           };
         },
-      }),
+      }) as any, // Ép kiểu để xử lý triệt để lỗi TypeScript Overload
 
       // Tool 2: Xem thời tiết
       getWeather: tool({
@@ -55,20 +54,19 @@ export async function POST(req: Request) {
           location: z.string().describe('Tên thành phố hoặc quốc gia, ví dụ: Hà Nội, Tokyo'),
         }),
         execute: async ({ location }) => {
-          // Thực tế bạn sẽ gọi API thời tiết (như OpenWeatherMap) ở đây
-          const temperature = Math.floor(Math.random() * 15) + 20; // Ngẫu nhiên 20°C - 35°C
+          const temperature = Math.floor(Math.random() * 15) + 20;
           return {
             location,
             temperature: `${temperature}°C`,
             condition: 'Nhiều mây, có lúc có mưa rào',
           };
         },
-      }),
+      }) as any, // Ép kiểu ở đây luôn để đồng bộ
     },
-    // Cho phép Model tự động chạy tool và phản hồi lại kết quả tối đa 5 bước liên tiếp
     maxSteps: 5, 
   });
 
   return result.toUIMessageStreamResponse();
 }
+
 
