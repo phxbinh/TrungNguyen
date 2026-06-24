@@ -43,11 +43,11 @@ export async function POST(req: Request) {
   const result = streamText({
     model: google('gemini-2.5-flash'),
     messages: formattedMessages,
-    // ĐỊNH NGHĨA CÁC CÔNG CỤ (TOOLS) Ở ĐÂY
     tools: {
       getWeather: {
         description: 'Lấy thông tin thời tiết hiện tại của một thành phố',
-        parameters: z.object({
+        // ĐỔI TỪ parameters THÀNH inputSchema THEO CHUẨN V6
+        inputSchema: z.object({
           city: z.string().describe('Tên thành phố cần xem thời tiết, ví dụ: Hà Nội, Sài Gòn'),
         }),
         execute: async ({ city }) => {
@@ -65,6 +65,7 @@ export async function POST(req: Request) {
 
   return result.toUIMessageStreamResponse();
 }
+
 
 
 
