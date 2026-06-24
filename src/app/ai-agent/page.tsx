@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import Link from 'next/link'; // 1. Import Link từ next/link
 
@@ -5,7 +6,6 @@ export default function AgentPage() {
   return (
     <div style={containerStyle}>
       <h1 style={headingStyle}>Khám phá AI Agent langchain ai-sdk</h1>
-      {/* 2. Thêm thẻ Link để chuyển hướng sang /ai-agent */}
       <Link href="/" style={linkStyle}>
         Back to Home →
       </Link>
@@ -43,3 +43,57 @@ const linkStyle: React.CSSProperties = {
   backgroundColor: '#fff',
   transition: 'all 0.2s ease',
 };
+*/
+
+
+'use client';
+
+import { useChat } from '@ai-sdk/react';
+
+export default function ChatbotTest() {
+  // useChat sẽ tự động kết nối tới API /api/chat ở Bước 2
+  const { messages, input, handleInputChange, handleSubmit } = useChat();
+
+  return (
+    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
+      <h1 className="text-2xl font-bold mb-4 text-center">Gemini Chatbot Test</h1>
+      
+      {/* Khung hiển thị tin nhắn */}
+      <div className="space-y-4 mb-4 overflow-y-auto max-h-[500px] border p-4 rounded bg-gray-50">
+        {messages.length === 0 && (
+          <p className="text-gray-400 text-center">Hãy nhập gì đó để bắt đầu kiểm tra...</p>
+        )}
+        {messages.map(m => (
+          <div key={m.id} className={`p-2 rounded ${m.role === 'user' ? 'bg-blue-100 text-right' : 'bg-green-100 text-left'}`}>
+            <span className="font-bold block text-xs text-gray-550">
+              {m.role === 'user' ? 'Bạn' : 'AI'}
+            </span>
+            <p className="whitespace-pre-wrap">{m.content}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Form nhập liệu */}
+      <form onSubmit={handleSubmit} className="flex gap-2">
+        <input
+          className="flex-1 p-2 border border-gray-350 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={input}
+          placeholder="Hỏi AI bất cứ điều gì..."
+          onChange={handleInputChange}
+        />
+        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+          Gửi
+        </button>
+      </form>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
