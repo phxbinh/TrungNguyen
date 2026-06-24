@@ -103,8 +103,7 @@ export default function ChatbotTest() {
   const [inputValue, setInputValue] = useState('');
   
   // ĐỊNH DẠNG HOÀN CHỈNH CHO AI SDK v6
-  const { messages, sendMessage } = useChat({
-    maxSteps: 5,           
+  const { messages, sendMessage } = useChat({  
     transport: new DefaultChatTransport({
       api: '/api/chat', // Khai báo đường dẫn API chuẩn tại đây
     }),
