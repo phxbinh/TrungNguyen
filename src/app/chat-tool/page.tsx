@@ -68,7 +68,7 @@ export default function Chat() {
       api: '/api/chat-tool',
     }),
 
-    sendMessage: [
+    messages: [
       {
         id: 'welcome',
         role: 'assistant',
