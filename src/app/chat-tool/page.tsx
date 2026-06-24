@@ -54,7 +54,6 @@ export default function Chat() {
 }
 */
 
-
 'use client';
 
 import { useChat } from '@ai-sdk/react';
@@ -64,51 +63,70 @@ import { useState } from 'react';
 export default function Chat() {
   const [input, setInput] = useState('');
 
-  const { 
-    messages, 
-    sendMessage, 
-    status, 
-    error 
-  } = useChat({
+  const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/chat-tool',
     }),
-    messages: [
+
+    initialMessages: [
       {
         id: 'welcome',
-        role: 'assistant' as const,
-        parts: [{ 
-          type: 'text' as const, 
-          text: 'Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?' 
-        }],
+        role: 'assistant',
+        parts: [
+          {
+            type: 'text',
+            text: 'Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?',
+          },
+        ],
       },
     ],
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || status !== 'ready') return;
+  const isLoading =
+    status === 'submitted' ||
+    status === 'streaming';
 
-    sendMessage({ text: input });
+  const handleSubmit = (
+    e: React.FormEvent
+  ) => {
+    e.preventDefault();
+
+    if (!input.trim() || isLoading) return;
+
+    sendMessage({
+      role: 'user',
+      parts: [
+        {
+          type: 'text',
+          text: input,
+        },
+      ],
+    });
+
     setInput('');
   };
-
-  const isLoading = status === 'submitted' || status === 'streaming';
 
   return (
     <div className="flex flex-col h-screen max-w-3xl mx-auto bg-gray-50">
       <div className="border-b bg-white p-4">
-        <h1 className="text-2xl font-semibold text-center">AI Chat - SDK v6</h1>
+        <h1 className="text-2xl font-semibold text-center">
+          AI Chat - SDK v6
+        </h1>
       </div>
 
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((message) => {
-          const isUser = message.role === 'user';   // ← Fix type narrowing ở đây
+          const isUser =
+            message.role === 'user';
 
           return (
             <div
               key={message.id}
-              className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${
+                isUser
+                  ? 'justify-end'
+                  : 'justify-start'
+              }`}
             >
               <div
                 className={`max-w-[85%] px-5 py-4 rounded-2xl whitespace-pre-wrap ${
@@ -117,10 +135,17 @@ export default function Chat() {
                     : 'bg-white border border-gray-200 text-gray-900'
                 }`}
               >
-                {message.parts?.map((part, index) =>
-                  part.type === 'text' ? (
-                    <span key={index}>{part.text}</span>
-                  ) : null
+                {message.parts.map(
+                  (part, index) => {
+                    if (part.type !== 'text')
+                      return null;
+
+                    return (
+                      <span key={index}>
+                        {part.text}
+                      </span>
+                    );
+                  }
                 )}
               </div>
             </div>
@@ -130,7 +155,7 @@ export default function Chat() {
         {isLoading && (
           <div className="flex justify-start">
             <div className="bg-white border px-5 py-4 rounded-2xl">
-              Đang suy nghĩ<span className="animate-pulse">...</span>
+              Đang suy nghĩ...
             </div>
           </div>
         )}
@@ -139,24 +164,32 @@ export default function Chat() {
       {error && (
         <div className="px-6 pb-4">
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl">
-            Lỗi: {error.message || 'Có lỗi xảy ra'}
+            Lỗi: {error.message}
           </div>
         </div>
       )}
 
       <div className="border-t bg-white p-4">
-        <form onSubmit={handleSubmit} className="flex gap-3">
+        <form
+          onSubmit={handleSubmit}
+          className="flex gap-3"
+        >
           <input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Nhập tin nhắn của bạn..."
-            className="flex-1 px-6 py-4 border border-gray-300 rounded-full focus:outline-none focus:border-blue-500"
+            onChange={(e) =>
+              setInput(e.target.value)
+            }
+            placeholder="Nhập tin nhắn..."
+            className="flex-1 px-6 py-4 border border-gray-300 rounded-full"
             disabled={isLoading}
           />
+
           <button
             type="submit"
-            disabled={isLoading || !input.trim()}
-            className="px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-full transition"
+            disabled={
+              isLoading || !input.trim()
+            }
+            className="px-8 py-4 bg-blue-600 text-white rounded-full"
           >
             {isLoading ? '...' : 'Gửi'}
           </button>
@@ -165,6 +198,5 @@ export default function Chat() {
     </div>
   );
 }
-
 
 
