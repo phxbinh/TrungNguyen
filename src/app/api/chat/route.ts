@@ -8,10 +8,10 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: google('gemini-2.5-flash'),
-    // Thêm hàm convertToModelMessages để chuyển đổi cấu trúc UIMessage mới của v6 sang dạng model đọc được
-    messages: convertToModelMessages(messages),
+    // THÊM TỪ KHÓA await Ở ĐÂY để giải quyết lỗi Type 'Promise'
+    messages: await convertToModelMessages(messages),
   });
 
-  // Đổi hàm này thành toUIMessageStreamResponse chuẩn AI SDK v6
+  // Trả về luồng dữ liệu tương thích giao diện UI v6
   return result.toUIMessageStreamResponse();
 }
