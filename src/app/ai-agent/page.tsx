@@ -3,7 +3,8 @@
 
 import { useState } from 'react';
 import { useChat } from '@ai-sdk/react';
-
+// BẮT BUỘC IMPORT THÊM DÒNG NÀY THEO CHUẨN V6
+import { DefaultChatTransport } from 'ai';
 
 //export default 
 function ChatbotTest__() {
@@ -101,10 +102,12 @@ function ChatbotTest__() {
 export default function ChatbotTest() {
   const [inputValue, setInputValue] = useState('');
   
-  // Khai báo hook chuẩn hóa theo định dạng Vercel AI SDK v6
+  // ĐỊNH DẠNG HOÀN CHỈNH CHO AI SDK v6
   const { messages, sendMessage } = useChat({
-    endpoint: '/api/chat', 
     maxSteps: 5,           
+    transport: new DefaultChatTransport({
+      api: '/api/chat', // Khai báo đường dẫn API chuẩn tại đây
+    }),
   });
 
   const handleFormSubmit = (e: React.FormEvent) => {
