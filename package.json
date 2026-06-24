@@ -14,8 +14,8 @@
     "react-dom": "^19.0.0",
     
     "ai": "^6.0.0",
-    "@ai-sdk/google": "^1.0.0",
-    "@ai-sdk/react": "^1.0.0",
+    "@ai-sdk/google": "^6.0.0",
+    "@ai-sdk/react": "^6.0.0",
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
