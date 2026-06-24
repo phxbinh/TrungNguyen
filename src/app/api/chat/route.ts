@@ -1,5 +1,5 @@
 
-/*
+
 import { google } from '@ai-sdk/google';
 import { convertToModelMessages, streamText } from 'ai';
 
@@ -17,8 +17,8 @@ export async function POST(req: Request) {
   // Trả về luồng dữ liệu tương thích giao diện UI v6
   return result.toUIMessageStreamResponse();
 }
-*/
 
+/*
 import { streamText, tool } from 'ai';
 import { google } from '@ai-sdk/google';
 import { z } from 'zod';
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
+*/
 
 
 
