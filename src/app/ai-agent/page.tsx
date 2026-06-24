@@ -4,7 +4,6 @@
 import { useState } from 'react';
 import { useChat } from '@ai-sdk/react';
 
-
 export default function ChatbotTest() {
   const [inputValue, setInputValue] = useState('');
   const { messages, sendMessage } = useChat();
@@ -50,31 +49,32 @@ export default function ChatbotTest() {
                     : 'bg-gray-100 text-gray-800 rounded-tl-none border border-gray-200'
                 }`}
               >
-                {/* XỬ LÝ TẤT CẢ CÁC THÀNH PHẦN (PARTS) TRONG TIN NHẮN */}
                 <div className="space-y-2">
                   {m.parts.map((part, index) => {
-                    // 1. Nếu là tin nhắn chữ thông thường
+                    // 1. Text thông thường
                     if (part.type === 'text') {
                       return <p key={index} className="whitespace-pre-wrap">{part.text}</p>;
                     }
 
-                    // 2. Nếu là lúc AI đang kích hoạt Tool (Đang xử lý)
+                    // 2. Ép kiểu 'as any' cục bộ cho tool-call để lấy toolName không bị lỗi TypeScript Union
                     if (part.type === 'tool-call') {
+                      const toolCall = part as any;
                       return (
                         <div key={index} className="text-xs italic text-blue-500 flex items-center gap-1 font-medium bg-blue-50 p-2 rounded-lg border border-blue-100">
                           <span className="animate-pulse">⏳</span> 
-                          Đang gọi công cụ: <strong className="underline">{part.toolName}</strong>...
+                          Đang gọi công cụ: <strong className="underline">{toolCall.toolName}</strong>...
                         </div>
                       );
                     }
 
-                    // 3. Nếu đã nhận được kết quả trả về từ Tool
+                    // 3. Ép kiểu 'as any' cục bộ cho tool-result để lấy toolName và result sạch sẽ
                     if (part.type === 'tool-result') {
+                      const toolResult = part as any;
                       return (
                         <div key={index} className="text-xs text-green-700 bg-green-50 p-2 rounded-lg border border-green-100 font-mono">
-                          <div className="font-bold mb-1">✅ Kết quả [{part.toolName}]:</div>
+                          <div className="font-bold mb-1">✅ Kết quả [{toolResult.toolName}]:</div>
                           <pre className="whitespace-pre-wrap text-[11px] bg-white p-1.5 rounded border border-green-200">
-                            {JSON.stringify(part.result, null, 2)}
+                            {JSON.stringify(toolResult.result, null, 2)}
                           </pre>
                         </div>
                       );
@@ -107,6 +107,7 @@ export default function ChatbotTest() {
     </div>
   );
 }
+
 
 
 
