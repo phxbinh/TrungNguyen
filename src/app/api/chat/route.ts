@@ -1,5 +1,5 @@
 import { google } from '@ai-sdk/google';
-import { streamText } from 'ai';
+import { convertToModelMessages, streamText } from 'ai';
 
 export const runtime = 'edge';
 
@@ -8,9 +8,10 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: google('gemini-2.5-flash'),
-    messages,
+    // Thêm hàm convertToModelMessages để chuyển đổi cấu trúc UIMessage mới của v6 sang dạng model đọc được
+    messages: convertToModelMessages(messages),
   });
 
-  // Đổi thành toTextStreamResponse để khớp với định dạng TypeScript hiện tại
-  return result.toTextStreamResponse();
+  // Đổi hàm này thành toUIMessageStreamResponse chuẩn AI SDK v6
+  return result.toUIMessageStreamResponse();
 }
