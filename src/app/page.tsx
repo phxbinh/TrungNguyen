@@ -40,6 +40,9 @@ export default function HomePage() {
       <Link href="/ai-agent" style={linkStyle}>
         Khám phá AI Agent →
       </Link>
+      <Link href="/chat-tool" style={linkStyle}>
+        Khám phá AI Agent with chatTool →
+      </Link>
     </div>
   );
 }
