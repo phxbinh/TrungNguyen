@@ -44,36 +44,42 @@ export async function POST(req: NextRequest) {
 */
 
 
+// src/app/api/chat/route.ts
 import { google } from '@ai-sdk/google';
-import { streamText, tool } from 'ai';
+import { streamText, tool, stepCountIs } from 'ai';   // ← import stepCountIs
 import { z } from 'zod';
 import { NextRequest } from 'next/server';
 
 const weatherTool = tool({
   description: 'Get the weather for a city.',
   inputSchema: z.object({ city: z.string() }),
-  execute: async ({ city }) => `Thời tiết hiện tại ở ${city} rất sunny và đẹp trời.`,
+  execute: async ({ city }) => `Thời tiết ở ${city} hiện đang rất sunny và đẹp trời.`,
 });
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json();   // Nhận toàn bộ lịch sử chat
+    const { messages } = await req.json();
 
     const result = await streamText({
       model: google('gemini-1.5-flash'),
       tools: { getWeather: weatherTool },
-      system: 'Bạn là trợ lý thân thiện, trả lời bằng tiếng Việt khi người dùng hỏi bằng tiếng Việt.',
-      messages,                               // Truyền toàn bộ lịch sử
-      maxSteps: 5,                            // Giới hạn số bước tool calling
+      system: 'Bạn là trợ lý AI thân thiện, trả lời bằng tiếng Việt khi người dùng hỏi bằng tiếng Việt.',
+      
+      // ✅ Dùng cái này thay vì maxSteps
+      stopWhen: stepCountIs(5),        // Tối đa 5 steps (tool call rounds)
+
+      messages,
     });
 
-    return result.toDataStreamResponse();     // Quan trọng: streaming
+    return result.toDataStreamResponse();
   } catch (error: any) {
     console.error(error);
-    return new Response('Error', { status: 500 });
+    return new Response(JSON.stringify({ error: error.message }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
-
 
 
 
