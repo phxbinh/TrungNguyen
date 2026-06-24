@@ -57,34 +57,35 @@ export default function Chat() {
 
 'use client';
 
-import { useChat } from '@ai-sdk/react';   // ← Khuyến nghị import từ đây
+import { useChat } from '@ai-sdk/react';
 import { useState } from 'react';
 
 export default function Chat() {
-  const [input, setInput] = useState('');   // ← Tự quản lý input
+  const [input, setInput] = useState('');
 
   const { 
     messages, 
-    handleInputChange, 
-    handleSubmit, 
+    sendMessage, 
     isLoading, 
     error,
-    stop
+    status 
   } = useChat({
     api: '/api/chat-tool',
     initialMessages: [
       {
         id: 'welcome',
         role: 'assistant',
-        content: 'Xin chào! Tôi là trợ lý AI. Bạn cần hỗ trợ gì hôm nay?',
+        content: 'Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?',
       },
     ],
   });
 
-  // Đồng bộ input với hook
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value);
-    handleInputChange(e);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+
+    sendMessage({ text: input });   // Gửi tin nhắn
+    setInput('');                   // Xóa input
   };
 
   return (
@@ -94,7 +95,7 @@ export default function Chat() {
         <h1 className="text-2xl font-semibold text-center">AI Chat</h1>
       </div>
 
-      {/* Messages */}
+      {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((message) => (
           <div
@@ -102,10 +103,10 @@ export default function Chat() {
             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[85%] px-5 py-4 rounded-2xl ${
+              className={`max-w-[85%] px-5 py-4 rounded-2xl whitespace-pre-wrap ${
                 message.role === 'user'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-white border border-gray-200'
+                  : 'bg-white border border-gray-200 text-gray-900'
               }`}
             >
               {message.content}
@@ -122,20 +123,21 @@ export default function Chat() {
         )}
       </div>
 
+      {/* Error */}
       {error && (
         <div className="px-6 pb-4">
-          <div className="bg-red-100 text-red-700 p-4 rounded-xl">
-            Lỗi: {error.message}
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl">
+            Lỗi: {error.message || 'Có lỗi xảy ra'}
           </div>
         </div>
       )}
 
-      {/* Input Form */}
+      {/* Input */}
       <div className="border-t bg-white p-4">
         <form onSubmit={handleSubmit} className="flex gap-3">
           <input
             value={input}
-            onChange={onInputChange}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Nhập tin nhắn của bạn..."
             className="flex-1 px-6 py-4 border border-gray-300 rounded-full focus:outline-none focus:border-blue-500"
             disabled={isLoading}
@@ -143,7 +145,7 @@ export default function Chat() {
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-full"
+            className="px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-full transition"
           >
             {isLoading ? '...' : 'Gửi'}
           </button>
@@ -152,7 +154,6 @@ export default function Chat() {
     </div>
   );
 }
-
 
 
 
