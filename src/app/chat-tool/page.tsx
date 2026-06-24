@@ -76,9 +76,9 @@ export default function Chat() {
     messages: [
       {
         id: 'welcome',
-        role: 'assistant',
+        role: 'assistant' as const,
         parts: [{ 
-          type: 'text', 
+          type: 'text' as const, 
           text: 'Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?' 
         }],
       },
@@ -107,7 +107,9 @@ export default function Chat() {
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${
+              message.role === 'user' ? 'justify-end' : 'justify-start'
+            }`}
           >
             <div
               className={`max-w-[85%] px-5 py-4 rounded-2xl whitespace-pre-wrap ${
@@ -116,8 +118,10 @@ export default function Chat() {
                   : 'bg-white border border-gray-200 text-gray-900'
               }`}
             >
-              {message.parts.map((part, index) => 
-                part.type === 'text' ? <span key={index}>{part.text}</span> : null
+              {message.parts?.map((part, index) => 
+                part.type === 'text' ? (
+                  <span key={index}>{part.text}</span>
+                ) : null
               )}
             </div>
           </div>
@@ -141,7 +145,7 @@ export default function Chat() {
         </div>
       )}
 
-      {/* Input Area */}
+      {/* Input */}
       <div className="border-t bg-white p-4">
         <form onSubmit={handleSubmit} className="flex gap-3">
           <input
@@ -163,7 +167,6 @@ export default function Chat() {
     </div>
   );
 }
-
 
 
 
