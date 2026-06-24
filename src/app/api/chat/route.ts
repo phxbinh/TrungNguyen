@@ -135,7 +135,7 @@ export async function POST(req: NextRequest) {
     const modelMessages = await convertToModelMessages(messages);
 
     const result = streamText({
-      model: google('gemini-1.5-flash'),
+      model: google('gemini-2.5-flash'),
 
       system: `Bạn là một chatbot thông minh, hữu ích và trả lời bằng tiếng Việt tự nhiên, lịch sự.`,
 
