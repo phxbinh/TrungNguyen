@@ -19,7 +19,8 @@ export async function POST(req: Request) {
 */
 
 import { google } from '@ai-sdk/google';
-import { streamText } from 'ai';
+// IMPORT THÊM stepCountIs THEO CHUẨN V6
+import { streamText, stepCountIs } from 'ai';
 import { z } from 'zod';
 
 export const runtime = 'edge';
@@ -27,7 +28,6 @@ export const runtime = 'edge';
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  // Chuyển đổi dữ liệu sang định dạng Core Message chuẩn
   const formattedMessages = messages.map((m: any) => {
     const textContent = m.parts
       ?.filter((part: any) => part.type === 'text')
@@ -43,15 +43,15 @@ export async function POST(req: Request) {
   const result = streamText({
     model: google('gemini-2.5-flash'),
     messages: formattedMessages,
+    // BẮT BUỘC CÓ Ở BACKEND: Cho phép AI Agent tự chạy tiếp tối đa 5 bước khi kích hoạt Tool
+    stopWhen: stepCountIs(5), 
     tools: {
       getWeather: {
         description: 'Lấy thông tin thời tiết hiện tại của một thành phố',
-        // ĐỔI TỪ parameters THÀNH inputSchema THEO CHUẨN V6
         inputSchema: z.object({
           city: z.string().describe('Tên thành phố cần xem thời tiết, ví dụ: Hà Nội, Sài Gòn'),
         }),
         execute: async ({ city }) => {
-          // Giả lập gọi API lấy thời tiết thực tế
           const temperature = Math.floor(Math.random() * (35 - 20 + 1)) + 20;
           return {
             location: city,
@@ -65,6 +65,7 @@ export async function POST(req: Request) {
 
   return result.toUIMessageStreamResponse();
 }
+
 
 
 
