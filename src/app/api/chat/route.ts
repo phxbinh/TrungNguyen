@@ -1,4 +1,4 @@
-
+/*
 import { google } from '@ai-sdk/google';
 import { convertToModelMessages, streamText } from 'ai';
 
@@ -16,11 +16,10 @@ export async function POST(req: Request) {
   // Trả về luồng dữ liệu tương thích giao diện UI v6
   return result.toUIMessageStreamResponse();
 }
+*/
 
-
-/*
 import { google } from '@ai-sdk/google';
-import { convertToModelMessages, streamText } from 'ai';
+import { streamText } from 'ai';
 import { z } from 'zod';
 
 export const runtime = 'edge';
@@ -28,46 +27,45 @@ export const runtime = 'edge';
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  // Ép kiểu 'as any' cho toàn bộ object cấu hình để bỏ qua kiểm tra phiên bản cũ/mới
+  // Chuyển đổi dữ liệu sang định dạng Core Message chuẩn
+  const formattedMessages = messages.map((m: any) => {
+    const textContent = m.parts
+      ?.filter((part: any) => part.type === 'text')
+      .map((part: any) => part.text)
+      .join('\n') || '';
+
+    return {
+      role: m.role,
+      content: textContent,
+    };
+  });
+
   const result = streamText({
     model: google('gemini-2.5-flash'),
-    messages: await convertToModelMessages(messages),
+    messages: formattedMessages,
+    // ĐỊNH NGHĨA CÁC CÔNG CỤ (TOOLS) Ở ĐÂY
     tools: {
-      getCurrentTime: {
-        description: 'Lấy thời gian và ngày hiện tại.',
-        parameters: z.object({
-          timezone: z.string().optional().describe('Múi giờ, mặc định là Asia/Ho_Chi_Minh'),
-        }),
-        execute: async ({ timezone }: any) => {
-          const tz = timezone || 'Asia/Ho_Chi_Minh';
-          const now = new Date();
-          return {
-            time: now.toLocaleTimeString('vi-VN', { timeZone: tz }),
-            date: now.toLocaleDateString('vi-VN', { timeZone: tz }),
-          };
-        },
-      },
       getWeather: {
-        description: 'Lấy thông tin thời tiết hiện tại của một địa điểm cụ thể.',
+        description: 'Lấy thông tin thời tiết hiện tại của một thành phố',
         parameters: z.object({
-          location: z.string().describe('Tên thành phố hoặc quốc gia, ví dụ: Hà Nội, Tokyo'),
+          city: z.string().describe('Tên thành phố cần xem thời tiết, ví dụ: Hà Nội, Sài Gòn'),
         }),
-        execute: async ({ location }: any) => {
-          const temperature = Math.floor(Math.random() * 15) + 20;
+        execute: async ({ city }) => {
+          // Giả lập gọi API lấy thời tiết thực tế
+          const temperature = Math.floor(Math.random() * (35 - 20 + 1)) + 20;
           return {
-            location,
+            location: city,
             temperature: `${temperature}°C`,
-            condition: 'Nhiều mây, có lúc có mưa rào',
+            condition: 'Có nắng nhẹ, gió mát',
           };
         },
       },
     },
-    // ĐÃ XÓA maxSteps ở đây để tránh lỗi 'does not exist' ở phiên bản cũ
-  } as any); 
+  });
 
   return result.toUIMessageStreamResponse();
 }
-*/
+
 
 
 
