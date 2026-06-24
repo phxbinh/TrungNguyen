@@ -7,7 +7,6 @@ import { DefaultChatTransport } from 'ai';
 export default function ChatbotTest() {
   const [inputValue, setInputValue] = useState('');
   
-  // XÓA BỎ HOÀN TOÀN maxSteps Ở ĐÂY
   const { messages, sendMessage } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/chat', 
@@ -26,6 +25,7 @@ export default function ChatbotTest() {
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch text-black">
       <h1 className="text-2xl font-bold mb-4 text-center">Gemini Chatbot v6 Tool Test</h1>
       
+      {/* Khung hiển thị tin nhắn */}
       <div className="space-y-4 mb-4 overflow-y-auto max-h-[500px] border p-4 rounded bg-gray-50">
         {messages.length === 0 && (
           <p className="text-gray-400 text-center">Hỏi thử: "Thời tiết Hà Nội thế nào?"</p>
@@ -43,18 +43,20 @@ export default function ChatbotTest() {
                   return <span key={index} className="block">{part.text}</span>;
                 }
 
+                // ĐỔI part.toolName THÀNH part.name THEO CHUẨN V6
                 if (part.type === 'tool-call') {
                   return (
                     <div key={index} className="text-xs text-amber-600 bg-amber-50 p-1 rounded border border-amber-200">
-                      ⚙️ Đang gọi công cụ: <strong>{part.toolName}</strong>...
+                      ⚙️ Đang gọi công cụ: <strong>{part.name}</strong>...
                     </div>
                   );
                 }
 
+                // ĐỔI part.toolName THÀNH part.name THEO CHUẨN V6
                 if (part.type === 'tool-result') {
                   return (
                     <div key={index} className="text-xs text-purple-700 bg-purple-50 p-1 rounded border border-purple-200">
-                      📊 Kết quả {part.toolName}: {JSON.stringify(part.result)}
+                      📊 Kết quả {part.name}: {JSON.stringify(part.result)}
                     </div>
                   );
                 }
@@ -66,6 +68,7 @@ export default function ChatbotTest() {
         ))}
       </div>
 
+      {/* Form nhập liệu */}
       <form onSubmit={handleFormSubmit} className="flex gap-2">
         <input
           className="flex-1 p-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
