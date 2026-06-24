@@ -57,7 +57,7 @@ export default function Chat() {
 
 'use client';
 
-import { useChat } from 'ai/react';
+import { useChat } from '@ai-sdk/react';
 
 export default function Chat() {
   const { 
