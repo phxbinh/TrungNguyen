@@ -57,27 +57,35 @@ export default function Chat() {
 
 'use client';
 
-import { useChat } from '@ai-sdk/react';
+import { useChat } from '@ai-sdk/react';   // ← Khuyến nghị import từ đây
+import { useState } from 'react';
 
 export default function Chat() {
+  const [input, setInput] = useState('');   // ← Tự quản lý input
+
   const { 
     messages, 
-    input, 
     handleInputChange, 
     handleSubmit, 
     isLoading, 
-    error 
+    error,
+    stop
   } = useChat({
     api: '/api/chat-tool',
     initialMessages: [
       {
         id: 'welcome',
         role: 'assistant',
-        content: 'Xin chào! Tôi là trợ lý AI. Bạn muốn hỏi gì hôm nay?',
+        content: 'Xin chào! Tôi là trợ lý AI. Bạn cần hỗ trợ gì hôm nay?',
       },
     ],
-    onError: (err) => console.error('Chat error:', err),
   });
+
+  // Đồng bộ input với hook
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+    handleInputChange(e);
+  };
 
   return (
     <div className="flex flex-col h-screen max-w-3xl mx-auto bg-gray-50">
@@ -86,7 +94,7 @@ export default function Chat() {
         <h1 className="text-2xl font-semibold text-center">AI Chat</h1>
       </div>
 
-      {/* Messages Area */}
+      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.map((message) => (
           <div
@@ -94,10 +102,10 @@ export default function Chat() {
             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`max-w-[85%] px-5 py-4 rounded-2xl text-[17px] leading-relaxed ${
+              className={`max-w-[85%] px-5 py-4 rounded-2xl ${
                 message.role === 'user'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-white border border-gray-200 text-gray-900'
+                  : 'bg-white border border-gray-200'
               }`}
             >
               {message.content}
@@ -107,37 +115,35 @@ export default function Chat() {
 
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-white border border-gray-200 px-5 py-4 rounded-2xl">
-              Đang suy nghĩ
-              <span className="animate-pulse">...</span>
+            <div className="bg-white border px-5 py-4 rounded-2xl">
+              Đang suy nghĩ<span className="animate-pulse">...</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* Error Display */}
       {error && (
         <div className="px-6 pb-4">
-          <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-xl">
-            Lỗi: {error.message || 'Không thể kết nối với server'}
+          <div className="bg-red-100 text-red-700 p-4 rounded-xl">
+            Lỗi: {error.message}
           </div>
         </div>
       )}
 
-      {/* Input Area */}
+      {/* Input Form */}
       <div className="border-t bg-white p-4">
         <form onSubmit={handleSubmit} className="flex gap-3">
           <input
             value={input}
-            onChange={handleInputChange}
+            onChange={onInputChange}
             placeholder="Nhập tin nhắn của bạn..."
-            className="flex-1 px-6 py-4 border border-gray-300 rounded-full focus:outline-none focus:border-blue-500 text-[17px]"
+            className="flex-1 px-6 py-4 border border-gray-300 rounded-full focus:outline-none focus:border-blue-500"
             disabled={isLoading}
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium rounded-full transition-colors"
+            className="px-8 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-full"
           >
             {isLoading ? '...' : 'Gửi'}
           </button>
