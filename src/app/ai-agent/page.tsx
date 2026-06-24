@@ -95,13 +95,16 @@ function ChatbotTest__() {
 
 
 
+
+
+
 export default function ChatbotTest() {
   const [inputValue, setInputValue] = useState('');
   
-  // CẤU TRÚC SỬA ĐỔI: Chỉ định rõ api endpoint và cho phép chạy nhiều bước (maxSteps) để gọi Tool
+  // Khai báo hook chuẩn hóa theo định dạng Vercel AI SDK v6
   const { messages, sendMessage } = useChat({
-    api: '/api/chat', // Đảm bảo luôn gọi chính xác đến file src/app/api/chat/route.ts
-    maxSteps: 5,      // BẮT BUỘC CÓ: Cho phép AI Agent chạy tiếp bước 2 sau khi Tool trả về kết quả
+    endpoint: '/api/chat', 
+    maxSteps: 5,           
   });
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -129,14 +132,11 @@ export default function ChatbotTest() {
             </span>
             
             <div className="whitespace-pre-wrap text-sm space-y-2">
-              {/* Kiểm tra m.parts có tồn tại trước khi map để tránh lỗi runtime */}
               {m.parts?.map((part, index) => {
-                // 1. Hiển thị văn bản AI trả lời
                 if (part.type === 'text') {
                   return <span key={index} className="block">{part.text}</span>;
                 }
 
-                // 2. Hiển thị khi AI đang gọi Tool (Hữu ích để người dùng biết hệ thống đang xử lý)
                 if (part.type === 'tool-call') {
                   return (
                     <div key={index} className="text-xs text-amber-600 bg-amber-50 p-1 rounded border border-amber-200">
@@ -145,7 +145,6 @@ export default function ChatbotTest() {
                   );
                 }
 
-                // 3. Hiển thị dữ liệu thô từ Tool nếu bạn muốn debug
                 if (part.type === 'tool-result') {
                   return (
                     <div key={index} className="text-xs text-purple-700 bg-purple-50 p-1 rounded border border-purple-200">
