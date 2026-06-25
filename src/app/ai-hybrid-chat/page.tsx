@@ -136,7 +136,10 @@ export default function Chat() {
               );
             }
 
-if (part.type === 'tool-getTodos') {
+if (
+  part.type === 'tool-getTodos' &&
+  part.state === 'output-available'
+) {
   const output = part.output as {
     total: number;
     todos: {
