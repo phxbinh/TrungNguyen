@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   return streamText({
     model: google("gemini-2.5-flash"),
 
-    messages: convertToModelMessages(messages),
+    messages: await convertToModelMessages(messages),
 
     tools: {
       searchProducts: tool({
