@@ -137,11 +137,20 @@ export default function Chat() {
             }
 
 if (part.type === 'tool-getTodos') {
+  const output = part.output as {
+    total: number;
+    todos: {
+      id: number;
+      title: string;
+      completed: boolean;
+    }[];
+  };
+
   return (
     <div key={index}>
       <h3>Danh sách Todo</h3>
 
-      {part.output.todos.map((todo: any) => (
+      {output.todos.map((todo) => (
         <div key={todo.id}>
           <p>{todo.title}</p>
           <p>
