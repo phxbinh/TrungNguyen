@@ -12,9 +12,6 @@ const weatherTool = tool({
   execute: async ({ city }) => `Thời tiết hiện tại ở ${city} rất đẹp và sunny.`,
 });
 
-//import { tool } from 'ai';
-//import { z } from 'zod';
-
 const getCurrentTime = tool({
   description: 'Lấy giờ hiện tại',
   inputSchema: z.object({}),
@@ -35,7 +32,6 @@ const getCurrentTime = tool({
     };
   },
 });
-
 
 const buildProductQuery = tool({
   description:
@@ -91,6 +87,82 @@ const buildProductQuery = tool({
   },
 });
 
+const getTodos = tool({
+  description:
+    'Lấy danh sách công việc từ bảng todosnew.',
+
+  inputSchema: z.object({
+    completed: z
+      .boolean()
+      .optional()
+      .describe('Lọc theo trạng thái hoàn thành'),
+
+    keyword: z
+      .string()
+      .optional()
+      .describe('Từ khóa tìm trong title'),
+
+    limit: z
+      .number()
+      .optional()
+      .describe('Số lượng tối đa'),
+  }),
+
+  execute: async ({
+    completed,
+    keyword,
+    limit = 10,
+  }) => {
+    // Mock data
+    const todos = [
+      {
+        id: 1,
+        title: 'Học AI SDK',
+        completed: false,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 2,
+        title: 'Làm UI Todo',
+        completed: true,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 3,
+        title: 'Viết tool query DB',
+        completed: false,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ];
+
+    let filtered = todos;
+
+    if (typeof completed === 'boolean') {
+      filtered = filtered.filter(
+        (t) => t.completed === completed
+      );
+    }
+
+    if (keyword) {
+      filtered = filtered.filter((t) =>
+        t.title
+          .toLowerCase()
+          .includes(keyword.toLowerCase())
+      );
+    }
+
+    filtered = filtered.slice(0, limit);
+
+    return {
+      total: filtered.length,
+      todos: filtered,
+    };
+  },
+});
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -101,7 +173,8 @@ export async function POST(req: NextRequest) {
       tools: {
         getWeather: weatherTool,
         getCurrentTime: getCurrentTime,
-        buildProductQuery
+        buildProductQuery,
+        getTodos
       },
       system: `Bạn là trợ lý AI thân thiện, trả lời bằng tiếng Việt.
 - Nếu hỏi về thời tiết của thành phố thì gọi tool getWeather.
