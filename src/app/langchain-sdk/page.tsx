@@ -32,7 +32,7 @@ export default function Chat() {
   } = useChat({
     transport:
       new DefaultChatTransport({
-        api: '/api/ai-hybrid-chat',
+        api: '/api/langchain-sdk',
       }),
 
     messages: initialMessages,
