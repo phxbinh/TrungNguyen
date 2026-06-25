@@ -7,36 +7,16 @@ import {
   lastAssistantMessageIsCompleteWithToolCalls,
 } from 'ai';
 
-type MyTools = {
-  askForConfirmation: {
-    input: {
-      message: string;
-    };
-    output: string;
-  };
-
-  getLocation: {
-    input: {};
-    output: string;
-  };
-
-  getWeatherInformation: {
-    input: {
-      city: string;
-    };
-    output: string;
-  };
-};
+type AddToolOutput =
+  ReturnType<typeof useChat>['addToolOutput'];
 
 export default function Chat() {
   const [input, setInput] = useState('');
 
   const toolOutputRef =
-    useRef<ReturnType<typeof useChat<MyTools>>['addToolOutput'] | null>(
-      null
-    );
+    useRef<AddToolOutput | null>(null);
 
-  const chat = useChat<MyTools>({
+  const chat = useChat({
     transport: new DefaultChatTransport({
       api: '/api/vercel-guides',
     }),
@@ -113,13 +93,17 @@ export default function Chat() {
                       </div>
                     );
 
-                  case 'input-available':
+                  case 'input-available': {
+                    const toolInput = part.input as {
+                      message: string;
+                    };
+
                     return (
                       <div
                         key={callId}
                         className="space-y-2"
                       >
-                        <p>{part.input.message}</p>
+                        <p>{toolInput.message}</p>
 
                         <div className="flex gap-2">
                           <button
@@ -150,11 +134,12 @@ export default function Chat() {
                         </div>
                       </div>
                     );
+                  }
 
                   case 'output-available':
                     return (
                       <div key={callId}>
-                        Confirmation: {part.output}
+                        Confirmation: {String(part.output)}
                       </div>
                     );
 
@@ -193,7 +178,7 @@ export default function Chat() {
                   case 'output-available':
                     return (
                       <div key={callId}>
-                        Location: {part.output}
+                        Location: {String(part.output)}
                       </div>
                     );
 
@@ -222,27 +207,43 @@ export default function Chat() {
                       </div>
                     );
 
-                  case 'input-available':
+                  case 'input-available': {
+                    const toolInput = part.input as {
+                      city: string;
+                    };
+
                     return (
                       <div key={callId}>
-                        Getting weather for {part.input.city}...
+                        Getting weather for {toolInput.city}...
                       </div>
                     );
+                  }
 
-                  case 'output-available':
+                  case 'output-available': {
+                    const toolInput = part.input as {
+                      city: string;
+                    };
+
                     return (
                       <div key={callId}>
-                        Weather in {part.input.city}: {part.output}
+                        Weather in {toolInput.city}:{' '}
+                        {String(part.output)}
                       </div>
                     );
+                  }
 
-                  case 'output-error':
+                  case 'output-error': {
+                    const toolInput = part.input as {
+                      city: string;
+                    };
+
                     return (
                       <div key={callId}>
-                        Error getting weather for {part.input.city}:{' '}
+                        Error getting weather for {toolInput.city}:{' '}
                         {part.errorText}
                       </div>
                     );
+                  }
                 }
 
                 break;
