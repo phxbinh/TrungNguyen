@@ -20,7 +20,7 @@ Use tools when needed.
 Always ask for confirmation before using getLocation.
 `,
 
-    messages: convertToModelMessages(messages),
+    messages: await convertToModelMessages(messages),
 
     tools: {
       getWeather: {
