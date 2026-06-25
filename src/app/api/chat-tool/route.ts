@@ -65,7 +65,10 @@ export async function POST(req: NextRequest) {
     const result = await streamText({   // ← giữ await
       model: google('gemini-2.5-flash'),
       tools: { getWeather: weatherTool },
-      system: 'Bạn là trợ lý AI thân thiện, trả lời bằng tiếng Việt.',
+      system: 'Bạn là trợ lý AI thân thiện, trả lời bằng tiếng Việt.
+- Nếu hỏi về thời tiết của thành phố thì gọi tool getWeather.
+- Nếu không thì trả lời bằng kiến thức của mình.
+',
       
       stopWhen: stepCountIs(5),
 
