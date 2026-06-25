@@ -119,7 +119,8 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-screen max-w-4xl mx-auto bg-slate-50 font-sans shadow-2xl border-x border-slate-200/50">
+    //<div className="flex flex-col h-screen max-w-4xl mx-auto bg-slate-50 font-sans shadow-2xl border-x border-slate-200/50">
+    <div className="flex flex-col h-dscreen w-full max-w-4xl mx-auto bg-slate-50 font-sans shadow-2xl border-x border-slate-200/50 overflow-hidden">
       {/* Header */}
       <div className="backdrop-blur-md bg-white/80 sticky top-0 z-10 border-b border-slate-100 px-6 py-4 flex items-center justify-between shadow-xs">
         <div className="flex items-center gap-3 mx-auto">
