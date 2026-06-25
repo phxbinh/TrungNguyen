@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useRef, useState } from 'react';
@@ -8,13 +7,36 @@ import {
   lastAssistantMessageIsCompleteWithToolCalls,
 } from 'ai';
 
+type MyTools = {
+  askForConfirmation: {
+    input: {
+      message: string;
+    };
+    output: string;
+  };
+
+  getLocation: {
+    input: {};
+    output: string;
+  };
+
+  getWeatherInformation: {
+    input: {
+      city: string;
+    };
+    output: string;
+  };
+};
+
 export default function Chat() {
+  const [input, setInput] = useState('');
+
   const toolOutputRef =
-    useRef<ReturnType<typeof useChat>['addToolOutput'] | null>(
+    useRef<ReturnType<typeof useChat<MyTools>>['addToolOutput'] | null>(
       null
     );
 
-  const chat = useChat({
+  const chat = useChat<MyTools>({
     transport: new DefaultChatTransport({
       api: '/api/vercel-guides',
     }),
@@ -54,8 +76,6 @@ export default function Chat() {
     status,
     error,
   } = chat;
-
-  const [input, setInput] = useState('');
 
   return (
     <main className="p-4 max-w-2xl mx-auto space-y-4">
@@ -212,8 +232,7 @@ export default function Chat() {
                   case 'output-available':
                     return (
                       <div key={callId}>
-                        Weather in {part.input.city}:{' '}
-                        {part.output}
+                        Weather in {part.input.city}: {part.output}
                       </div>
                     );
 
