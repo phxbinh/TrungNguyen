@@ -136,36 +136,37 @@ export default function Chat() {
               );
             }
 
-if (
-  part.type === 'tool-getTodos' &&
-  part.state === 'output-available'
-) {
-  const output = part.output as {
-    total: number;
-    todos: {
-      id: number;
-      title: string;
-      completed: boolean;
-    }[];
-  };
+            if (
+              part.type === 'tool-getTodos' &&
+              part.state === 'output-available'
+            ) {
+              const output = part.output as {
+                total: number;
+                todos: {
+                  id: number;
+                  title: string;
+                  completed: boolean;
+                }[];
+              };
+            
+              return (
+                <div key={index}>
+                  <h3>Danh sách Todo</h3>
+            
+                  {output.todos.map((todo) => (
+                    <div key={todo.id}>
+                      <p>{todo.title}</p>
+                      <p>
+                        {todo.completed
+                          ? '✅ Hoàn thành'
+                          : '⏳ Chưa xong'}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              );
+            }
 
-  return (
-    <div key={index}>
-      <h3>Danh sách Todo</h3>
-
-      {output.todos.map((todo) => (
-        <div key={todo.id}>
-          <p>{todo.title}</p>
-          <p>
-            {todo.completed
-              ? '✅ Hoàn thành'
-              : '⏳ Chưa xong'}
-          </p>
-        </div>
-      ))}
-    </div>
-  );
-}
             return null;
           })}
 
