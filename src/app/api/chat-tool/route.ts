@@ -94,6 +94,7 @@ export async function POST(req: NextRequest) {
       },
       system: `Bạn là trợ lý AI thân thiện, trả lời bằng tiếng Việt.
 - Nếu hỏi về thời tiết của thành phố thì gọi tool getWeather.
+- Nếu hỏi về thời gian hiện tại thì gọi tool getCurrentTime.
 - Nếu không thì trả lời bằng kiến thức của mình.
 `,
       
