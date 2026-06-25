@@ -14,7 +14,7 @@ const initialMessages: UIMessage[] = [
     parts: [
       {
         type: 'text',
-        text: 'Xin chào! Tôi là trợ lý AI có sử dụng LangChain. Hôm nay bạn cần hỗ trợ gì?',
+        text: 'Xin chào! Tôi là trợ lý AI có sử dụng LangChain để gọi gemini nhằm phân tích sâu (gọi nhiều tool). Hôm nay bạn cần hỗ trợ gì?',
       },
     ],
   },
