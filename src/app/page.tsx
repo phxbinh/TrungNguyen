@@ -43,6 +43,9 @@ export default function HomePage() {
       <Link href="/chat-tool" style={linkStyle}>
         Khám phá AI Agent with chatTool →
       </Link>
+      <Link href="/ai-hybrid-chat" style={linkStyle}>
+        Khám phá AI Agent with Hybrid →
+      </Link>
     </div>
   );
 }
