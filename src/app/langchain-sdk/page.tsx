@@ -1,22 +1,31 @@
 'use client';
 
+import { useState } from 'react';
 import { useChat } from '@ai-sdk/react';
 
 export default function LangchainSdkPage() {
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    status,
-  } = useChat({
+  const [input, setInput] = useState('');
+
+  const { messages, sendMessage, status } = useChat({
     api: '/api/langchain-sdk',
   });
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!input.trim()) return;
+
+    await sendMessage({
+      text: input,
+    });
+
+    setInput('');
+  };
 
   return (
     <main className="mx-auto flex h-screen max-w-3xl flex-col p-4">
       <h1 className="mb-4 text-2xl font-bold">
-        LangChain + AI SDK Test
+        LangChain + AI SDK v6
       </h1>
 
       {/* Messages */}
@@ -30,15 +39,17 @@ export default function LangchainSdkPage() {
                 : 'bg-gray-100'
             }`}
           >
-            <div className="mb-1 text-xs font-semibold uppercase">
+            <div className="mb-2 text-xs font-semibold uppercase">
               {message.role}
             </div>
 
-            {/* Text parts */}
-            {message.parts?.map((part, index) => {
+            {message.parts.map((part, index) => {
               if (part.type === 'text') {
                 return (
-                  <p key={index} className="whitespace-pre-wrap">
+                  <p
+                    key={index}
+                    className="whitespace-pre-wrap"
+                  >
                     {part.text}
                   </p>
                 );
@@ -48,12 +59,13 @@ export default function LangchainSdkPage() {
                 return (
                   <div
                     key={index}
-                    className="mt-2 rounded-lg border bg-yellow-50 p-2 text-sm"
+                    className="mt-2 rounded border bg-yellow-50 p-2 text-sm"
                   >
                     <div>
                       Tool: <b>{part.toolName}</b>
                     </div>
-                    <pre className="overflow-x-auto">
+
+                    <pre>
                       {JSON.stringify(part.input, null, 2)}
                     </pre>
                   </div>
@@ -64,10 +76,11 @@ export default function LangchainSdkPage() {
                 return (
                   <div
                     key={index}
-                    className="mt-2 rounded-lg border bg-green-50 p-2 text-sm"
+                    className="mt-2 rounded border bg-green-50 p-2 text-sm"
                   >
                     <div>Result:</div>
-                    <pre className="overflow-x-auto">
+
+                    <pre>
                       {JSON.stringify(part.output, null, 2)}
                     </pre>
                   </div>
@@ -82,12 +95,12 @@ export default function LangchainSdkPage() {
 
       {/* Input */}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
         className="mt-4 flex gap-2"
       >
         <input
           value={input}
-          onChange={handleInputChange}
+          onChange={(e) => setInput(e.target.value)}
           placeholder="Hỏi gì đó..."
           className="flex-1 rounded-xl border px-4 py-2"
         />
