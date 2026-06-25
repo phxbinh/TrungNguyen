@@ -58,6 +58,30 @@ const weatherTool = tool({
   execute: async ({ city }) => `Thời tiết hiện tại ở ${city} rất đẹp và sunny.`,
 });
 
+//import { tool } from 'ai';
+//import { z } from 'zod';
+
+const getCurrentTime = tool({
+  description: 'Lấy giờ hiện tại',
+  inputSchema: z.object({}),
+
+  execute: async () => {
+    const now = new Date();
+
+    return {
+      time: now.toLocaleTimeString('vi-VN', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+      }),
+      date: now.toLocaleDateString('vi-VN', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+      }),
+      timezone: 'Asia/Ho_Chi_Minh',
+      iso: now.toISOString(),
+      timestamp: now.getTime(),
+    };
+  },
+});
+
 export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json();
