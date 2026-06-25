@@ -3,7 +3,7 @@ import {
   streamText,
   UIMessage,
 } from 'ai';
-import { xai } from '@ai-sdk/google';
+import { google } from '@ai-sdk/google';
 import { z } from 'zod';
 
 export const maxDuration = 30;
