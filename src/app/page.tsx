@@ -52,6 +52,9 @@ export default function HomePage() {
       <Link href="/langchain-sdk" style={linkStyle}>
         Khám phá AI Agent with LangChain SDK →
       </Link>
+      <Link href="/use-gemini-in-langchain" style={linkStyle}>
+        AI Agent use Gemini in LangChain →
+      </Link>
     </div>
   );
 }
