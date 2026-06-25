@@ -103,6 +103,7 @@ export default function Chat() {
                     : 'bg-white border border-slate-100 text-slate-800 rounded-2xl rounded-tl-xs shadow-xs'
                 }`}
               >
+{/*
                 {message.parts.map(
                   (part, index) => {
                     if (
@@ -117,6 +118,25 @@ export default function Chat() {
                     );
                   }
                 )}
+*/}
+          {message.parts.map((part, index) => {
+            if (part.type === 'text') {
+              return (
+                      <span key={index} className="text-[15px] leading-relaxed">
+                        {part.text}
+                      </span>
+                    );
+            }
+            if (part.type === 'tool-buildProductQuery') {
+              return (
+                <pre key={index}>
+                  {JSON.stringify(part.output, null, 2)}
+                </pre>
+              );
+            }
+            return null;
+          })}
+
               </div>
             </div>
           );
