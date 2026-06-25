@@ -87,7 +87,7 @@ const buildProductQuery = tool({
   },
 });
 
-/*
+
 const getTodos = tool({
   description:
     'Lấy danh sách công việc từ bảng todosnew.',
@@ -160,45 +160,6 @@ const getTodos = tool({
     return {
       total: filtered.length,
       todos: filtered,
-    };
-  },
-});
-*/
-
-const getTodos = tool({
-  description: 'Lấy danh sách todos',
-
-  inputSchema: z.object({
-    completed: z.coerce.boolean().optional(),
-    keyword: z.string().optional(),
-    limit: z.coerce.number().optional(),
-  }),
-
-  execute: async ({
-    completed,
-    keyword,
-    limit = 5,
-  }) => {
-    const todos = [
-      {
-        id: 1,
-        title: 'Học AI SDK',
-        completed: false,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      },
-      {
-        id: 2,
-        title: 'Làm UI Todo',
-        completed: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      },
-    ];
-
-    return {
-      total: todos.length,
-      todos,
     };
   },
 });
