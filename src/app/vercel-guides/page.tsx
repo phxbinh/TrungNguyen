@@ -8,6 +8,7 @@ import {
 } from 'ai';
 
 export default function Chat() {
+/*
   const {
     messages,
     sendMessage,
@@ -46,6 +47,46 @@ export default function Chat() {
       }
     },
   });
+*/
+const chat = useChat({
+  transport: new DefaultChatTransport({
+    api: '/api/chat',
+  }),
+
+  sendAutomaticallyWhen:
+    lastAssistantMessageIsCompleteWithToolCalls,
+
+  async onToolCall({ toolCall }) {
+    if (toolCall.dynamic) return;
+
+    if (toolCall.toolName === 'getLocation') {
+      const cities = [
+        'New York',
+        'Los Angeles',
+        'Chicago',
+        'San Francisco',
+      ];
+
+      const city =
+        cities[Math.floor(Math.random() * cities.length)];
+
+      return chat.addToolOutput({
+        tool: 'getLocation',
+        toolCallId: toolCall.toolCallId,
+        output: city,
+      });
+    }
+  },
+});
+
+const {
+  messages,
+  sendMessage,
+  addToolOutput,
+  status,
+  error,
+} = chat;
+
 
   const [input, setInput] = useState('');
 
