@@ -1,5 +1,9 @@
 @import "tailwindcss";
-/*@import "katex/dist/katex.min.css";*/
+@import "katex/dist/katex.min.css";
+/*
+import katex phải cài package: "rehype-katex": "^7.0.1",
+- Sử dụng để biểu diễn công thức toán học
+*/
 
 
 /* Update */
