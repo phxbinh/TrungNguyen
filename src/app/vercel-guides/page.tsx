@@ -50,7 +50,7 @@ export default function Chat() {
 */
 const chat = useChat({
   transport: new DefaultChatTransport({
-    api: '/api/chat',
+    api: '/api/vercel-guides',
   }),
 
   sendAutomaticallyWhen:
