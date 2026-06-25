@@ -22,11 +22,13 @@
     "framer-motion": "^11.11.9",
     "lucide-react": "^0.453.0",
     "rehype-katex": "^7.0.1",
-    "langchain": "^0.3.27",
+    "langchain": "^0.3.37",
     "@langchain/core": "^0.3.79",
-    "@langchain/community": "^0.3.45",
+    "@langchain/community": "^0.3.59",
+    "@langchain/textsplitters": "^0.1.0",
     "@langchain/google-genai": "^0.2.15",
-    "@langchain/textsplitters": "^0.1.0"
+    "drizzle-orm": "^0.x",
+    "pg": "^8.x"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
