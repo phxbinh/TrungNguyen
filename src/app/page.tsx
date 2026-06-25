@@ -49,6 +49,9 @@ export default function HomePage() {
       <Link href="/vercel-guides" style={linkStyle}>
         Khám phá AI Agent with Vercel Guide SDK →
       </Link>
+      <Link href="/langchain-sdk" style={linkStyle}>
+        Khám phá AI Agent with LangChain SDK →
+      </Link>
     </div>
   );
 }
