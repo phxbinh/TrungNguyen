@@ -127,6 +127,7 @@ export default function Chat() {
                       </span>
                     );
             }
+
             if (part.type === 'tool-buildProductQuery') {
               return (
                 <pre key={index}>
@@ -134,6 +135,25 @@ export default function Chat() {
                 </pre>
               );
             }
+
+if (part.type === 'tool-getTodos') {
+  return (
+    <div key={index}>
+      <h3>Danh sách Todo</h3>
+
+      {part.output.todos.map((todo: any) => (
+        <div key={todo.id}>
+          <p>{todo.title}</p>
+          <p>
+            {todo.completed
+              ? '✅ Hoàn thành'
+              : '⏳ Chưa xong'}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
             return null;
           })}
 
