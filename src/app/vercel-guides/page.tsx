@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useChat } from '@ai-sdk/react';
 import {
   DefaultChatTransport,
@@ -8,23 +9,19 @@ import {
 } from 'ai';
 
 export default function Chat() {
-/*
-  const {
-    messages,
-    sendMessage,
-    addToolOutput,
-    status,
-    error,
-  } = useChat({
+  const toolOutputRef =
+    useRef<ReturnType<typeof useChat>['addToolOutput'] | null>(
+      null
+    );
+
+  const chat = useChat({
     transport: new DefaultChatTransport({
       api: '/api/vercel-guides',
     }),
 
-    // Auto continue after tool outputs
     sendAutomaticallyWhen:
       lastAssistantMessageIsCompleteWithToolCalls,
 
-    // Auto execute client-side tools
     async onToolCall({ toolCall }) {
       if (toolCall.dynamic) return;
 
@@ -39,7 +36,7 @@ export default function Chat() {
         const city =
           cities[Math.floor(Math.random() * cities.length)];
 
-        return addToolOutput({
+        return toolOutputRef.current?.({
           tool: 'getLocation',
           toolCallId: toolCall.toolCallId,
           output: city,
@@ -47,46 +44,16 @@ export default function Chat() {
       }
     },
   });
-*/
-const chat = useChat({
-  transport: new DefaultChatTransport({
-    api: '/api/vercel-guides',
-  }),
 
-  sendAutomaticallyWhen:
-    lastAssistantMessageIsCompleteWithToolCalls,
+  toolOutputRef.current = chat.addToolOutput;
 
-  async onToolCall({ toolCall }) {
-    if (toolCall.dynamic) return;
-
-    if (toolCall.toolName === 'getLocation') {
-      const cities = [
-        'New York',
-        'Los Angeles',
-        'Chicago',
-        'San Francisco',
-      ];
-
-      const city =
-        cities[Math.floor(Math.random() * cities.length)];
-
-      return chat.addToolOutput({
-        tool: 'getLocation',
-        toolCallId: toolCall.toolCallId,
-        output: city,
-      });
-    }
-  },
-});
-
-const {
-  messages,
-  sendMessage,
-  addToolOutput,
-  status,
-  error,
-} = chat;
-
+  const {
+    messages,
+    sendMessage,
+    addToolOutput,
+    status,
+    error,
+  } = chat;
 
   const [input, setInput] = useState('');
 
