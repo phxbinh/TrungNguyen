@@ -36,6 +36,62 @@ const getCurrentTime = tool({
   },
 });
 
+
+const buildProductQuery = tool({
+  description:
+    'Phân tích câu hỏi người dùng về sản phẩm và tạo object filter để tìm kiếm.',
+
+  inputSchema: z.object({
+    keyword: z
+      .string()
+      .describe('Tên hoặc từ khóa sản phẩm'),
+
+    category: z
+      .string()
+      .optional()
+      .describe('Danh mục sản phẩm'),
+
+    color: z
+      .string()
+      .optional()
+      .describe('Màu sắc mong muốn'),
+
+    size: z
+      .string()
+      .optional()
+      .describe('Kích thước mong muốn'),
+
+    maxPrice: z
+      .number()
+      .optional()
+      .describe('Giá tối đa user muốn trả'),
+  }),
+
+  execute: async ({
+    keyword,
+    category,
+    color,
+    size,
+    maxPrice,
+  }) => {
+    return {
+      success: true,
+
+      query: {
+        keyword,
+        category: category || null,
+        color: color || null,
+        size: size || null,
+        maxPrice: maxPrice || null,
+      },
+
+      message:
+        'Đã phân tích yêu cầu sản phẩm, sẵn sàng tìm trong database.',
+    };
+  },
+});
+
+
 export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json();
@@ -44,7 +100,8 @@ export async function POST(req: NextRequest) {
       model: google('gemini-2.5-flash'),
       tools: {
         getWeather: weatherTool,
-        getCurrentTime: getCurrentTime
+        getCurrentTime: getCurrentTime,
+        buildProductQuery
       },
       system: `Bạn là trợ lý AI thân thiện, trả lời bằng tiếng Việt.
 - Nếu hỏi về thời tiết của thành phố thì gọi tool getWeather.
