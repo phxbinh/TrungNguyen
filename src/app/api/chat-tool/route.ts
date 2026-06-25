@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
     const result = await streamText({   // ← giữ await
       model: google('gemini-2.5-flash'),
       tools: {
-        getWeather: ưeatherTool,
+        getWeather: weatherTool,
         getCurrentTime: getCurrentTime
       },
       system: `Bạn là trợ lý AI thân thiện, trả lời bằng tiếng Việt.
