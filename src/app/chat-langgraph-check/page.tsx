@@ -67,7 +67,8 @@ function ChatPanel({
   const [input, setInput] = useState('');
 
   return (
-      <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-6 p-6 lg:grid-cols-[2fr_1fr]">      <div className="flex-1 space-y-4 overflow-y-auto p-4">
+    <section className="flex flex-col rounded-2xl border border-neutral-800 bg-neutral-900">
+      <div className="flex-1 space-y-4 overflow-y-auto p-4">
         {messages.map((message) => {
           const text =
             message.parts
