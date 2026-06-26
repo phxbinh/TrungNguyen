@@ -35,7 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi" suppressHydrationWarning className="h-full">
-      <body className={`${inter.className} h-full overflow-hidden text-slate-900 bg-slate-50 antialiased`}>
+      <body className={`${inter.className} h-full overflow-auto text-slate-900 bg-slate-50 antialiased`}>
         {children}
       </body>
     </html>
