@@ -27,74 +27,7 @@ const headingStyle: React.CSSProperties = {
 };
 */
 
-// app/page.tsx -> Đang chạy ổn
-/*
-import React from 'react';
-import Link from 'next/link'; // 1. Import Link từ next/link
-
-export default function HomePage() {
-  return (
-    <div style={containerStyle}>
-      <h1 style={headingStyle}>Hello world</h1>
-      
-      
-      <Link href="/ai-agent" style={linkStyle}>
-        Khám phá AI Agent →
-      </Link>
-      <Link href="/chat-tool" style={linkStyle}>
-        Khám phá AI Agent with chatTool →
-      </Link>
-      <Link href="/ai-hybrid-chat" style={linkStyle}>
-        Khám phá AI Agent with Hybrid →
-      </Link>
-      <Link href="/vercel-guides" style={linkStyle}>
-        Khám phá AI Agent with Vercel Guide SDK →
-      </Link>
-      <Link href="/langchain-sdk" style={linkStyle}>
-        Khám phá AI Agent with LangChain SDK →
-      </Link>
-      <Link href="/use-gemini-in-langchain" style={linkStyle}>
-        AI Agent use Gemini in LangChain →
-      </Link>
-    </div>
-  );
-}
-
-// Cấu hình style
-const containerStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column', // Đổi sang column để chữ và link xếp theo chiều dọc
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',
-  backgroundColor: '#f0f2f5',
-  fontFamily: 'system-ui, sans-serif',
-  gap: '20px', // Tạo khoảng cách giữa h1 và link
-};
-
-const headingStyle: React.CSSProperties = {
-  fontSize: '3rem',
-  color: '#333',
-  fontWeight: 'bold',
-  margin: 0, // Xóa margin mặc định để gap hoạt động chuẩn
-};
-
-const linkStyle: React.CSSProperties = {
-  fontSize: '1.2rem',
-  color: '#0070f3',
-  textDecoration: 'none',
-  fontWeight: '500',
-  padding: '10px 20px',
-  border: '1px solid #0070f3',
-  borderRadius: '8px',
-  backgroundColor: '#fff',
-  transition: 'all 0.2s ease',
-};
-*/
-
-
-
-// app/page.tsx
+// app/page.tsx -> 🟢chatGPT thiết kế
 import Link from 'next/link';
 import React from 'react';
 
@@ -227,7 +160,7 @@ const badgeStyle = (status: string): React.CSSProperties => ({
 
 
 /*
-// app/page.tsx
+// app/page.tsx -> 🟢Gemini thiết kế
 import Link from 'next/link';
 import React from 'react';
 
