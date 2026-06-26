@@ -8,7 +8,6 @@ import {
   type UIMessage,
 } from 'ai';
 
-/*
 const initialMessages: UIMessage[] = [
   {
     id: 'welcome',
@@ -22,6 +21,7 @@ const initialMessages: UIMessage[] = [
   },
 ];
 
+/*
 export default function Chat() {
   const [input, setInput] =
     useState('');
@@ -56,7 +56,7 @@ export default function HomePage() {
   const { messages, sendMessage, status } = useChat({
     transport:
       new DefaultChatTransport({
-        api: '/api/chat-tool',
+        api: '/api/chat-langgraph-check',
       }),
 
     onData: (part) => {
