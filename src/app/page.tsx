@@ -47,6 +47,13 @@ const routes = [
     status: 'test',
   },
   {
+    href: '/agent-langgraph',
+    title: 'AI Agent với LangGraph Tự gọi tool',
+    summary:
+      'Test với LangGraph tự gọi tool',
+    status: 'test',
+  },
+  {
     href: '/ai-agent',
     title: 'AI Agent',
     summary:
