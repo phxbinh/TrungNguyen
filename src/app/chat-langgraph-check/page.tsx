@@ -30,6 +30,18 @@ type AgentState = {
   answer?: string;
 };
 
+function isAgentStatePart(
+  part: any
+): part is { type: 'data-state'; data: { state: AgentState } } {
+  return (
+    part?.type === 'data-state' &&
+    typeof part?.data === 'object' &&
+    part.data !== null &&
+    'state' in part.data
+  );
+}
+
+
 export default function HomePage() {
   const [agentState, setAgentState] = useState<AgentState | null>(null);
 
@@ -40,7 +52,7 @@ export default function HomePage() {
       }),
 
     onData: (part) => {
-      if (part.type === 'data-state') {
+      if (isAgentStatePart(part)) {
         setAgentState(part.data.state);
       }
     },
