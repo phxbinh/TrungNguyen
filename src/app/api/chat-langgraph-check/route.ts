@@ -15,16 +15,18 @@ export async function POST(req: Request) {
         input: lastMessage,
       });
 
+      const answer = result.answer ?? "";
+
       writer.write({
         type: "text-delta",
         id: "assistant-message",
-        delta: result.answer,
+        delta: answer,
       });
 
       writer.write({
         type: "data-state",
         data: {
-          answer: result.answer,
+          answer,
           state: result,
         },
       });
