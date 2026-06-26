@@ -1,4 +1,7 @@
-import { createUIMessageStream, createUIMessageStreamResponse } from "ai";
+import {
+  createUIMessageStream,
+  createUIMessageStreamResponse,
+} from "ai";
 import { graph } from "@/lib/ai/graph";
 
 export async function POST(req: Request) {
@@ -12,13 +15,12 @@ export async function POST(req: Request) {
         input: lastMessage,
       });
 
-      // stream text ra UI
       writer.write({
         type: "text-delta",
-        textDelta: result.answer,
+        id: "assistant-message",
+        delta: result.answer,
       });
 
-      // giữ nguyên structure cũ
       writer.write({
         type: "data-state",
         data: {
