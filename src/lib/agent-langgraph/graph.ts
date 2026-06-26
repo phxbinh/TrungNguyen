@@ -1,7 +1,7 @@
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { MemorySaver } from "@langchain/langgraph";
-import { AgentState } from "./ai/state";
+import { AgentState } from "../ai/state";
 
 import { 
   productSearchTool, 
