@@ -329,6 +329,7 @@ export default function HomePage() {
 }
 
 // Styles
+/*
 const containerStyle: React.CSSProperties = {
   minHeight: '100vh',
   background: '#fafafa', // Nền xám rất nhẹ kiểu Vercel
@@ -336,6 +337,20 @@ const containerStyle: React.CSSProperties = {
   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   padding: '60px 20px',
 };
+*/
+const containerStyle: React.CSSProperties = {
+  minHeight: '100vh',
+  background: '#fafafa', 
+  color: '#171717',
+  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  padding: '60px 20px',
+  
+  // Thêm 2 dòng này để sửa triệt để lỗi kẹt cuộn:
+  overflowY: 'auto',       /* Cho phép cuộn dọc khi nội dung tràn */
+  height: '100%',          /* Đảm bảo chiều cao co giãn linh hoạt */
+};
+
+
 
 const wrapperStyle: React.CSSProperties = {
   maxWidth: '1000px',
