@@ -39,6 +39,7 @@ export async function POST(req: Request) {
 */
 
 
+
 import {
   createUIMessageStream,
   createUIMessageStreamResponse,
@@ -48,13 +49,11 @@ import { graph } from "@/lib/ai/graph";
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  const lastMessage = messages.at(-1);
-
   const input =
-    lastMessage?.parts
-      ?.filter((part: any) => part.type === "text")
-      .map((part: any) => part.text)
-      .join("") ?? "";
+    messages.at(-1)?.parts
+      ?.filter((p: any) => p.type === "text")
+      ?.map((p: any) => p.text)
+      ?.join("") ?? "";
 
   const stream = createUIMessageStream({
     execute: async ({ writer }) => {
@@ -63,19 +62,9 @@ export async function POST(req: Request) {
       const answer = result.answer ?? "";
 
       writer.write({
-        type: "start",
-        messageId: "assistant-message",
-      });
-
-      writer.write({
         type: "text-delta",
-        messageId: "assistant-message",
+        id: "assistant-message",
         delta: answer,
-      });
-
-      writer.write({
-        type: "finish",
-        messageId: "assistant-message",
       });
 
       writer.write({
@@ -89,6 +78,5 @@ export async function POST(req: Request) {
 
   return createUIMessageStreamResponse({ stream });
 }
-
 
 
