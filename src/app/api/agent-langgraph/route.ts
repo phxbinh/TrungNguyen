@@ -1,5 +1,6 @@
 import { app } from "@/lib/agent-langgraph/graph";
 import {
+  createUIMessageStream,
   createUIMessageStreamResponse,
   type UIMessage,
 } from "ai";
@@ -26,7 +27,7 @@ export async function POST(req: Request) {
     }
   );
 
-  return createUIMessageStreamResponse({
+  const stream = createUIMessageStream({
     execute: async ({ writer }) => {
       for await (const chunk of result) {
         const lastMessage = chunk.messages?.at(-1);
@@ -52,4 +53,6 @@ export async function POST(req: Request) {
       }
     },
   });
+
+  return createUIMessageStreamResponse({ stream });
 }
