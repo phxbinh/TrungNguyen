@@ -64,7 +64,8 @@ const stream = createUIMessageStream({
       type: "text-start",
       id: textId,
     });
-
+// Lấy toàn bộ toolMessages
+//*
     for await (const chunk of result) {
       const lastMessage = chunk.messages?.at(-1);
       if (!lastMessage) continue;
@@ -84,6 +85,36 @@ const stream = createUIMessageStream({
         delta: content,
       });
     }
+//*/
+
+// Chỉ lấy AiMessage
+/*
+for await (const chunk of result) {
+  const lastMessage = chunk.messages?.at(-1);
+
+  if (!lastMessage) continue;
+
+  // bỏ tool message
+  if (lastMessage._getType?.() !== "ai") continue;
+
+  const content =
+    typeof lastMessage.content === "string"
+      ? lastMessage.content
+      : Array.isArray(lastMessage.content)
+      ? lastMessage.content.map((c: any) => c.text ?? "").join("")
+      : "";
+
+  if (!content) continue;
+
+  writer.write({
+    type: "text-delta",
+    id: textId,
+    delta: content,
+  });
+}
+*/
+
+
 
     writer.write({
       type: "text-end",
