@@ -2,7 +2,44 @@
 
 import { useState } from 'react';
 import { useChat } from '@ai-sdk/react';
-import type { UIMessage } from 'ai';
+//import type { UIMessage } from 'ai';
+import {
+  DefaultChatTransport,
+  type UIMessage,
+} from 'ai';
+
+/*
+const initialMessages: UIMessage[] = [
+  {
+    id: 'welcome',
+    role: 'assistant',
+    parts: [
+      {
+        type: 'text',
+        text: 'Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?',
+      },
+    ],
+  },
+];
+
+export default function Chat() {
+  const [input, setInput] =
+    useState('');
+
+  const {
+    messages,
+    sendMessage,
+    status,
+    error,
+  } = useChat({
+    transport:
+      new DefaultChatTransport({
+        api: '/api/chat-tool',
+      }),
+
+    messages: initialMessages,
+  });
+*/
 
 type AgentState = {
   input: string;
@@ -17,7 +54,10 @@ export default function HomePage() {
   const [agentState, setAgentState] = useState<AgentState | null>(null);
 
   const { messages, sendMessage, status } = useChat({
-    api: '/api/chat-langgraph',
+    transport:
+      new DefaultChatTransport({
+        api: '/api/chat-tool',
+      }),
 
     onData: (part) => {
       if (part.type === 'data-state') {
