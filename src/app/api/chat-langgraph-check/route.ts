@@ -50,24 +50,32 @@ export async function POST(req: Request) {
 
   const lastMessage = messages.at(-1);
 
-  const lastMessageText =
+  const input =
     lastMessage?.parts
       ?.filter((part: any) => part.type === "text")
-      ?.map((part: any) => part.text)
-      ?.join("") ?? "";
+      .map((part: any) => part.text)
+      .join("") ?? "";
 
   const stream = createUIMessageStream({
     execute: async ({ writer }) => {
-      const result = await graph.invoke({
-        input: lastMessageText,
-      });
+      const result = await graph.invoke({ input });
 
       const answer = result.answer ?? "";
 
       writer.write({
+        type: "start",
+        messageId: "assistant-message",
+      });
+
+      writer.write({
         type: "text-delta",
-        id: "assistant-message",
+        messageId: "assistant-message",
         delta: answer,
+      });
+
+      writer.write({
+        type: "finish",
+        messageId: "assistant-message",
       });
 
       writer.write({
