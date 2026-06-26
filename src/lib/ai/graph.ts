@@ -1,4 +1,6 @@
 import { StateGraph, END } from "@langchain/langgraph";
+import { AgentState } from "./state";
+
 import { detectIntent } from "./nodes/detect-intent";
 import { productSearch } from "./nodes/product-search";
 import { productDetail } from "./nodes/product-detail";
@@ -7,7 +9,7 @@ import { generalChat } from "./nodes/general-chat";
 import { synthesize } from "./nodes/synthesize";
 import { routeIntent } from "./router";
 
-export const graph = new StateGraph<any>()
+export const graph = new StateGraph(AgentState)
   .addNode("detectIntent", detectIntent)
   .addNode("productSearch", productSearch)
   .addNode("productDetail", productDetail)
@@ -15,7 +17,7 @@ export const graph = new StateGraph<any>()
   .addNode("generalChat", generalChat)
   .addNode("synthesize", synthesize)
 
-  .setEntryPoint("detectIntent")
+  .addEdge("__start__", "detectIntent")
 
   .addConditionalEdges("detectIntent", routeIntent)
 
