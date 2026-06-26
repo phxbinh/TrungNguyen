@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useChat } from '@ai-sdk/react';
-//import type { UIMessage } from 'ai';
+
 import {
   DefaultChatTransport,
   type UIMessage,
@@ -20,26 +20,6 @@ const initialMessages: UIMessage[] = [
     ],
   },
 ];
-
-/*
-export default function Chat() {
-  const [input, setInput] =
-    useState('');
-
-  const {
-    messages,
-    sendMessage,
-    status,
-    error,
-  } = useChat({
-    transport:
-      new DefaultChatTransport({
-        api: '/api/chat-tool',
-      }),
-
-    messages: initialMessages,
-  });
-*/
 
 type AgentState = {
   input: string;
@@ -64,6 +44,7 @@ export default function HomePage() {
         setAgentState(part.data.state);
       }
     },
+    messages: initialMessages,
   });
 
   const loading = status === 'submitted' || status === 'streaming';
