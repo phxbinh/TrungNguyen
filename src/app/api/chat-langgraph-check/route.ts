@@ -1,22 +1,26 @@
+// src/app/api/chat-langgraph-check/route.ts
 import { createUIMessageStreamResponse } from 'ai';
-import { toBaseMessages, toUIMessageStream } from '@ai-sdk/langchain';
-import { graph } from "@/lib/ai/graph";   // hoặc app tùy bạn export
-import { AgentState } from "@/lib/ai/state"; // điều chỉnh path nếu cần
+import { toUIMessageStream } from '@ai-sdk/langchain';
+import { graph } from "@/lib/ai/graph";
+import { AgentState } from "@/lib/ai/state";
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();   // ← Dùng messages thay vì message (chuẩn Vercel AI)
+    const { messages } = await req.json();
 
-    if (!messages || !Array.isArray(messages)) {
+    if (!messages?.length) {
       return new Response(JSON.stringify({ error: "Messages is required" }), { 
         status: 400 
       });
     }
 
-    // Chuyển Vercel messages → LangChain messages
-    const langchainMessages = await toBaseMessages(messages);
+    // Tạm thời convert thủ công (đơn giản & ổn định)
+    const langchainMessages = messages.map((msg: any) => ({
+      role: msg.role === 'user' ? 'human' : 'ai',
+      content: msg.content || msg.text || '',
+    }));
 
-    // Stream từ LangGraph (dùng streamEvents để tốt nhất với v6)
+    // Stream từ LangGraph
     const stream = await graph.streamEvents(
       { 
         messages: langchainMessages 
@@ -25,25 +29,23 @@ export async function POST(req: Request) {
         version: "v2",
         streamMode: ["values", "messages", "updates"],
         configurable: {
-          thread_id: "default-thread", // TODO: sau thay bằng dynamic thread_id
+          thread_id: "thread-" + Date.now(), // tạm thời, sau sẽ cải thiện
         },
       }
     );
 
-    // Chuyển stream LangGraph → Vercel UI Stream
     const uiStream = toUIMessageStream(stream);
 
-    // Cách bạn muốn: return result.toUIMessageStreamResponse()
     return createUIMessageStreamResponse({
       stream: uiStream,
     });
 
-  } catch (error) {
-    console.error("Streaming error:", error);
+  } catch (error: any) {
+    console.error("LangGraph streaming error:", error);
     return new Response(
       JSON.stringify({ 
         error: "Internal server error", 
-        message: error instanceof Error ? error.message : "Unknown error" 
+        message: error.message 
       }), 
       { status: 500 }
     );
