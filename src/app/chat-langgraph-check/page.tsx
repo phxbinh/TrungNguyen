@@ -39,7 +39,7 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-neutral-950 text-white">
-      <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-6 p-6 lg:grid-cols-[2fr_1fr]}>
+      <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-6 p-6 lg:grid-cols-[2fr_1fr]">
         
         {/* Left */}
         <ChatPanel
