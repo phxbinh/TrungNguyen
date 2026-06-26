@@ -33,6 +33,13 @@ import React from 'react';
 
 const routes = [
   {
+    href: '/chat-langgraph',
+    title: 'AI Agent với LangGraph',
+    summary:
+      'Test với LangGraph',
+    status: 'test',
+  },
+  {
     href: '/ai-agent',
     title: 'AI Agent',
     summary:
