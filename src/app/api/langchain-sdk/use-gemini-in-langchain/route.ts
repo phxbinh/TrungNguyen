@@ -71,10 +71,18 @@ export async function POST(req: Request) {
         execute: async ({
           question,
         }) => {
-          const response =
+          /*const response =
             await lcModel.invoke(question);
 
-          return response.content;
+          return response.content;*/
+const response =
+  await lcModel.invoke(question);
+
+if (typeof response.content === 'string') {
+  return response.content;
+}
+
+return JSON.stringify(response.content);
         },
       }),
     },
