@@ -10,7 +10,8 @@ import {
 } from "./tools";
 
 const model = new ChatGoogleGenerativeAI({
-  modelName: "gemini-2.0-flash",
+  model: "gemini-2.5-flash",
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
   temperature: 0.3,
 }).bindTools([productSearchTool, productDetailTool, docsSearchTool]);
 
