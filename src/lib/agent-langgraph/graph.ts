@@ -18,7 +18,7 @@ const model = new ChatGoogleGenerativeAI({
 export const app = createReactAgent({
   llm: model,
   tools: [productSearchTool, productDetailTool, docsSearchTool],
-  stateModifier: AgentState,
+  state: AgentState,
   checkpointSaver: new MemorySaver(),
 
   prompt: `Bạn là trợ lý bán hàng thông minh, vui tính và chuyên nghiệp.
