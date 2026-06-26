@@ -40,6 +40,13 @@ const routes = [
     status: 'test',
   },
   {
+    href: '/chat-langgraph-check',
+    title: 'AI Agent với LangGraph UIStream',
+    summary:
+      'Test với LangGraph gọi stream UI',
+    status: 'test',
+  },
+  {
     href: '/ai-agent',
     title: 'AI Agent',
     summary:
