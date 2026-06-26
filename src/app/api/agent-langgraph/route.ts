@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       streamMode: "values",
     }
   );
-
+/*
   const stream = createUIMessageStream({
     execute: async ({ writer }) => {
       for await (const chunk of result) {
@@ -53,6 +53,35 @@ export async function POST(req: Request) {
       }
     },
   });
+*/
+
+
+const stream = createUIMessageStream({
+  execute: async ({ writer }) => {
+    for await (const chunk of result) {
+      const lastMessage = chunk.messages?.at(-1);
+
+      if (!lastMessage) continue;
+
+      const content =
+        typeof lastMessage.content === "string"
+          ? lastMessage.content
+          : Array.isArray(lastMessage.content)
+          ? lastMessage.content
+              .map((c: any) => c.text ?? "")
+              .join("")
+          : "";
+
+      if (!content) continue;
+
+      writer.write({
+        type: "text",
+        id: lastMessage.id ?? crypto.randomUUID(),
+        text: content,
+      });
+    }
+  },
+});
 
   return createUIMessageStreamResponse({ stream });
 }
