@@ -58,28 +58,37 @@ export async function POST(req: Request) {
 
 const stream = createUIMessageStream({
   execute: async ({ writer }) => {
+    const textId = crypto.randomUUID();
+
+    writer.write({
+      type: "text-start",
+      id: textId,
+    });
+
     for await (const chunk of result) {
       const lastMessage = chunk.messages?.at(-1);
-
       if (!lastMessage) continue;
 
       const content =
         typeof lastMessage.content === "string"
           ? lastMessage.content
           : Array.isArray(lastMessage.content)
-          ? lastMessage.content
-              .map((c: any) => c.text ?? "")
-              .join("")
+          ? lastMessage.content.map((c: any) => c.text ?? "").join("")
           : "";
 
       if (!content) continue;
 
       writer.write({
-        type: "text",
-        id: lastMessage.id ?? crypto.randomUUID(),
-        text: content,
+        type: "text-delta",
+        id: textId,
+        delta: content,
       });
     }
+
+    writer.write({
+      type: "text-end",
+      id: textId,
+    });
   },
 });
 
