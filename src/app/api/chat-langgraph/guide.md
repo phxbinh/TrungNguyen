@@ -31,4 +31,37 @@ src/
 ```
 
 
+## Cấu hình cho graph.ts
+```typescript
+const graph = new StateGraph(AgentState)
+
+  // 1. Khai báo tất cả các Node trước
+  .addNode("detectIntent", detectIntent)
+  .addNode("extractParams", extractParams)
+  .addNode("productSearch", productSearch)
+  .addNode("productDetail", productDetail)
+  .addNode("docsRag", docsRag)
+  .addNode("generalChat", generalChat)
+  .addNode("errorHandler", errorHandler)
+  .addNode("finalizeResponse", finalizeResponse)
+
+  // 2. Khai báo các Edge (routing)
+  .addConditionalEdges("detectIntent", routeByIntent)
+
+  .addEdge("extractParams", "productSearch")
+  .addEdge("productSearch", "finalizeResponse")
+  .addEdge("productDetail", "finalizeResponse")
+  .addEdge("docsRag", "finalizeResponse")
+  .addEdge("generalChat", "finalizeResponse")
+  .addEdge("errorHandler", "finalizeResponse")
+
+  // 3. Các edge conditional khác (nếu có)
+  .addConditionalEdges("finalizeResponse", shouldContinue)
+
+  // 4. Entry point
+  .setEntryPoint("detectIntent");
+
+export const app = graph.compile();
+```
+
 
