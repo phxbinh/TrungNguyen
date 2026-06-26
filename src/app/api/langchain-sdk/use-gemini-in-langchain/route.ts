@@ -75,6 +75,7 @@ export async function POST(req: Request) {
             await lcModel.invoke(question);
 
           return response.content;*/
+/*
 const response =
   await lcModel.invoke(question);
 
@@ -83,6 +84,24 @@ if (typeof response.content === 'string') {
 }
 
 return JSON.stringify(response.content);
+*/
+
+const response =
+  await lcModel.invoke(question);
+
+if (typeof response.content === 'string') {
+  return response.content;
+}
+
+if (Array.isArray(response.content)) {
+  return response.content
+    .map((part: any) => part.text ?? '')
+    .join('\n');
+}
+
+return String(response.content);
+
+
         },
       }),
     },
