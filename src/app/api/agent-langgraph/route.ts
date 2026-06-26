@@ -1,8 +1,6 @@
 import { app } from "@/lib/agent-langgraph/graph";
 import {
-  convertToModelMessages,
   createUIMessageStreamResponse,
-  streamText,
   type UIMessage,
 } from "ai";
 
@@ -11,7 +9,14 @@ export async function POST(req: Request) {
 
   const result = await app.stream(
     {
-      messages: await convertToModelMessages(messages),
+      messages: messages.map((m) => ({
+        type: m.role,
+        content:
+          m.parts
+            ?.filter((p) => p.type === "text")
+            .map((p) => p.text)
+            .join("") ?? "",
+      })),
     },
     {
       configurable: {
@@ -28,16 +33,22 @@ export async function POST(req: Request) {
 
         if (!lastMessage) continue;
 
-        if (lastMessage.content) {
-          writer.write({
-            type: "text-delta",
-            id: lastMessage.id ?? crypto.randomUUID(),
-            delta:
-              typeof lastMessage.content === "string"
-                ? lastMessage.content
-                : JSON.stringify(lastMessage.content),
-          });
-        }
+        const content =
+          typeof lastMessage.content === "string"
+            ? lastMessage.content
+            : Array.isArray(lastMessage.content)
+            ? lastMessage.content
+                .map((c: any) => c.text ?? "")
+                .join("")
+            : "";
+
+        if (!content) continue;
+
+        writer.write({
+          type: "text-delta",
+          id: lastMessage.id ?? crypto.randomUUID(),
+          delta: content,
+        });
       }
     },
   });
