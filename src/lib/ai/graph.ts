@@ -7,7 +7,8 @@ import { productDetail } from "./nodes/product-detail";
 import { docsRag } from "./nodes/docs-rag";
 import { generalChat } from "./nodes/general-chat";
 import { synthesize } from "./nodes/synthesize";
-import { routeIntent } from "./router";
+import { synthesize } from "./nodes/synthesize";
+import { extractParams } from "./nodes/extractParams";
 
 export const graph = new StateGraph(AgentState)
   .addNode("detectIntent", detectIntent)
@@ -15,6 +16,7 @@ export const graph = new StateGraph(AgentState)
   .addNode("productDetail", productDetail)
   .addNode("docsRag", docsRag)
   .addNode("generalChat", generalChat)
+  .addNode("extractParams", extractParams)
   .addNode("synthesize", synthesize)
 
   .addEdge("__start__", "detectIntent")
@@ -25,6 +27,7 @@ export const graph = new StateGraph(AgentState)
   .addEdge("productDetail", "synthesize")
   .addEdge("docsRag", "synthesize")
   .addEdge("generalChat", "synthesize")
+  .addEdge("extractParams", "synthesize")
 
   .addEdge("synthesize", END)
 
