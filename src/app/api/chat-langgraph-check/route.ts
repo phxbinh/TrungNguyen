@@ -1,4 +1,5 @@
 
+/*
 import {
   createUIMessageStream,
   createUIMessageStreamResponse,
@@ -45,6 +46,26 @@ export async function POST(req: Request) {
 
   return createUIMessageStreamResponse({ stream });
 }
+*/
+
+
+import { createUIMessageStreamResponse } from "ai";
+import { runGraph } from "./run-graph";
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  const input =
+    messages.at(-1)?.parts
+      ?.filter((p: any) => p.type === "text")
+      ?.map((p: any) => p.text)
+      ?.join("") ?? "";
+
+  const stream = runGraph(input);
+
+  return createUIMessageStreamResponse({ stream });
+}
+
 
 
 
