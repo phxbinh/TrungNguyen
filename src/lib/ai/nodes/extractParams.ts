@@ -22,3 +22,11 @@ export async function extractParams(state: any) {
     answer: JSON.stringify(params, null, 2),
   };
 }
+
+/*
+câu hỏi test: Tìm áo hoodie màu đen size M
+*/
+
+
+
+
