@@ -36,7 +36,7 @@ const routes = [
     href: '/chat-langgraph',
     title: 'AI Agent với LangGraph',
     summary:
-      'Test với LangGraph',
+      'Test với LangGraph\npath: /chat-langgraph',
     status: 'test',
   },
   {
