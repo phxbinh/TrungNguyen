@@ -84,7 +84,7 @@ export async function POST(req: Request) {
 
 
 
-import { app as graph } from "@/lib/ai/graph";
+import { graph as app } from "@/lib/ai/graph";
 import {
   createUIMessageStream,
   createUIMessageStreamResponse,
