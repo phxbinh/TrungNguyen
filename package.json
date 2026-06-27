@@ -36,6 +36,7 @@
     "@langchain/community": "^1.1.0",
     "@ai-sdk/langchain": "^1.x",
     "@langchain/langgraph": "^1.x",
+    "@langchain/langgraph-checkpoint-postgres": "^1.0.3",
     
     "drizzle-orm": "^0.33.0",
     "pg": "^8.x.x"
