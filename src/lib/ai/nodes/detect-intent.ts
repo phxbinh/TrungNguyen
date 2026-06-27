@@ -7,6 +7,7 @@ Classify:
 - PRODUCT_DETAIL
 - DOCS
 - GENERAL
+- EXTRACT_PARAMS
 
 Input: ${state.input}
 Only return intent.
