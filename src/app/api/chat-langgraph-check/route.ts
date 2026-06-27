@@ -84,7 +84,7 @@ export async function POST(req: Request) {
 
 
 
-import { graph as app } from "@/lib/ai/graph";
+import { graph } from "@/lib/ai/graph";
 import {
   createUIMessageStream,
   createUIMessageStreamResponse,
@@ -94,7 +94,7 @@ import {
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
 
-  const result = await app.stream(
+  const result = await graph.stream(
     {
       messages: messages.map((m) => ({
         type: m.role,
