@@ -65,7 +65,7 @@ const stream = createUIMessageStream({
       id: textId,
     });
 // Lấy toàn bộ toolMessages
-//*
+/*
     for await (const chunk of result) {
       const lastMessage = chunk.messages?.at(-1);
       if (!lastMessage) continue;
@@ -88,7 +88,7 @@ const stream = createUIMessageStream({
 //*/
 
 // Chỉ lấy AiMessage
-/*
+//*
 for await (const chunk of result) {
   const lastMessage = chunk.messages?.at(-1);
 
@@ -112,7 +112,7 @@ for await (const chunk of result) {
     delta: content,
   });
 }
-*/
+//*/
 
 
 
