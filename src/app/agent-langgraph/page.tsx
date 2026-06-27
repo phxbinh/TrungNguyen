@@ -1,4 +1,4 @@
-/*
+
 'use client';
 
 import { useChat } from '@ai-sdk/react';
@@ -106,10 +106,10 @@ export default function AgentLangGraphPage() {
     </main>
   );
 }
-*/
 
 
 
+/*
 'use client';
 
 import { useChat } from '@ai-sdk/react';
@@ -130,8 +130,9 @@ const initialMessages: UIMessage[] = [
     ],
   },
 ];
-
-export default function AgentLangGraphPage() {
+*/
+//export default 
+function AgentLangGraphPage_() {
   const {
     messages,
     sendMessage,
