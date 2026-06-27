@@ -9,6 +9,9 @@ export function routeIntent(state: any) {
     case "DOCS":
       return "docsRag";
 
+    case "EXTRACT_PARAMS":
+      return "extractParams";
+
     default:
       return "generalChat";
   }
