@@ -34,25 +34,33 @@ import React from 'react';
 const routes = [
   {
     href: '/chat-langgraph',
-    title: 'AI Agent với LangGraph',
+    title: 'AI Agent - LangGraph',
     summary:
       `Test với LangGraph route state tool.
 Luồng logic gọi tool được xác định sẵn.
+Kiều trả về chưa phải kiểu stream. Là Responsive thông thường của fetch.
 path: /chat-langgraph`,
     status: 'test',
   },
   {
     href: '/chat-langgraph-check',
-    title: 'AI Agent với LangGraph UIStream',
+    title: 'AI Agent - LangGraph UIStream',
     summary:
-      'Test với LangGraph gọi stream UI',
+      `Test với LangGraph gọi stream UI.
+Luồng logic gọi tool được xác định sẵn.
+Kiểu trả về toUIMessageStreamResponse.
+Path: /chat-langgraph-check
+`,
     status: 'test',
   },
   {
     href: '/agent-langgraph',
-    title: 'AI Agent với LangGraph Tự gọi tool',
+    title: 'AI Agent - LangGraph Tự gọi tool',
     summary:
-      'Test với LangGraph tự gọi tool',
+      `Test với LangGraph tự gọi tool.
+Agent AI tự gọi tool và trả về createUIMessageStreamResponse.
+Path: /agent-langgraph.
+`,
     status: 'test',
   },
   {
