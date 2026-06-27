@@ -143,102 +143,133 @@ export default function AgentLangGraphPage() {
     }),
   });
 
+  const isLoading = status === 'streaming';
+
   return (
-    <main className="mx-auto flex h-screen max-w-3xl flex-col bg-slate-50 px-4 py-6 md:px-6">
-      {/* Header tinh tế và chuyên nghiệp */}
-      <header className="mb-4 flex items-center gap-2 border-b border-slate-200 pb-3">
-        <div className="h-2.5 w-2.5 animate-pulse rounded-full bg-emerald-500" />
-        <h1 className="text-xl font-bold tracking-tight text-slate-800">
-          LangGraph Agent Test
-        </h1>
-      </header>
+    /* DÙNG FIXED KHÓA CHẶT BỐ CỤC TOÀN MÀN HÌNH THEO MẪU */
+    <div className="fixed inset-0 flex flex-col max-w-4xl mx-auto bg-slate-50 font-sans shadow-2xl md:border-x border-slate-200/50 overflow-hidden">
+      
+      {/* Header - Ghim trên cùng */}
+      <div className="backdrop-blur-md bg-white/80 border-b border-slate-100 px-6 py-4 flex items-center justify-between shadow-xs shrink-0 z-10">
+        <div className="flex items-center gap-3 mx-auto">
+          <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
+          <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+            LangGraph Agent Test
+          </h1>
+        </div>
+      </div>
 
-      {/* Khung chứa nội dung chat mượt mà, bo góc rộng và đổ bóng nhẹ */}
-      <section className="flex-1 space-y-4 overflow-y-auto rounded-xl border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex flex-col ${
-              message.role === 'user' ? 'items-end' : 'items-start'
-            }`}
-          >
-            {/* Label vai trò nhỏ gọn, trực quan */}
-            <span className="mb-1 px-1 text-[10px] font-medium uppercase tracking-wider text-slate-400">
-              {message.role === 'user' ? 'Bạn' : 'Agent'}
-            </span>
+      {/* Messages - Vùng cuộn tin nhắn ở giữa */}
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scrollbar-thin">
+        {messages.map((message) => {
+          const isUser = message.role === 'user';
 
-            {/* Bong bóng chat bo góc kiểu hiện đại (Message Bubbles) */}
+          return (
             <div
-              className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-sm md:max-w-[75%] ${
-                message.role === 'user'
-                  ? 'bg-blue-600 text-white rounded-tr-none'
-                  : 'bg-slate-100 text-slate-800 rounded-tl-none border border-slate-200/50'
+              key={message.id}
+              className={`flex items-start gap-3 ${
+                isUser ? 'justify-end' : 'justify-start'
               }`}
             >
-              <div className="whitespace-pre-wrap">
-                {message.parts
-                  .filter((part) => part.type === 'text')
-                  .map((part, index) => (
-                    <span key={index}>{part.text}</span>
-                  ))}
+              {/* Avatar AI hiển thị khi không phải là User */}
+              {!isUser && (
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs shadow-md select-none shrink-0 mt-0.5">
+                  AI
+                </div>
+              )}
+
+              {/* Khung chứa text - Giữ nguyên logic render dữ liệu cũ */}
+              <div
+                className={`max-w-[75%] px-5 py-3.5 transition-all duration-200 ${
+                  isUser
+                    ? 'bg-slate-900 text-slate-50 rounded-2xl rounded-tr-xs shadow-md shadow-slate-900/10'
+                    : 'bg-white border border-slate-100 text-slate-800 rounded-2xl rounded-tl-xs shadow-xs'
+                }`}
+              >
+                <div className="whitespace-pre-wrap">
+                  {message.parts
+                    .filter((part) => part.type === 'text')
+                    .map((part, index) => (
+                      <span key={index} className="text-[15px] leading-relaxed">
+                        {part.text}
+                      </span>
+                    ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
-        {/* Trạng thái Loading giả lập ba dấu chấm nhấp nháy chuyên nghiệp */}
-        {status === 'streaming' && (
-          <div className="flex flex-col items-start">
-            <span className="mb-1 px-1 text-[10px] font-medium uppercase tracking-wider text-slate-400">
-              Agent
-            </span>
-            <div className="flex items-center gap-1.5 rounded-2xl bg-slate-100 px-4 py-3 border border-slate-200/50 shadow-sm">
-              <span className="h-2 w-2 animate-bounce rounded-full bg-slate-400 [animation-delay:-0.3s]"></span>
-              <span className="h-2 w-2 animate-bounce rounded-full bg-slate-400 [animation-delay:-0.15s]">s</span>
-              <span className="h-2 w-2 animate-bounce rounded-full bg-slate-400"></span>
+        {/* Trạng thái Loading đang suy nghĩ đồng bộ theo mẫu */}
+        {isLoading && (
+          <div className="flex items-start gap-3 justify-start">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs shadow-md shrink-0 mt-0.5">
+              AI
+            </div>
+            <div className="bg-white border border-slate-100 px-5 py-4 rounded-2xl rounded-tl-xs shadow-xs flex items-center gap-2">
+              <span className="text-[15px] text-slate-500 font-medium">Đang suy nghĩ</span>
+              <span className="flex gap-1 items-center pt-1">
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
+              </span>
             </div>
           </div>
         )}
-      </section>
+      </div>
 
-      {/* Form nhập liệu cân đối, hiệu ứng focus rõ ràng */}
-      <form
-        className="mt-4 flex gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
+      {/* Input Form - Giữ nguyên cấu trúc lấy value từ form element không qua state của code gốc */}
+      <div className="shrink-0 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent p-4 md:p-6 pb-safe z-10">
+        <form
+          className="flex gap-3 bg-white p-2 rounded-2xl border border-slate-200 shadow-lg focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 transition-all duration-200"
+          onSubmit={(e) => {
+            e.preventDefault();
 
-          const form = e.currentTarget;
-          const input = form.elements.namedItem(
-            'message'
-          ) as HTMLInputElement;
+            const form = e.currentTarget;
+            const input = form.elements.namedItem(
+              'message'
+            ) as HTMLInputElement;
 
-          const value = input.value.trim();
-          if (!value) return;
+            const value = input.value.trim();
+            if (!value || isLoading) return;
 
-          sendMessage({
-            text: value,
-          });
+            sendMessage({
+              text: value,
+            });
 
-          input.value = '';
-        }}
-      >
-        <input
-          name="message"
-          placeholder="Nhập câu hỏi..."
-          className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm shadow-sm transition-all placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-        />
-
-        <button
-          type="submit"
-          disabled={status === 'streaming'}
-          className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700 active:bg-blue-800 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+            input.value = '';
+          }}
         >
-          Gửi
-        </button>
-      </form>
-    </main>
+          <input
+            name="message"
+            placeholder="Nhập câu hỏi..."
+            className="flex-1 px-4 py-3 text-[15px] text-slate-800 placeholder-slate-400 focus:outline-none bg-transparent"
+            disabled={isLoading}
+          />
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 text-white font-medium rounded-xl shadow-md hover:shadow-lg disabled:shadow-none transition-all duration-200 flex items-center justify-center cursor-pointer disabled:cursor-not-allowed"
+          >
+            {isLoading ? (
+              <svg className="animate-spin h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
+              <svg className="w-5 h-5 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+              </svg>
+            )}
+          </button>
+        </form>
+      </div>
+
+    </div>
   );
 }
+
 
 
 
