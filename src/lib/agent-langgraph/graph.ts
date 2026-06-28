@@ -4,7 +4,7 @@ checkpointSaver sử dụng MemorySaver của thư viện
 @langchain/langgraph -> lưu lịch sử chát trên RAM
 khi thoát chát và refresh là mất lịch sử chát
 */
-/*
+//*
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { MemorySaver } from "@langchain/langgraph";
@@ -44,7 +44,11 @@ checkpointSaver sử dụng PostgresSaver của thư viện
 @langchain/langgraph-checkpoint-postgres -> lưu lịch sử chát trên DN neon
 Khi thoát chát và refresh thì lịch sử chát vẫn được lưu lại
 */
-//*
+/*
+🆘❌☢️Bị lỗi lặp lại câu chào của AI đầu phiên chát cho mỗi 
+câu trả lời của AI sau mỗi câu hỏi của User
+*/
+/*
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
