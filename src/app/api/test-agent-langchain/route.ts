@@ -21,13 +21,14 @@ const getWeather = tool(
   }
 );
 
+
 export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json();
 
     const model = new ChatGoogleGenerativeAI({
-      modelName: "gemini-2.5-flash-lite",   // hoặc gemini-1.5-flash, gemini-2.0-flash-exp
-      apiKey: process.env.GOOGLE_GENAI_API_KEY,
+      model: "gemini-2.5-flash",
+      apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
       temperature: 0.3,
     });
 
