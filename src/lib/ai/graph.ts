@@ -1,4 +1,5 @@
 
+//✅ -> Gốc chạy được và không có extractParams
 /*
 import { StateGraph, END } from "@langchain/langgraph";
 import { AgentState } from "./state";
@@ -9,7 +10,6 @@ import { productDetail } from "./nodes/product-detail";
 import { docsRag } from "./nodes/docs-rag";
 import { generalChat } from "./nodes/general-chat";
 import { synthesize } from "./nodes/synthesize";
-import { extractParams } from "./nodes/extractParams";
 import { routeIntent } from "./router";
 
 export const graph = new StateGraph(AgentState)
@@ -28,12 +28,14 @@ export const graph = new StateGraph(AgentState)
   .addEdge("productDetail", "synthesize")
   .addEdge("docsRag", "synthesize")
   .addEdge("generalChat", "synthesize")
+
   .addEdge("synthesize", END)
 
   .compile();
-*/
+//*/
 
 
+//⛔️ -> Không thấy phản ứng gì
 /*
 import { StateGraph, END } from "@langchain/langgraph";
 import { AgentState } from "./state";
@@ -84,7 +86,7 @@ export const graph = new StateGraph(AgentState)
 
   .compile();
 
-*/
+//*/
 
 
 import { StateGraph, END } from "@langchain/langgraph";
