@@ -51,9 +51,9 @@ Kiều trả về chưa phải kiểu stream, mà là Responsive thông thườn
       `LangGraph route state tool, gọi stream UI.
 Luồng logic gọi tool được xác định sẵn.
 Kiểu trả về toUIMessageStreamResponse.
-*✳️ Khai báo các tools sau đó addNode và addEdge với graph.
-- 🔸lib: src/lib/ai/...
-- 🔸path: /chat-langgraph-check
+/n*✳️ Khai báo các tools sau đó addNode và addEdge với graph.
+/n- 🔸lib: src/lib/ai/...
+/n- 🔸path: /chat-langgraph-check
 `,
     status: 'test',
   },
