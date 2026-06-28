@@ -101,7 +101,8 @@ Khai báo các tools, sau đó:
 -> Không sử dụng langchain langgraph.
 -> Chỉ sử dụng ai ai-sdk/... và gemini.
 - 🔸lib: app/api/ai-hybrid-chat 
-- 🔸path: app/ai-hybrid-chat`,
+- 🔸path: app/ai-hybrid-chat
+`,
     status: 'testing',
   },
   {
@@ -119,7 +120,7 @@ Khai báo các tools, sau đó:
 -> Sử dụng DynamicTool của @langchain/core/tools để tạo tool.
 -> Chỉ thử nghiệm đơn thuần thay thế hàm tool của ai bằng DynamicTool để tạo tool.
 - 🔸lib: app/api/langchain-sdk 
-- 🔸path: app/langchain-sdk`,
+- 🔸path: app/langchain-sdk
 `,
     status: 'testing',
   },
@@ -127,12 +128,12 @@ Khai báo các tools, sau đó:
     href: '/use-gemini-in-langchain',
     title: 'Gemini + LangChain',
     summary:
-      'Tích hợp Gemini model vào LangChain để test reasoning + tool execution.
+      `Tích hợp Gemini model vào LangChain để test reasoning + tool execution.
 -> Dùng tính năng gọi model llm của langchain để xử lý kết quả cuối cùng trước khi trả kết quả về cho UI.
 -> Không thấy hiệu quả, làm tăng token
 - 🔸lib: app/api/langchain-sdk/use-gemini-in-langchain
-- 🔸path: app/use-gemini-in-langchain`,
-',
+- 🔸path: app/use-gemini-in-langchain
+`,
     status: 'draft',
   },
 ];
