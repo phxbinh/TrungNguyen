@@ -21,7 +21,21 @@ export const graph = new StateGraph(AgentState)
 
   .addEdge("__start__", "detectIntent")
 
-  .addConditionalEdges("detectIntent", routeIntent)
+  // không đi qua extactParams
+  //.addConditionalEdges("detectIntent", routeIntent)
+
+// Hai cái addConditionEdges bên dưới thay thế cho cái ở trên
+.addConditionalEdges("detectIntent", (state) => {
+  if (
+    state.intent === "PRODUCT_SEARCH" ||
+    state.intent === "PRODUCT_DETAIL"
+  ) {
+    return "extractParams";
+  }
+  return routeIntent(state);
+})
+
+.addConditionalEdges("extractParams", routeIntent)
 
   .addEdge("productSearch", "synthesize")
   .addEdge("productDetail", "synthesize")
