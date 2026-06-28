@@ -5,8 +5,7 @@ import {
   type UIMessage,
 } from "ai";
 
-//export 
-async function Binh_POST__(req: Request) {
+export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
 
   const result = await app.stream(
@@ -107,7 +106,10 @@ import {
   type UIMessage,
 } from "ai";
 */
-export async function POST(req: Request) {
+// ❌Lỗi bị lặp lại câu chào của AI đầu phiên chát
+// cho mỗi câu trả lời khi dùng checkpointSaver ờ DB neon
+//export 
+async function Binh_POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
 
   // chỉ lấy message mới nhất
