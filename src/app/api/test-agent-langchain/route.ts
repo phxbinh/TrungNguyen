@@ -66,14 +66,21 @@ import * as z from "zod";
 import { NextRequest } from "next/server";
 import { createAgent } from "langchain";
 import { MemorySaver } from "@langchain/langgraph";
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
 const contextSchema = z.object({
   user_id: z.string(),
 });
 
+const model = new ChatGoogleGenerativeAI({
+      model: "gemini-2.5-flash",
+      apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+      temperature: 0.3,
+    });
+
 // Tạo agent một lần (không tạo mỗi request)
 const agent = createAgent({
-  model: "google-genai:gemini-2.5-flash",
+  model,
   tools: [],
   contextSchema,
   checkpointer: new MemorySaver(),
