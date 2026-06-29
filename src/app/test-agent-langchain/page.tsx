@@ -1,118 +1,135 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-type Message = {
-  role: "user" | "assistant";
+type AgentState = {
+  input: string;
+  intent?: string;
+  products?: any[];
+  product?: any;
+  docs?: any[];
+  answer?: string;
+};
+
+type ChatMessage = {
+  role: 'user' | 'assistant';
   content: string;
 };
 
 export default function HomePage() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function sendMessage() {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [agentState, setAgentState] = useState<AgentState | null>(null);
+
+  async function handleSend() {
     if (!input.trim()) return;
 
-    const newMessages: Message[] = [
-      ...messages,
-      {
-        role: "user",
-        content: input,
-      },
-    ];
+    const userMessage = input;
 
-    setMessages(newMessages);
-    setInput("");
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'user',
+        content: userMessage,
+      },
+    ]);
+
+    setInput('');
     setLoading(true);
 
     try {
-      const res = await fetch("/api/test-agent-langchain", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const res = await fetch('/api/chat-langgraph', {
+        method: 'POST',
         body: JSON.stringify({
-          messages: newMessages,
+          message: userMessage,
         }),
       });
 
       const data = await res.json();
 
-      // LangChain agent thường trả messages[]
-      const aiMessage =
-        data.messages?.[data.messages.length - 1]?.content ||
-        "Không có phản hồi";
-
-      setMessages([
-        ...newMessages,
+      setMessages((prev) => [
+        ...prev,
         {
-          role: "assistant",
-          content: aiMessage,
+          role: 'assistant',
+          content: data.content,
         },
       ]);
-    } catch (error) {
-      console.error(error);
 
-      setMessages([
-        ...newMessages,
-        {
-          role: "assistant",
-          content: "Lỗi gọi API",
-        },
-      ]);
+      //setAgentState(data.state);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Test Agent</h1>
-
-      <div className="border rounded-lg p-4 h-[500px] overflow-y-auto mb-4 space-y-4">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`p-3 rounded-lg ${
-              msg.role === "user"
-                ? "bg-blue-100 text-right"
-                : "bg-gray-100"
-            }`}
-          >
-            <p className="text-sm font-semibold mb-1">
-              {msg.role === "user" ? "Bạn" : "Agent"}
+    <main className="min-h-screen bg-neutral-950 text-white">
+      <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-6 p-6 lg:grid-cols-[2fr_1fr]">
+        
+        {/* Left side */}
+        <section className="flex flex-col rounded-2xl border border-neutral-800 bg-neutral-900">
+          <div className="border-b border-neutral-800 p-4">
+            <h1 className="text-xl font-bold">LangGraph Playground</h1>
+            <p className="text-sm text-neutral-400">
+              Test deterministic AI workflow with routing + state.
             </p>
-            <p>{msg.content}</p>
           </div>
-        ))}
 
-        {loading && (
-          <div className="bg-gray-100 p-3 rounded-lg">
-            Agent đang suy nghĩ...
+          <div className="flex-1 space-y-4 overflow-y-auto p-4">
+            {messages.length === 0 && (
+              <div className="rounded-xl border border-dashed border-neutral-700 p-4 text-sm text-neutral-400">
+                Try:
+                <ul className="mt-2 space-y-2">
+                  <li>• Tìm áo hoodie</li>
+                  <li>• Cho xem chi tiết áo hoodie</li>
+                  <li>• Hướng dẫn giặt áo hoodie</li>
+                  <li>• Bạn giúp được gì?</li>
+                </ul>
+              </div>
+            )}
+
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`max-w-[80%] rounded-xl px-4 py-3 ${
+                  message.role === 'user'
+                    ? 'ml-auto bg-blue-600'
+                    : 'bg-neutral-800'
+                }`}
+              >
+                <p className="text-sm whitespace-pre-wrap">
+                  {message.content}
+                </p>
+              </div>
+            ))}
+
+            {loading && (
+              <div className="w-fit rounded-xl bg-neutral-800 px-4 py-3 text-sm text-neutral-400">
+                Running graph...
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      <div className="flex gap-2">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Nhập tin nhắn..."
-          className="flex-1 border rounded-lg px-4 py-2"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") sendMessage();
-          }}
-        />
+          <div className="border-t border-neutral-800 p-4">
+            <div className="flex gap-3">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Nhập câu hỏi..."
+                className="flex-1 rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 outline-none"
+              />
 
-        <button
-          onClick={sendMessage}
-          disabled={loading}
-          className="px-4 py-2 border rounded-lg"
-        >
-          Gửi
-        </button>
+              <button
+                onClick={handleSend}
+                disabled={loading}
+                className="rounded-xl bg-white px-5 py-3 font-medium text-black disabled:opacity-50"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
   );
