@@ -52,6 +52,8 @@ console.log(JSON.stringify(result, null, 2));
     return Response.json(result);
   } catch (error) {
     console.error(error);
-    return Response.json({ error: "Có lỗi xảy ra" }, { status: 500 });
+    return Response.json({
+      error: error instanceof Error ? error.message : "Unknown error"
+    })
   }
 }
