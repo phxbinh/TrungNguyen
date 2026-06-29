@@ -136,6 +136,13 @@ Khai báo các tools, sau đó:
 `,
     status: 'draft',
   },
+{
+    href: '/test-agent-langchain',
+    title: 'Agent Langchain guide from web',
+    summary:
+      'Agent đơn giản hướng dẫn từ langchain web, (grok,chatGPT, gemini)',
+    status: 'done',
+  },
 ];
 
 export default function HomePage() {
