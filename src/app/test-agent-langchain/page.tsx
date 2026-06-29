@@ -10,73 +10,69 @@ type ChatMessage = {
 export default function HomePage() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   async function handleSend() {
-    if (!input.trim()) return;
+    if (!input.trim() || loading) return;
 
-    const userMessage = input;
-
-    setMessages((prev) => [
-      ...prev,
+    const nextMessages: ChatMessage[] = [
+      ...messages,
       {
         role: 'user',
-        content: userMessage,
+        content: input,
       },
-    ]);
+    ];
 
+    // optimistic update
+    setMessages(nextMessages);
     setInput('');
     setLoading(true);
 
     try {
-/*
-      const res = await fetch('/api/chat-langgraph', {
+      const res = await fetch('/api/test-agent-langchain', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          message: userMessage,
+          messages: nextMessages,
         }),
       });
 
       const data = await res.json();
 
-      setMessages((prev) => [
-        ...prev,
+      console.log(data);
+
+      const agentMessages = data?.messages ?? [];
+      const lastMessage = agentMessages[agentMessages.length - 1];
+
+      let assistantContent = '';
+
+      if (typeof lastMessage?.content === 'string') {
+        assistantContent = lastMessage.content;
+      } else if (Array.isArray(lastMessage?.content)) {
+        assistantContent = lastMessage.content
+          .map((c: any) => c.text || '')
+          .join('\n');
+      }
+
+      setMessages([
+        ...nextMessages,
         {
           role: 'assistant',
-          content: data.content,
+          content: assistantContent || 'Không có phản hồi',
         },
       ]);
-*/
+    } catch (error) {
+      console.error(error);
 
-const res = await fetch('/api/test-agent-langchain', {
-  method: 'POST',
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    messages: [
-      {
-        role: "user",
-        content: userMessage
-      }
-    ],
-  }),
-});
-
-const data = await res.json();
-
-const lastMessage = data.messages[data.messages.length - 1];
-
-setMessages((prev) => [
-  ...prev,
-  {
-    role: 'assistant',
-    content: lastMessage.content,
-  },
-]);
-
-
+      setMessages([
+        ...nextMessages,
+        {
+          role: 'assistant',
+          content: 'Có lỗi xảy ra.',
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -84,30 +80,13 @@ setMessages((prev) => [
 
   return (
     <main className="min-h-screen bg-neutral-950 text-white">
-      <div className="mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-6 p-6 lg:grid-cols-[2fr_1fr]">
-        
-        {/* Left side */}
-        <section className="flex flex-col rounded-2xl border border-neutral-800 bg-neutral-900">
+      <div className="mx-auto flex min-h-screen max-w-4xl flex-col p-6">
+        <section className="flex flex-1 flex-col rounded-2xl border border-neutral-800 bg-neutral-900">
           <div className="border-b border-neutral-800 p-4">
-            <h1 className="text-xl font-bold">LangGraph Playground</h1>
-            <p className="text-sm text-neutral-400">
-              Test deterministic AI workflow with routing + state.
-            </p>
+            <h1 className="text-xl font-bold">LangChain Agent Playground</h1>
           </div>
 
           <div className="flex-1 space-y-4 overflow-y-auto p-4">
-            {messages.length === 0 && (
-              <div className="rounded-xl border border-dashed border-neutral-700 p-4 text-sm text-neutral-400">
-                Try:
-                <ul className="mt-2 space-y-2">
-                  <li>• Tìm áo hoodie</li>
-                  <li>• Cho xem chi tiết áo hoodie</li>
-                  <li>• Hướng dẫn giặt áo hoodie</li>
-                  <li>• Bạn giúp được gì?</li>
-                </ul>
-              </div>
-            )}
-
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -117,7 +96,7 @@ setMessages((prev) => [
                     : 'bg-neutral-800'
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">
+                <p className="whitespace-pre-wrap text-sm">
                   {message.content}
                 </p>
               </div>
@@ -125,7 +104,7 @@ setMessages((prev) => [
 
             {loading && (
               <div className="w-fit rounded-xl bg-neutral-800 px-4 py-3 text-sm text-neutral-400">
-                Running graph...
+                Thinking...
               </div>
             )}
           </div>
@@ -135,6 +114,9 @@ setMessages((prev) => [
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSend();
+                }}
                 placeholder="Nhập câu hỏi..."
                 className="flex-1 rounded-xl border border-neutral-700 bg-neutral-950 px-4 py-3 outline-none"
               />
