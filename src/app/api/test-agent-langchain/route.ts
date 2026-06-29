@@ -3,6 +3,7 @@
 // Link web:
 // https://docs.langchain.com/oss/javascript/langchain/overview
 
+/*
 // app/api/agent/route.ts
 import { createAgent, tool } from "langchain";  // Kiểm tra lại import chính xác
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
@@ -20,7 +21,6 @@ const getWeather = tool(
     }),
   }
 );
-
 
 export async function POST(req: NextRequest) {
   try {
@@ -43,11 +43,7 @@ export async function POST(req: NextRequest) {
       messages,
     });
 
-
-console.log(JSON.stringify(result, null, 2));
-
-
-
+    console.log(JSON.stringify(result, null, 2));
 
     return Response.json(result);
   } catch (error) {
@@ -57,4 +53,78 @@ console.log(JSON.stringify(result, null, 2));
     })
   }
 }
+*/
+
+
+
+import { createAgent } from "langchain";
+import { tool } from "@langchain/core/tools";
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import * as z from "zod";
+import { NextRequest } from "next/server";
+
+// Tool example
+const getWeather = tool(
+  async ({ city }) => {
+    return `Thời tiết tại ${city} đang rất sunny ☀️`;
+  },
+  {
+    name: "get_weather",
+    description: "Lấy thông tin thời tiết cho một thành phố",
+    schema: z.object({
+      city: z.string().describe("Tên thành phố cần xem thời tiết"),
+    }),
+  }
+);
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { messages } = body;
+
+    if (!Array.isArray(messages)) {
+      return Response.json(
+        { error: "messages must be an array" },
+        { status: 400 }
+      );
+    }
+
+    const model = new ChatGoogleGenerativeAI({
+      model: "gemini-2.5-flash",
+      apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
+      temperature: 0.3,
+    });
+
+    const agent = createAgent({
+      model,
+      tools: [getWeather],
+      system:
+        "Bạn là trợ lý bán hàng thông minh, vui tính và chuyên nghiệp. Trả lời bằng tiếng Việt.",
+    });
+
+    const result = await agent.invoke({
+      messages,
+    });
+
+    console.log(JSON.stringify(result, null, 2));
+
+    return Response.json(result);
+  } catch (error) {
+    console.error(error);
+
+    return Response.json(
+      {
+        error:
+          error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+
+
+
+
+
 
