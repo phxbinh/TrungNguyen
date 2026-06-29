@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
     const agent = createAgent({
       model,
       tools: [getWeather],
-      system:
+      systemPrompt:
         "Bạn là trợ lý bán hàng thông minh, vui tính và chuyên nghiệp. Trả lời bằng tiếng Việt.",
     });
 
