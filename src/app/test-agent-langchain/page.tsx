@@ -2,15 +2,6 @@
 
 import { useState } from 'react';
 
-type AgentState = {
-  input: string;
-  intent?: string;
-  products?: any[];
-  product?: any;
-  docs?: any[];
-  answer?: string;
-};
-
 type ChatMessage = {
   role: 'user' | 'assistant';
   content: string;
@@ -21,7 +12,6 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [agentState, setAgentState] = useState<AgentState | null>(null);
 
   async function handleSend() {
     if (!input.trim()) return;
@@ -40,6 +30,7 @@ export default function HomePage() {
     setLoading(true);
 
     try {
+/*
       const res = await fetch('/api/chat-langgraph', {
         method: 'POST',
         body: JSON.stringify({
@@ -56,8 +47,36 @@ export default function HomePage() {
           content: data.content,
         },
       ]);
+*/
 
-      //setAgentState(data.state);
+const res = await fetch('/api/test-agent-langchain', {
+  method: 'POST',
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    messages: [
+      {
+        role: "user",
+        content: userMessage
+      }
+    ],
+  }),
+});
+
+const data = await res.json();
+
+const lastMessage = data.messages[data.messages.length - 1];
+
+setMessages((prev) => [
+  ...prev,
+  {
+    role: 'assistant',
+    content: lastMessage.content,
+  },
+]);
+
+
     } finally {
       setLoading(false);
     }
