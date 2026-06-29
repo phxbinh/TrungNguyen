@@ -43,6 +43,12 @@ export async function POST(req: NextRequest) {
       messages,
     });
 
+
+console.log(JSON.stringify(result, null, 2));
+
+
+
+
     return Response.json(result);
   } catch (error) {
     console.error(error);
