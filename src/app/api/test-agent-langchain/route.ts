@@ -4,6 +4,7 @@
 // https://docs.langchain.com/oss/javascript/langchain/overview
 
 // app/api/agent/route.ts
+/*
 import { createAgent, tool } from "langchain";  // Kiểm tra lại import chính xác
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import * as z from "zod";
@@ -55,5 +56,80 @@ console.log(JSON.stringify(result, null, 2));
     return Response.json({
       error: error instanceof Error ? error.message : "Unknown error"
     })
+  }
+}
+
+*/
+
+
+import * as z from "zod";
+import { NextRequest } from "next/server";
+import { createAgent } from "langchain";
+import { MemorySaver } from "@langchain/langgraph";
+
+const contextSchema = z.object({
+  user_id: z.string(),
+});
+
+// Tạo agent một lần (không tạo mỗi request)
+const agent = createAgent({
+  model: "google-genai:gemini-2.5-flash",
+  tools: [],
+  contextSchema,
+  checkpointer: new MemorySaver(),
+});
+
+export async function POST(req: NextRequest) {
+  try {
+    const { message, threadId, userId } = await req.json();
+
+    if (!message) {
+      return Response.json(
+        { error: "Missing message" },
+        { status: 400 }
+      );
+    }
+
+    const result = await agent.invoke(
+      {
+        messages: [
+          {
+            role: "user",
+            content: message,
+          },
+        ],
+      },
+      {
+        configurable: {
+          thread_id: threadId ?? crypto.randomUUID(),
+        },
+        context: {
+          user_id: userId ?? "anonymous-user",
+        },
+      }
+    );
+
+    const lastMessage = result.messages.at(-1);
+
+    return Response.json({
+      threadId,
+      content:
+        lastMessage && "content" in lastMessage
+          ? lastMessage.content
+          : null,
+      raw: result,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return Response.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }
