@@ -28,7 +28,7 @@ export default function HomePage() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/agent", {
+      const res = await fetch("/api/test-agent-langchain", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
