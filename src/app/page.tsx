@@ -143,6 +143,13 @@ Khai báo các tools, sau đó:
       'Agent đơn giản hướng dẫn từ langchain web, (grok,chatGPT, gemini)',
     status: 'done',
   },
+{
+    href: '/chat-langgraph-agent-child',
+    title: 'Tạo Agent cha (graph) agent con (createReactAgent)',
+    summary:
+      'Agent cha (detectIntent), con tự gọi tool',
+    status: 'done',
+  },
 ];
 
 export default function HomePage() {
