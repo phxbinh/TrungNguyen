@@ -64,6 +64,7 @@ import * as z from "zod";
 import { NextRequest } from "next/server";
 
 // Tool example
+/*
 const getWeather = tool(
   async ({ city }) => {
     return `Thời tiết tại ${city} đang rất sunny ☀️`;
@@ -76,6 +77,78 @@ const getWeather = tool(
     }),
   }
 );
+*/
+
+  const getWeather = tool(
+    async ({ city }) => {
+      try {
+        const geoRes = await fetch(
+          `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=vi`
+        );
+        const geoData = await geoRes.json();
+
+        if (!geoData.results || geoData.results.length === 0) {
+          return `Không tìm thấy thông tin thời tiết cho thành phố "${city}".`;
+        }
+
+        const { latitude, longitude, name } = geoData.results[0];
+
+        const weatherRes = await fetch(
+          `https://api.open-meteo.com/v1/forecast?` +
+          `latitude=${latitude}&longitude=${longitude}` +
+          `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m` +
+          `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+          `&timezone=Asia/Ho_Chi_Minh`
+        );
+
+        const weatherData = await weatherRes.json();
+        const current = weatherData.current;
+        const daily = weatherData.daily;
+
+        // Weather code map với index signature
+        const weatherCodeMap: { [key: number]: string } = {
+          0: "Trời quang",
+          1: "Chủ yếu quang",
+          2: "Có mây",
+          3: "Mây u ám",
+          45: "Sương mù",
+          51: "Mưa phùn nhẹ",
+          61: "Mưa nhẹ",
+          63: "Mưa vừa",
+          65: "Mưa to",
+          71: "Tuyết nhẹ",
+          80: "Mưa rào",
+          95: "Giông",
+        };
+
+        const code = Number(current.weather_code);
+        const description = weatherCodeMap[code] || "Thời tiết thay đổi";
+
+        return `
+**Thời tiết tại ${name} (${city})**
+
+🌡️ Nhiệt độ hiện tại: **${current.temperature_2m}°C**
+☁️ Cảm giác như: ${current.apparent_temperature}°C
+💧 Độ ẩm: ${current.relative_humidity_2m}%
+🌬️ Gió: ${current.wind_speed_10m} km/h
+⛅ Trạng thái: ${description}
+
+**Dự báo:**
+- Ngày mai: ${daily.temperature_2m_max[1]}°C / ${daily.temperature_2m_min[1]}°C
+- Ngày kia: ${daily.temperature_2m_max[2]}°C / ${daily.temperature_2m_min[2]}°C
+        `.trim();
+      } catch (error) {
+        console.error(error);
+        return `Có lỗi khi lấy dữ liệu thời tiết cho "${city}". Vui lòng thử lại sau.`;
+      }
+    },
+    {
+    description: 'Lấy thông tin thời tiết hiện tại và dự báo ngắn hạn',
+    parameters: z.object({
+      city: z.string().describe('Tên thành phố, ví dụ: Hà Nội, Hồ Chí Minh, Đà Nẵng'),
+    }
+  );
+
 
 export async function POST(req: NextRequest) {
   try {
