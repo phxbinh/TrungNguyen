@@ -64,21 +64,11 @@ import * as z from "zod";
 import { NextRequest } from "next/server";
 
 // Tool example
-/*
-const getWeather = tool(
-  async ({ city }) => {
-    return `Thời tiết tại ${city} đang rất sunny ☀️`;
-  },
-  {
-    name: "get_weather",
-    description: "Lấy thông tin thời tiết cho một thành phố",
-    schema: z.object({
-      city: z.string().describe("Tên thành phố cần xem thời tiết"),
-    }),
-  }
-);
-*/
-
+import {
+  productSearchTool,
+  productDetailTool,
+  docsSearchTool,
+} from "@/lib/agent-langgraph/tools";
 
 const getWeather = tool(
   async ({ city }) => {
@@ -175,7 +165,9 @@ export async function POST(req: NextRequest) {
 
     const agent = createAgent({
       model,
-      tools: [getWeather],
+      tools: [getWeather, productSearchTool,
+  productDetailTool,
+  docsSearchTool],
       systemPrompt:
         "Bạn là trợ lý bán hàng thông minh, vui tính và chuyên nghiệp. Trả lời bằng tiếng Việt.",
     });
@@ -199,9 +191,6 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-
-
 
 
 
