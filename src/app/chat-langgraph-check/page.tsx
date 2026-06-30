@@ -24,6 +24,8 @@ const initialMessages: UIMessage[] = [
 type AgentState = {
   input: string;
   intent?: string;
+  query?: string;
+  params?: any[];
   products?: any[];
   product?: any;
   docs?: any[];
