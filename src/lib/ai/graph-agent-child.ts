@@ -1,12 +1,12 @@
 import { StateGraph, END } from "@langchain/langgraph";
 import { AgentState } from "./state";
 
-import { detectIntent } from "./nodes/detect-intent";
+import { detectIntent } from "./product-agent/detect-intent";
 import { productAgentNode } from "./product-agent/product-agent-node";
 import { docsRag } from "./nodes/docs-rag";
 import { generalChat } from "./nodes/general-chat";
 import { synthesize } from "./nodes/synthesize";
-import { routeIntent } from "./router-agent-child";
+import { routeIntent } from "./route-agent-child";
 
 export const graph = new StateGraph(AgentState)
   .addNode("detectIntent", detectIntent)
