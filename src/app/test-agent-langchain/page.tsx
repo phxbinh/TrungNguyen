@@ -1,6 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+//✅Import:
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
+//✅Use method:
+/*
+  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+    {m.content}
+  </ReactMarkdown>
+*/
 
 type ChatMessage = {
   role: 'user' | 'assistant';
@@ -150,9 +160,14 @@ export default function HomePage() {
                     : 'bg-neutral-800'
                 }`}
               >
+{/*
                 <p className="whitespace-pre-wrap text-sm">
                   {message.content}
                 </p>
+*/}
+  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+    {message.content}
+  </ReactMarkdown>
               </div>
             ))}
 
