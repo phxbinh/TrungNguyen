@@ -174,6 +174,176 @@ export const AgentLogPayloadSchema = z.object({
 export type AgentLogPayload = z.infer<typeof AgentLogPayloadSchema>;
 ```
 
+Vì sao input_tokens nhiều hơn dù user chỉ gửi "Hello"?
 
+Khi nhìn log:
+
+{
+  "usage_metadata": {
+    "input_tokens": 74,
+    "output_tokens": 36,
+    "total_tokens": 110
+  }
+}
+
+Dễ nghĩ rằng:
+
+User input = "Hello"
+=> chỉ vài token
+=> sao lại thành 74?
+
+Nhưng thực tế input_tokens không chỉ là message của user.
+
+⸻
+
+Input tokens gồm những gì?
+
+1. User message
+
+Ví dụ:
+
+Hello
+
+Phần này thường chỉ ~1–3 tokens.
+
+⸻
+
+2. System Prompt
+
+Đây thường là phần tốn token nhất.
+
+Ví dụ:
+
+systemPrompt: `
+Bạn là trợ lý bán hàng.
+Luôn trả lời lịch sự.
+Ưu tiên tư vấn sản phẩm.
+...`
+
+Model luôn nhận phần này trước message user.
+
+Có thể chiếm:
+
+30–300+ tokens
+
+⸻
+
+3. Tool definitions
+
+Nếu dùng agent có tools:
+
+tools: [
+  productSearchTool,
+  docsSearchTool
+]
+
+LangChain sẽ serialize toàn bộ:
+
+* tool name
+* description
+* schema
+* parameters
+
+Ví dụ:
+
+{
+  name: "product_search",
+  description: "Tìm sản phẩm",
+  parameters: {...}
+}
+
+Phần này có thể thêm:
+
+20–200+ tokens/tool
+
+⸻
+
+4. Conversation history
+
+Nếu có memory:
+
+checkpointer: new MemorySaver()
+
+Model sẽ nhận lại:
+
+* HumanMessage cũ
+* AIMessage cũ
+* ToolMessage cũ
+
+=> token tăng dần theo số lượt chat.
+
+⸻
+
+5. Provider wrappers (internal formatting)
+
+Ví dụ với Gemini/OpenAI:
+
+Model thường wrap thành dạng:
+
+System:
+...
+Tools:
+...
+User:
+Hello
+
+Kèm:
+
+* role metadata
+* tool call protocol
+* safety formatting
+
+Phần này cũng tiêu token.
+
+⸻
+
+Ví dụ breakdown thực tế
+
+User chỉ gửi:
+
+Hello
+
+Nhưng model thực nhận:
+
+System prompt         ~40
+Tool schemas          ~25
+Role formatting       ~5
+User message          ~2
+--------------------------
+Total                 ~74
+
+=> hoàn toàn khớp log:
+
+{
+  "input_tokens": 74
+}
+
+⸻
+
+Công thức tổng quát
+
+input_tokens =
+system_prompt
++ tool_definitions
++ conversation_history
++ provider_wrappers
++ current_user_message
+
+⸻
+
+Kết luận
+
+input_tokens = toàn bộ prompt gửi vào model
+
+Không phải chỉ là:
+
+user.content
+
+Cho nên:
+
+User = "Hello"
+Input tokens = 74
+
+là hoàn toàn bình thường.
 
 
