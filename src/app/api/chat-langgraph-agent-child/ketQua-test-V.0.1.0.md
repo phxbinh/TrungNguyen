@@ -19,6 +19,7 @@ Có hai Agent được sử dụng:
 - **Agent con** được thiết kế với
   - createReactAgent cho phép tự chọn lựa việc gọi tool phù hợp nhất.
   - Được gọi thông qua việc tạo node trung gian và được dùng addNode với addEdge để gọi
+
 ----
 ## 2. Packages và AI Api key
 ### 2.1 Packages
@@ -54,9 +55,47 @@ Sử dụng api key của gemini.
 * Project name: projects/378791152913
 * Project number: 378791152913
 * Project id: gen-lang-client-0616907835
+
 ----
 ## 3. Cấu trúc folders/files
+**Folder chính: src/lib/ai**
+- src/lib/ai/route-agent-child.ts
+- src/lib/ai/graph-agent-child.ts
+```typescript
+import { StateGraph, END } from "@langchain/langgraph";
+import { AgentState } from "./state";
 
+import { detectIntent } from "./product-agent/detect-intent";
+import { productAgentNode } from "./product-agent/product-agent-node";
+import { docsRag } from "./nodes/docs-rag";
+import { generalChat } from "./nodes/general-chat";
+import { synthesize } from "./nodes/synthesize";
+import { routeIntent } from "./route-agent-child";
+```
+- src/lib/ai/nodes
+  - src/lib/ai/nodes/docs-rag.ts
+  - src/lib/ai/nodes/general-chat.ts
+  - src/lib/ai/nodes/synthesize.ts
+- src/lib/ai/product-agent
+  - src/lib/ai/product-agent/detect-intent.ts
+```typescript
+import { model } from "../model";
+```
+  - src/lib/ai/product-agent/product-agent-node.ts
+```typescript
+import { productAgent } from "./product-agent";
+```
+  - src/lib/ai/product-agent/product-agent.ts
+```typescript
+import { createReactAgent } from "@langchain/langgraph/prebuilt";
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+
+import {
+  productSearchTool,
+  productDetailTool,
+} from "../../agent-langgraph/tools";
+import { model } from "../model";
+```
 
 ----
 ## 4. Url để kiểm tra hoạt động của Ai agent
@@ -82,4 +121,8 @@ Full Agent state
   "answer": "Đã tìm thấy một số sản phẩm phù hợp với \"iphone 16 pro\".\nSản phẩm: iPhone 16 Pro, giá: 28.990.000, danh mục: Điện thoại."
 }
 ```
+
+----
+## 6. Đánh giá kết quả kiểm thử
+
 
