@@ -180,14 +180,14 @@ Full Agent state
 }
 ```
 ### 5.2 Tìm docRag
-```markdown
-**user**:
+
+**USER**:
 Hướng dẫn giặt áo sợi tre và quần jean.  
 **AI**:
 Để giặt áo sợi tre và quần jean, bạn có thể tham khảo hướng dẫn sau:
-  * **Áo sợi tre:** Giặt ở nhiệt độ dưới 35 độ.
-  * **Quần jean:** Giặt ở nhiệt độ dưới 35 độ, nên giặt bằng tay với chất giặt có chất tẩy nhẹ.
-```
+* **Áo sợi tre:** Giặt ở nhiệt độ dưới 35 độ.
+* **Quần jean:** Giặt ở nhiệt độ dưới 35 độ, nên giặt bằng tay với chất giặt có chất tẩy nhẹ.
+
 ---
 ```plaintext
 Detect Intent: DOCS
