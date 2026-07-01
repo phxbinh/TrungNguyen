@@ -1,5 +1,5 @@
 import { StateGraph, END } from "@langchain/langgraph";
-import { AgentState } from "./state";
+import { AgentState } from "./state-agent-child";
 
 import { detectIntent } from "./product-agent/detect-intent";
 import { productAgentNode } from "./product-agent/product-agent-node";
