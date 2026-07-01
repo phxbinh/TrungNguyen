@@ -7,6 +7,7 @@ import { docsRag } from "./nodes/docs-rag";
 import { generalChat } from "./nodes/general-chat";
 import { synthesize } from "./nodes/synthesize";
 import { routeIntent } from "./route-agent-child";
+import { extractParamsPerIntent } from "./nodes/extractParamsPerIntent";
 
 export const graph = new StateGraph(AgentState)
   .addNode("detectIntent", detectIntent)
