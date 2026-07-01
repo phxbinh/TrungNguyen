@@ -8,7 +8,7 @@ import {
   type UIMessage,
 } from 'ai';
 
-import type { AgentStateType } from "@/lib/ai/state";
+import type { AgentStateType } from "@/lib/ai/state-agent-child";
 
 const initialMessages: UIMessage[] = [
   {
