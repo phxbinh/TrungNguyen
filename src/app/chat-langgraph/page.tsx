@@ -5,6 +5,8 @@ import { useState } from 'react';
 type AgentState = {
   input: string;
   intent?: string;
+  query?: string; // normalized query
+  params?: Record<string, any>; // structured params
   products?: any[];
   product?: any;
   docs?: any[];
