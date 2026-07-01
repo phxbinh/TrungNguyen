@@ -8,6 +8,8 @@ import {
   type UIMessage,
 } from 'ai';
 
+import type { AgentStateType } from "@/lib/ai/state";
+
 const initialMessages: UIMessage[] = [
   {
     id: 'welcome',
@@ -20,7 +22,7 @@ const initialMessages: UIMessage[] = [
     ],
   },
 ];
-//
+/*
 type AgentState = {
   input: string;
   intent?: string;
@@ -28,7 +30,8 @@ type AgentState = {
   product?: any;
   docs?: any[];
   answer?: string;
-};
+}; */
+type AgentState = AgentStateType;
 
 function isAgentStatePart(
   part: any
@@ -159,9 +162,16 @@ function Sidebar({ agentState }: { agentState: AgentState | null }) {
     <section className="space-y-6">
       <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
         <h2 className="mb-3 font-semibold">Detected Intent</h2>
+{/*
         <div className="rounded-lg bg-neutral-950 p-3 text-sm">
           {agentState?.intent || 'No intent yet'}
         </div>
+*/}
+<div className="rounded-lg bg-neutral-950 p-3 text-sm">
+  {JSON.stringify(agentState?.intents ?? [], null, 2)}
+</div>
+
+
       </div>
 
       <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4">
