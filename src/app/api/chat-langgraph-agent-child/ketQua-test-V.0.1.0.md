@@ -78,26 +78,24 @@ import { routeIntent } from "./route-agent-child";
   - src/lib/ai/nodes/synthesize.ts
 - src/lib/ai/product-agent
   - src/lib/ai/product-agent/detect-intent.ts
-```typescript
-import { model } from "../model";
-```
--
+    ```typescript
+    import { model } from "../model";
+    ```
   - src/lib/ai/product-agent/product-agent-node.ts
-```typescript
-import { productAgent } from "./product-agent";
-```
--
+    ```typescript
+    import { productAgent } from "./product-agent";
+    ```
   - src/lib/ai/product-agent/product-agent.ts
-```typescript
-import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-
-import {
-  productSearchTool,
-  productDetailTool,
-} from "../../agent-langgraph/tools";
-import { model } from "../model";
-```
+    ```typescript
+    import { createReactAgent } from "@langchain/langgraph/prebuilt";
+    import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+    
+    import {
+      productSearchTool,
+      productDetailTool,
+    } from "../../agent-langgraph/tools";
+    import { model } from "../model";
+    ```
 
 ----
 ## 4. Url để kiểm tra hoạt động của Ai agent
