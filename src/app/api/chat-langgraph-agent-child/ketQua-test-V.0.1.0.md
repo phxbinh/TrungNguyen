@@ -44,6 +44,9 @@ Có hai Agent được sử dụng:
 
 #### 2.1.2 import api của package
 ```typescript
+// Tạo state graph cho agent cha
+import { StateGraph, END } from "@langchain/langgraph";
+// Tạo agent con
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 ```
@@ -58,7 +61,10 @@ Sử dụng api key của gemini.
 
 ----
 ## 3. Cấu trúc folders/files
-**Folder chính: src/lib/ai**
+### 3.1 Folder chính: src/lib/ai
+**Nơi lưu code logic của ai agent để sử dụng ở route**
+**Route path: src/app/api/chat-langgraph-agent-child/route.ts**
+---
 - src/lib/ai/route-agent-child.ts
 - src/lib/ai/graph-agent-child.ts
 ```typescript
@@ -72,6 +78,24 @@ import { generalChat } from "./nodes/general-chat";
 import { synthesize } from "./nodes/synthesize";
 import { routeIntent } from "./route-agent-child";
 ```
+- src/lib/ai/state.ts
+```typescript
+import { Annotation } from "@langchain/langgraph";
+
+export const AgentState = Annotation.Root({
+  input: Annotation<string>,
+  intent: Annotation<string | undefined>,
+  query: Annotation<string | undefined>, // normalized query
+  params: Annotation<Record<string, any> | undefined>, // structured params
+  products: Annotation<any[] | undefined>,
+  product: Annotation<any | undefined>,
+  docs: Annotation<any[] | undefined>,
+  answer: Annotation<string | undefined>,
+});
+
+export type AgentStateType = typeof AgentState.State;
+```
+
 - src/lib/ai/nodes
   - src/lib/ai/nodes/docs-rag.ts
   - src/lib/ai/nodes/general-chat.ts
