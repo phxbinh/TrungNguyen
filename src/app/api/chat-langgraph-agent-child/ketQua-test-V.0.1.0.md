@@ -162,14 +162,15 @@ import {
 
 ----
 ## 5. Kết quả kiểm thử
+### 5.1 Tìm kiếm sản phẩm
 - user: Tìm iphone 16 pro
 - ai: Đã tìm thấy một số sản phẩm phù hợp với "iphone 16 pro".
 Sản phẩm: iPhone 16 Pro, giá: 28.990.000, danh mục: Điện thoại.
-----
+---
 ```plaintext
 Detect Intent: PRODUCT_SEARCH
 ```
-----
+---
 Full Agent state
 ```json
 {
@@ -178,6 +179,39 @@ Full Agent state
   "answer": "Đã tìm thấy một số sản phẩm phù hợp với \"iphone 16 pro\".\nSản phẩm: iPhone 16 Pro, giá: 28.990.000, danh mục: Điện thoại."
 }
 ```
+### 5.2 Tìm docRag
+- user: Hướng dẫn giặt áo sợi tre và quần jean
+- AI: Để giặt áo sợi tre và quần jean, bạn có thể tham khảo hướng dẫn sau:
+*   **Áo sợi tre:** Giặt ở nhiệt độ dưới 35 độ.
+*   **Quần jean:** Giặt ở nhiệt độ dưới 35 độ, nên giặt bằng tay với chất giặt có chất tẩy nhẹ.
+---
+```plaintext
+Detect Intent: DOCS
+```
+---
+Full Agent state
+```json
+{
+  "input": "Hướng dẫn giặt áo sợi tre và quần jean",
+  "intent": "DOCS",
+  "docs": [
+    {
+      "title": "Hướng dẫn giặt áo hoodie",
+      "content": "Giặt ở nhiệt độ dưới 30 độ"
+    },
+    {
+      "title": "Hướng dẫn giặt áo sợi tre",
+      "content": "Giặt ở nhiệt độ dưới 35 độ"
+    },
+    {
+      "title": "Hướng dẫn giặt quần jean",
+      "content": "Giặt ở nhiệt độ dưới 35 độ, giặt bằng tay với chất giặt có chất tẩy nhẹ"
+    }
+  ],
+  "answer": "Để giặt áo sợi tre và quần jean, bạn có thể tham khảo hướng dẫn sau:\n\n*   **Áo sợi tre:** Giặt ở nhiệt độ dưới 35 độ.\n*   **Quần jean:** Giặt ở nhiệt độ dưới 35 độ, nên giặt bằng tay với chất giặt có chất tẩy nhẹ."
+}
+```
+
 
 ----
 ## 6. Đánh giá kết quả kiểm thử
