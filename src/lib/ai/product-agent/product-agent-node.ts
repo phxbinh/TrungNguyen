@@ -35,3 +35,19 @@ export async function runProductAgent(input: string) {
     trace: result.messages,
   };
 }
+
+export async function productAgentNode(state: any) {
+  const { answer } = await runProductAgent(state.input);
+
+  return {
+    ...state,
+    answer,
+  };
+}
+
+
+
+
+
+
+
