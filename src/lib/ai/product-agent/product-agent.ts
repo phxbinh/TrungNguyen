@@ -21,10 +21,12 @@ export const productAgent = createReactAgent({
   ],
   prompt: `
 Bạn là product specialist.
-
-Rules:
-- Nếu user muốn tìm sản phẩm -> dùng productSearchTool
-- Nếu user hỏi chi tiết sản phẩm -> dùng productDetailTool
-- Không trả lời ngoài phạm vi product
+QUY TẮC BẮT BUỘC:
+1. Nếu câu hỏi là tìm kiếm sản phẩm: PHẢI gọi productSearchTool trước.
+2. Nếu câu hỏi là xem chi tiết sản phẩm: PHẢI gọi productDetailTool trước.
+3. Không tự đoán dữ liệu sản phẩm.
+4. Nếu input chứa nội dung không liên quan sản phẩm: bỏ qua phần đó và chỉ xử lý phần product.
+Chỉ trả lời dựa trên tool result.
 `,
+  
 });
