@@ -27,7 +27,6 @@ Có hai Agent được sử dụng:
 ```json
 {
     "ai": "^6.0.0",
-    "@ai-sdk/google": "^3.0.0",
     "@ai-sdk/react": "^3.0.0",
     
     "zod": "^3.23.8",
@@ -35,8 +34,6 @@ Có hai Agent được sử dụng:
     "langchain": "^1.5.0",
     "@langchain/google-genai": "^2.2.0",
     "@langchain/core": "^1.2.0",
-    "@langchain/community": "^1.1.0",
-    "@ai-sdk/langchain": "^1.x",
     "@langchain/langgraph": "^1.x",
     "@langchain/langgraph-checkpoint-postgres": "^1.0.3",
 }
@@ -61,7 +58,7 @@ Sử dụng api key của gemini.
 
 ----
 ## 3. Cấu trúc folders/files
-### 3.1 Folder chính: src/lib/ai
+### 3.1 Folder logic chính - src/lib/ai
 **Nơi lưu code logic của ai agent để sử dụng ở route**
 **Route path: src/app/api/chat-langgraph-agent-child/route.ts**
 ---
@@ -120,6 +117,42 @@ export type AgentStateType = typeof AgentState.State;
     } from "../../agent-langgraph/tools";
     import { model } from "../model";
     ```
+### 3.2 Folder/file chứa api route gọi Ai agent
+- src/app/api/chat-langgraph-agent-child/route.ts
+```typescript
+import {
+  createUIMessageStream,
+  createUIMessageStreamResponse,
+} from "ai";
+import { graph } from "@/lib/ai/graph-agent-child";
+```
+### 3.3 Folder route cho UI - FRONTEND
+- src/app/chat-langgraph-agent-child/page.tsx
+```typescript
+// phần import
+import { useState } from 'react';
+import { useChat } from '@ai-sdk/react';
+
+import {
+  DefaultChatTransport,
+  type UIMessage,
+} from 'ai';
+
+// logic fetch data tới route
+  const { messages, sendMessage, status } = useChat({
+    transport:
+      new DefaultChatTransport({
+        api: '/api/chat-langgraph-agent-child',
+      }),
+
+    onData: (part) => {
+      if (isAgentStatePart(part)) {
+        setAgentState(part.data.state);
+      }
+    },
+    messages: initialMessages,
+  });
+```
 
 ----
 ## 4. Url để kiểm tra hoạt động của Ai agent
