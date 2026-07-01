@@ -266,8 +266,48 @@ Hãy tạo câu trả lời cuối cùng theo đúng phong cách công ty.
 `);
 ```
 ---
-**Nói ngắn:**
+**Nói ngắn:**  
 Nếu muốn AI nói đúng văn hoá công ty, synthesize là chỗ chuẩn nhất để làm.
 Không phải ở tool, không phải ở graph, mà ở lớp final response.
 ---
+
+```typescript
+// Nếu muốn scale tốt hơn, tách ra config:
+// brand-prompt.ts
+export const BRAND_VOICE = `
+...
+`;
+
+// RỒI GỌI Ở synthesize.ts
+import { BRAND_VOICE } from "../prompts/brand-prompt";
+
+const res = await model.invoke(`
+${BRAND_VOICE}
+
+...
+`);
+
+```
+
+## PATTERN PRODUCT TỐT
+- Pattern:
+  ```plaintext
+  System Identity
+      +
+  Brand Voice
+      +
+  Response Policy
+      +
+  Fallback Rules
+  ```
+- Ví dụ:
+  ```plaintext
+  Identity: trợ lý bán hàng của ABC
+  Voice: thân thiện, gần gũi
+  Policy: không đoán giá
+  Fallback: nếu thiếu data thì xin phép kiểm tra
+  Upsell: nếu phù hợp thì gợi ý thêm
+  ```
+
+
 
