@@ -1,4 +1,5 @@
 export async function docsRag(state: any) {
+  const query = state.docsQuery ?? state.input;
   const docs = [
     {
       title: "Hướng dẫn giặt áo hoodie",
