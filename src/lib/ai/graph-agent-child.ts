@@ -14,9 +14,17 @@ export const graph = new StateGraph(AgentState)
   .addNode("docsRag", docsRag)
   .addNode("generalChat", generalChat)
   .addNode("synthesize", synthesize)
+  .addNode("extractParamsPerIntent", extractParamsPerIntent)
 
   .addEdge("__start__", "detectIntent")
-  .addConditionalEdges("detectIntent", routeIntent)
+
+  .addEdge("detectIntent", "extractParamsPerIntent")
+  .addConditionalEdges(
+    "extractParamsPerIntent",
+    routeIntent
+  )
+  // Thay thế cho hai cái kế trên
+  //.addConditionalEdges("detectIntent", routeIntent)
 
   .addEdge("productAgent", "synthesize")
   .addEdge("docsRag", "synthesize")
