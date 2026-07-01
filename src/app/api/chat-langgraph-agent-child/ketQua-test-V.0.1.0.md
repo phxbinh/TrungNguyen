@@ -81,10 +81,12 @@ import { routeIntent } from "./route-agent-child";
 ```typescript
 import { model } from "../model";
 ```
+-
   - src/lib/ai/product-agent/product-agent-node.ts
 ```typescript
 import { productAgent } from "./product-agent";
 ```
+-
   - src/lib/ai/product-agent/product-agent.ts
 ```typescript
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
