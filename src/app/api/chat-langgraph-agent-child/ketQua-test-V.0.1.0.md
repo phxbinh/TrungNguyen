@@ -309,5 +309,27 @@ ${BRAND_VOICE}
   Upsell: nếu phù hợp thì gợi ý thêm
   ```
 
+## 7. Mở rộng
+### 7.1 Khi hỏi một câu tổng hợp
+**USER:**
+Tìm iphone 16 và hướng dẫn giặt áo sợi tre
+**AI:**
+Chào anh/chị, bên em rất vui được hỗ trợ ạ.
+Về iPhone 16, hiện sản phẩm này chưa ra mắt trên thị trường nên bên em chưa có thông tin chi tiết ạ. Anh/chị có muốn bên em tư vấn về các dòng iPhone mới nhất hiện có như iPhone 15 series không ạ?
+Còn về hướng dẫn giặt áo sợi tre, để đảm bảo cung cấp thông tin chính xác và đầy đủ nhất, bên em xin phép kiểm tra lại và sẽ phản hồi anh/chị ngay ạ.
 
+---
+```plaintext
+Detect Intent: PRODUCT_SEARCH, DOCS
+```
+---
+Full Agent state
+```json
+{
+  "input": "Tìm iphone 16 và hướng dẫn giặt áo sợi tre",
+  "intent": "PRODUCT_SEARCH, DOCS",
+  "answer": "Chào anh/chị, bên em rất vui được hỗ trợ ạ.\n\nVề iPhone 16, hiện sản phẩm này chưa ra mắt trên thị trường nên bên em chưa có thông tin chi tiết ạ. Anh/chị có muốn bên em tư vấn về các dòng iPhone mới nhất hiện có như iPhone 15 series không ạ?\n\nCòn về hướng dẫn giặt áo sợi tre, để đảm bảo cung cấp thông tin chính xác và đầy đủ nhất, bên em xin phép kiểm tra lại và sẽ phản hồi anh/chị ngay ạ."
+}
+```
+---
 
