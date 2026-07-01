@@ -35,6 +35,6 @@ Only return intent.
 `);
   return {
     ...state,
-    intents: result.intents,
+    intents: res.intents,
   };
 }
