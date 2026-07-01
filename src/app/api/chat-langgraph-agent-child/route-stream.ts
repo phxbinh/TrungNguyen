@@ -3,6 +3,7 @@ import {
   createUIMessageStreamResponse,
 } from "ai";
 import { graph } from "@/lib/ai/graph-agent-child";
+import { synthesizeStream } from "@/lib/ai/nodes/synthesize-stream";
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
