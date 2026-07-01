@@ -7,18 +7,18 @@
 - Tìm kiếm chi tiết sản phẩm
 - Tìm kiếm docRag
 - Hội thoại thông thường được prompt giới hạn trong phạm vi kiến thức
--- Chỉ tìm kiếm sản phẩm của shop
--- Trả lời với docRag chỉ trong phạm vi docRag
+  -- Chỉ tìm kiếm sản phẩm của shop
+  -- Trả lời với docRag chỉ trong phạm vi docRag
 
 ### 1.2 Kiến trúc
 Có hai Agent được sử dụng:
 - **Agent cha** sử dụng Graph để intent và điều phối thông qua:
--- Luống làm việc được xác định sẵn khi nào thì gọi tool nào, bằng intent và detectRouter
--- addNode và addEdge
--- Sử dụng invoke để trả kết quả
+  -- Luống làm việc được xác định sẵn khi nào thì gọi tool nào, bằng intent và detectRouter
+  -- addNode và addEdge
+  -- Sử dụng invoke để trả kết quả
 - **Agent con** được thiết kế với
- -- createReactAgent cho phép tự chọn lựa việc gọi tool phù hợp nhất.
- -- Được gọi thông qua việc tạo node trung gian và được dùng addNode với addEdge để gọi
+  -- createReactAgent cho phép tự chọn lựa việc gọi tool phù hợp nhất.
+  -- Được gọi thông qua việc tạo node trung gian và được dùng addNode với addEdge để gọi
 ----
 ## 2. Packages và AI Api key
 ### 2.1 Packages
@@ -61,8 +61,8 @@ Sử dụng api key của gemini.
 ----
 ## 4. Url để kiểm tra hoạt động của Ai agent
 * Full url: https://trung-nguyen-ruddy.vercel.app/chat-langgraph-agent-child
-    ** Domain: https://trung-nguyen-ruddy.vercel.app
-    ** route: /chat-langgraph-agent-child
+  ** Domain: https://trung-nguyen-ruddy.vercel.app
+  ** route: /chat-langgraph-agent-child
 
 ----
 ## 5. Kết quả kiểm thử
