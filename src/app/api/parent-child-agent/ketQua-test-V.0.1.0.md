@@ -58,12 +58,12 @@ Sử dụng api key của gemini.
 
 ----
 ## 3. Cấu trúc folders/files
-### 3.1 Folder logic chính - src/lib/ai
+### 3.1 Folder logic chính - src/lib/parent-child-agent
 **Nơi lưu code logic của ai agent để sử dụng ở route**
 **Route path: src/app/api/chat-langgraph-agent-child/route.ts**
 ---
-- src/lib/ai/route-agent-child.ts
-- src/lib/ai/graph-agent-child.ts
+- src/lib/parent-child-agent/route-agent-child.ts
+- src/lib/parent-child-agent/graph-agent-child.ts
 ```typescript
 import { StateGraph, END } from "@langchain/langgraph";
 import { AgentState } from "./state";
@@ -75,7 +75,7 @@ import { generalChat } from "./nodes/general-chat";
 import { synthesize } from "./nodes/synthesize";
 import { routeIntent } from "./route-agent-child";
 ```
-- src/lib/ai/state.ts
+- src/lib/parent-child-agent/state.ts
 ```typescript
 import { Annotation } from "@langchain/langgraph";
 
@@ -93,20 +93,20 @@ export const AgentState = Annotation.Root({
 export type AgentStateType = typeof AgentState.State;
 ```
 
-- src/lib/ai/nodes
-  - src/lib/ai/nodes/docs-rag.ts
-  - src/lib/ai/nodes/general-chat.ts
-  - src/lib/ai/nodes/synthesize.ts
-- src/lib/ai/product-agent
-  - src/lib/ai/product-agent/detect-intent.ts
+- src/lib/parent-child-agent/nodes
+  - src/lib/parent-child-agent/nodes/docs-rag.ts
+  - src/lib/parent-child-agent/nodes/general-chat.ts
+  - src/lib/parent-child-agent/nodes/synthesize.ts
+- src/lib/parent-child-agent/product-agent
+  - src/lib/parent-child-agent/product-agent/detect-intent.ts
     ```typescript
     import { model } from "../model";
     ```
-  - src/lib/ai/product-agent/product-agent-node.ts
+  - src/lib/parent-child-agent/product-agent/product-agent-node.ts
     ```typescript
     import { productAgent } from "./product-agent";
     ```
-  - src/lib/ai/product-agent/product-agent.ts
+  - src/lib/parent-child-agent/product-agent/product-agent.ts
     ```typescript
     import { createReactAgent } from "@langchain/langgraph/prebuilt";
     import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
@@ -124,7 +124,7 @@ import {
   createUIMessageStream,
   createUIMessageStreamResponse,
 } from "ai";
-import { graph } from "@/lib/ai/graph-agent-child";
+import { graph } from "@/lib/parent-child-agent/graph-agent-child";
 ```
 ### 3.3 Folder route cho UI - FRONTEND
 - src/app/chat-langgraph-agent-child/page.tsx
@@ -156,9 +156,9 @@ import {
 
 ----
 ## 4. Url để kiểm tra hoạt động của Ai agent
-* Full url: https://trung-nguyen-ruddy.vercel.app/chat-langgraph-agent-child
+* Full url: https://trung-nguyen-ruddy.vercel.app/parent-child-agent
   * Domain: https://trung-nguyen-ruddy.vercel.app
-  * route: /chat-langgraph-agent-child
+  * route: /parent-child-agent
 
 ----
 ## 5. Kết quả kiểm thử
@@ -225,7 +225,7 @@ Full Agent state
 ### 6.2 Văn phong trả lời
 Cần thiết lập một phong cách văn hoá và ngôn từ sử dụng
 Nơi cần thiết lập là ở nơi tổng hợp và nhận kết quả cuối cùng trước khi trả lờ
-- path: src/lib/ai/nodes/synthesize.ts
+- path: src/lib/parent-child-agent/nodes/synthesize.ts
 ```typescript
 import { model } from "../model";
 
