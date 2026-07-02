@@ -221,6 +221,7 @@ const summaryStyle: React.CSSProperties = {
   margin: 0,
   color: '#666',
   lineHeight: 1.5,
+  whiteSpace: "pre-line",
 };
 
 const badgeStyle = (status: string): React.CSSProperties => ({
