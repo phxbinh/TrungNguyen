@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Loader2, Search, ArrowRight, CheckCircle2, XCircle } from "lucide-react";
 
-const SAMPLE_INPUTS = [
+const SAMPLE_INPUTS: string[] = [
   "áo thun nam category ao-thun",
   "áo thun nam dưới 200k màu đỏ",
   "quần jean nữ màu tím giá dưới 100k",
@@ -11,14 +11,44 @@ const SAMPLE_INPUTS = [
   "áo màu tím",
 ];
 
-//src/app/claude-code-test-agent-loop/page.tsx
-export default function AgentTester() {
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  color: string;
+};
 
-  async function runTest(testInput) {
+type ToolCallTrace = {
+  type: "tool_call";
+  name: string;
+  args: Record<string, unknown>;
+};
+
+type ToolResultTrace = {
+  type: "tool_result";
+  content: {
+    resultCount: number;
+    hint: string;
+    results?: Product[];
+  };
+};
+
+type TraceItem = ToolCallTrace | ToolResultTrace;
+
+type AgentResponse = {
+  stepCount: number;
+  trace: TraceItem[];
+  finalAnswer: string;
+};
+
+export default function AgentTester() {
+  const [input, setInput] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<AgentResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // FIX CHỖ NÀY
+  async function runTest(testInput?: string) {
     const value = testInput ?? input;
     if (!value.trim()) return;
 
@@ -32,15 +62,23 @@ export default function AgentTester() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ input: value }),
       });
+
       if (!res.ok) throw new Error(`API lỗi: ${res.status}`);
-      const json = await res.json();
+
+      const json: AgentResponse = await res.json();
       setData(json);
     } catch (e) {
-      setError(e.message || "Có lỗi xảy ra khi gọi API");
+      if (e instanceof Error) {
+        setError(e.message);
+      } else {
+        setError("Có lỗi xảy ra khi gọi API");
+      }
     } finally {
       setLoading(false);
     }
   }
+
+  
 return (
   <div className="min-h-screen bg-neutral-50 p-6">
     <div className="max-w-2xl mx-auto space-y-6">
