@@ -11,11 +11,19 @@ import { NextRequest, NextResponse } from "next/server";
 // ============================================================
 // 1. SCHEMA - params agent được phép sinh ra
 // ============================================================
+/*
 const searchProductsSchema = z.object({
   category: z.string().nullable().describe("Loại sản phẩm, vd: ao-thun"),
   price_min: z.number().nullable(),
   price_max: z.number().nullable(),
   color: z.string().nullable(),
+});
+*/
+const searchProductsSchema = z.object({
+  category: z.string().describe("Loại sản phẩm, vd: ao-thun").optional(),
+  price_min: z.number().optional(),
+  price_max: z.number().optional(),
+  color: z.string().optional(),
 });
 
 // ============================================================
