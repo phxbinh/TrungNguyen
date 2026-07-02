@@ -5,7 +5,7 @@ export async function productSearch(state: any) {
   ];
 
   return {
-    ...state,
+    //...state,
     products,
   };
 }
