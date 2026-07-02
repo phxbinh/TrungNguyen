@@ -87,7 +87,8 @@ export async function runProductAgent(
   return {
     products,
     product,
-    answer,
+    //answer,
+    productAnswer: answer,
     trace: result.messages,
   };
 }
@@ -111,7 +112,7 @@ export async function productAgentNode(state: any) {
     //...state,
     products,
     product,
-    answer,
+    productAnswer,
     //trace: result.messages,   // ❌ do chưa có result. nếu muốn lưu trace
   };
 }
