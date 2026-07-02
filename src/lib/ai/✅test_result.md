@@ -2,9 +2,9 @@
 
 ## PART I ---->
 
-**AI:** Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?
-**USER:** Hướng dẫn giặt áo sợi tre 
-**AI:** Chào anh/chị,
+  **AI:** Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?
+  **USER:** Hướng dẫn giặt áo sợi tre 
+  **AI:** Chào anh/chị,
 
 Đối với áo sợi tre, bên em khuyến nghị anh/chị nên giặt ở nhiệt độ dưới 35 độ để giữ áo bền đẹp nhất ạ.
 
