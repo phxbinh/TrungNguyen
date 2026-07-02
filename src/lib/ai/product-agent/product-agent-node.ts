@@ -112,7 +112,7 @@ export async function productAgentNode(state: any) {
     products,
     product,
     answer,
-    trace: result.messages,   // nếu muốn lưu trace
+    //trace: result.messages,   // ❌ do chưa có result. nếu muốn lưu trace
   };
 }
 
