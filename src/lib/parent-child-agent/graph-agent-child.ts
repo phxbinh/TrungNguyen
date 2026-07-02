@@ -1,5 +1,5 @@
 import { StateGraph, END } from "@langchain/langgraph";
-import { AgentState } from "./state-agent-child";
+import { AgentState } from "./state";
 
 import { detectIntent } from "./product-agent/detect-intent";
 import { productAgentNode } from "./product-agent/product-agent-node";
@@ -15,18 +15,9 @@ export const graph = new StateGraph(AgentState)
   .addNode("docsRag", docsRag)
   .addNode("generalChat", generalChat)
   .addNode("synthesize", synthesize)
-  .addNode("extractParamsPerIntent", extractParamsPerIntent)
-
   .addEdge("__start__", "detectIntent")
 
-  .addEdge("detectIntent", "extractParamsPerIntent")
-  .addConditionalEdges(
-    "extractParamsPerIntent",
-    routeIntent
-  )
-  // Thay thế cho hai cái kế trên
-  //.addConditionalEdges("detectIntent", routeIntent)
-
+  .addConditionalEdges("detectIntent", routeIntent)
   .addEdge("productAgent", "synthesize")
   .addEdge("docsRag", "synthesize")
   .addEdge("generalChat", "synthesize")
