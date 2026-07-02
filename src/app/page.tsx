@@ -155,8 +155,8 @@ Khai báo các tools, sau đó:
     title: '✅Tạo Agent cha (graph) agent con (createReactAgent)',
     summary:
       `Agent cha (detectIntent), con tự gọi tool.
-- 🔸lib: app/api/parent-child-agent
-- 🔸path: app/parent-child-agent
+/n- 🔸lib: app/api/parent-child-agent
+/n- 🔸path: app/parent-child-agent
 `,
     status: 'done',
   },
