@@ -145,9 +145,19 @@ Khai báo các tools, sau đó:
   },
 {
     href: '/chat-langgraph-agent-child',
-    title: 'Tạo Agent cha (graph) agent con (createReactAgent)',
+    title: '✅Dev - Tạo Agent cha (graph) agent con (createReactAgent)',
     summary:
       'Agent cha (detectIntent), con tự gọi tool',
+    status: 'done',
+  },
+{
+    href: '/parent-child-agent',
+    title: '✅Tạo Agent cha (graph) agent con (createReactAgent)',
+    summary:
+      `Agent cha (detectIntent), con tự gọi tool.
+- 🔸lib: app/api/parent-child-agent
+- 🔸path: app/parent-child-agent
+`,
     status: 'done',
   },
 ];
