@@ -40,8 +40,8 @@ Full Agent state:
 ```
 
 ## PART II ------>
-**AI:** Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?
-**USER:** Tìm iphone 16
+**AI:** Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?  
+**USER:** Tìm iphone 16  
 **AI:** Chào anh/chị, bên em tìm thấy mẫu iPhone 16 Pro ạ. Sản phẩm này có giá 28.990.000đ. Anh/chị tham khảo sản phẩm này nhé!
 
 ---
