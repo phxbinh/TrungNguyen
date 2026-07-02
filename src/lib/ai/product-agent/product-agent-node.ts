@@ -95,7 +95,7 @@ export async function runProductAgent(
 export async function productAgentNode(state: any) {
   if (!state.productQuery) {
     return {
-      ...state,
+      //...state,
     };
   }
 
@@ -108,10 +108,11 @@ export async function productAgentNode(state: any) {
   );
 
   return {
-    ...state,
+    //...state,
     products,
     product,
     answer,
+    trace: result.messages,   // nếu muốn lưu trace
   };
 }
 
