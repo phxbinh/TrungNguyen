@@ -84,7 +84,8 @@ const searchProductsTool = tool(
   {
     name: "search_products",
     description: "Tìm sản phẩm theo filter",
-    schema: {
+    schema: searchProductsSchema,
+/*{
       type: "object",
       properties: {
         category: {
@@ -102,7 +103,7 @@ const searchProductsTool = tool(
         },
       },
     },
-  }
+  }*/
 );
 
 const tools = [searchProductsTool];
