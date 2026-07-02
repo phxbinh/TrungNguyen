@@ -69,7 +69,7 @@ const searchProductsTool = tool(
 */
 
 const searchProductsTool = tool(
-  async (params: searchProductsSchema) => {
+  async (params: z.infer<typeof searchProductsSchema>) => {
     const results = queryDB(params);
 
     return JSON.stringify({
