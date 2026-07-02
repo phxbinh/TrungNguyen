@@ -19,16 +19,19 @@ const searchProductsSchema = z.object({
   color: z.string().nullable(),
 });
 */
+/*
 const searchProductsSchema = z.object({
   category: z.string().describe("Loại sản phẩm, vd: ao-thun").optional(),
   price_min: z.number().optional(),
   price_max: z.number().optional(),
   color: z.string().optional(),
 });
+*/
 
 // ============================================================
 // 2. MOCK DB - lớp thực thi, KHÔNG để agent chạm vào query thật
 // ============================================================
+/*
 function queryDB(params: z.infer<typeof searchProductsSchema>) {
   const mockDB = [
     { id: "1", name: "Áo thun nam basic", price: 250000, category: "ao-thun", color: "trắng" },
@@ -42,6 +45,43 @@ function queryDB(params: z.infer<typeof searchProductsSchema>) {
     return true;
   });
 }
+*/
+type SearchProductsParams = {
+  category?: string;
+  price_min?: number;
+  price_max?: number;
+  color?: string;
+};
+
+function queryDB(params: SearchProductsParams) {
+  const mockDB = [
+    {
+      id: "1",
+      name: "Áo thun nam basic",
+      price: 250000,
+      category: "ao-thun",
+      color: "trắng",
+    },
+    {
+      id: "2",
+      name: "Áo thun nam form rộng",
+      price: 320000,
+      category: "ao-thun",
+      color: "đen",
+    },
+  ];
+
+  return mockDB.filter((p) => {
+    if (params.category && p.category !== params.category) return false;
+    if (params.price_min && p.price < params.price_min) return false;
+    if (params.price_max && p.price > params.price_max) return false;
+    if (params.color && p.color !== params.color) return false;
+
+    return true;
+  });
+}
+
+
 
 // ============================================================
 // 3. TOOL - trả kèm "hint" để model tự đánh giá có nên thử lại không
