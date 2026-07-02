@@ -16,7 +16,7 @@ export async function docsRag(state: any) {
   ];
 
   return {
-    ...state,
+    //...state,
     docs,
   };
 }
