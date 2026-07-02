@@ -30,9 +30,30 @@ export const AgentState = Annotation.Root({
   productQuery: Annotation<string | undefined>,
   docsQuery: Annotation<string | undefined>,
 
+/*
   products: Annotation<any[] | undefined>,
   product: Annotation<any | undefined>,
   docs: Annotation<any[] | undefined>,
+*/
+products: Annotation<any[]>({
+  reducer: (left, right) => right ?? left ?? [],
+  default: () => [],
+}),
+
+product: Annotation<any[]>({
+  reducer: (left, right) => right ?? left ?? [],
+  default: () => [],
+}),
+
+docs: Annotation<any[]>({
+  reducer: (left, right) => right ?? left ?? [],
+  default: () => [],
+}),
+
+productAnswer: Annotation<string>({
+  reducer: (left, right) => right ?? left ?? "",
+  default: () => "",
+}),
 
   answer: Annotation<string | undefined>,
 });
