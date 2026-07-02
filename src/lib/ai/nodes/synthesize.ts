@@ -64,7 +64,7 @@ ${JSON.stringify({
 Hãy tạo câu trả lời cuối cùng theo đúng phong cách công ty.
 `);
   return {
-    ...state,
+    //...state,
     answer: String(res.content),
   };
 }
