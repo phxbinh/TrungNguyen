@@ -9,7 +9,16 @@ import {
 } from 'ai';
 
 import type { AgentStateType } from "@/lib/parent-child-agent/state";
-//src/lib/parent-child-agent/graph-agent-child.ts
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
+//✅Use method:
+/*
+  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+    {m.content}
+  </ReactMarkdown>
+*/
+
 const initialMessages: UIMessage[] = [
   {
     id: 'welcome',
@@ -121,7 +130,12 @@ function ChatPanel({
                   : 'bg-neutral-800'
               }`}
             >
+{/*
               <p className="text-sm whitespace-pre-wrap">{text}</p>
+*/}
+  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+    {text}
+  </ReactMarkdown>
             </div>
           );
         })}
