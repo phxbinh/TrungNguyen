@@ -91,3 +91,45 @@ Sử dụng dấu gạch đứng `|` để phân tách cột và dấu gạch ng
 | Căn lề trái | Căn lề giữa | Căn lề phải |
 | Bàn phím cơ | 1 | 1.200.000đ |
 | Chuột Bluetooth | 2 | 450.000đ |
+
+## 9. Cú Pháp Nâng Cao và Mở Rộng
+
+### Khối nội dung ẩn/hiển thị (Collapsible/Dropdown)
+Sử dụng cặp thẻ HTML `<details>` và `<summary>` để làm gọn bài viết. Người đọc click vào để xem chi tiết.
+
+<details>
+<summary>Click vào đây để xem nội dung ẩn!</summary>
+
+Đây là nội dung được giấu đi, giúp bài viết gọn gàng hơn. Bạn có thể bỏ code, ảnh hoặc văn bản dài vào đây.
+</details>
+
+### Ký hiệu chú thích chân trang (Footnotes)
+Dùng để chú thích một từ ngữ khó hiểu xuống cuối trang.
+- Đây là một tuyên bố cần chú thích[^1].
+
+*(Đặt đoạn này ở cuối tài liệu của bạn):*
+[^1]: Đây là nội dung chú thích hiển thị ở chân trang.
+
+### Định dạng chữ viết chỉ số trên/dưới (Subscript/Superscript)
+*Một số trình soạn thảo yêu cầu cài thêm extension để chạy.*
+- Chỉ số dưới (Subscript): H~2~O (Cú pháp: `H~2~O`)
+- Chỉ số trên (Superscript): X^2^ (Cú pháp: `X^2^`)
+
+### Chèn Biểu Thức Toán Học (LaTeX / Mathjax)
+Dùng để viết công thức toán học, vật lý hoặc hóa học.
+- **Công thức trên cùng dòng (Inline):** `$E = mc^2$` $\rightarrow$ $E = mc^2$
+- **Khối công thức riêng biệt (Display):** 
+```text
+$$a^2 + b^2 = c^2$$
+```
+
+### Nhắc tên người dùng hoặc Issue/PR (Chỉ dùng trên GitHub/GitLab)
+- Nhắc tên ai đó: `@username`
+- Liên kết đến một Issue hoặc Pull Request: `#123`
+
+### Chèn Emoji siêu nhanh
+Bạn có thể gõ trực tiếp emoji bằng phím tắt (`Win + .` trên Windows hoặc `Cmd + Ctrl + Space` trên Mac), hoặc dùng cú pháp mã code:
+- `:rocket:` $\rightarrow$ 🚀
+- `:warning:` $\rightarrow$ ⚠️
+- `:heavy_check_mark:` $\rightarrow$ ✔️
+
