@@ -1,31 +1,3 @@
-// app/page.tsx
-/*
-import React from 'react';
-
-export default function HomePage() {
-  return (
-    <div style={containerStyle}>
-      <h1 style={headingStyle}>Hello world</h1>
-    </div>
-  );
-}
-
-// Cấu hình style cơ bản cho đẹp mắt
-const containerStyle: React.CSSProperties = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',
-  backgroundColor: '#f0f2f5',
-  fontFamily: 'system-ui, sans-serif',
-};
-
-const headingStyle: React.CSSProperties = {
-  fontSize: '3rem',
-  color: '#333',
-  fontWeight: 'bold',
-};
-*/
 
 // app/page.tsx -> 🟢chatGPT thiết kế
 import Link from 'next/link';
@@ -51,9 +23,9 @@ Kiều trả về chưa phải kiểu stream, mà là Responsive thông thườn
       `LangGraph route state tool, gọi stream UI.
 Luồng logic gọi tool được xác định sẵn.
 Kiểu trả về toUIMessageStreamResponse.
-\n*✳️ Khai báo các tools sau đó addNode và addEdge với graph.
-\n- 🔸lib: src/lib/ai/...
-\n- 🔸path: /chat-langgraph-check
+✳️ Khai báo các tools sau đó addNode và addEdge với graph.
+- 🔸lib: src/lib/ai/...
+- 🔸path: /chat-langgraph-check
 `,
     status: 'test',
   },
@@ -147,14 +119,21 @@ Khai báo các tools, sau đó:
     href: '/chat-langgraph-agent-child',
     title: '✅Dev - Tạo Agent cha (graph) agent con (createReactAgent)',
     summary:
-      'Agent cha (detectIntent), con tự gọi tool',
+      `Sử dụng hai agent:
+- Agent cha (detectIntent), sau đó sẽ phân tích input và xác định gọi tool hoặc agent con;
+- Agent con tự gọi tool của nó quản lý;
+`,
     status: 'done',
   },
 {
     href: '/parent-child-agent',
     title: '✅Tạo Agent cha (graph) agent con (createReactAgent)',
     summary:
-      'Agent cha (detectIntent), con tự gọi tool:\n- 🔸lib: app/api/parent-child-agent;\n- 🔸path: app/parent-child-agent',
+      `🎯Sử dụng hai agent: (Gốc 🥇):
+- 🅿️Agent cha (detectIntent), sau đó sẽ phân tích input và xác định gọi tool hoặc agent con;
+- Ⓜ️Agent con tự gọi tool của nó quản lý;
+- 🔸lib: app/api/parent-child-agent;
+- 🔸path: app/parent-child-agent`,
     status: 'done',
   },
 ];
