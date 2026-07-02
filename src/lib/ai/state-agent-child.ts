@@ -55,7 +55,13 @@ productAnswer: Annotation<string>({
   default: () => "",
 }),
 
-  answer: Annotation<string | undefined>,
+  //answer: Annotation<string | undefined>,
+
+answer: Annotation<string>({     // ← answer cuối cùng
+    reducer: (left, right) => right ?? left ?? "", 
+    default: () => ""
+  }),
+
 });
 
 export type AgentStateType = typeof AgentState.State;
