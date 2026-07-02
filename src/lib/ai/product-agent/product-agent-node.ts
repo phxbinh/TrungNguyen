@@ -103,7 +103,7 @@ export async function productAgentNode(state: any) {
   const {
     products,
     product,
-    answer,
+    productAnswer,
   } = await runProductAgent(
     state.productQuery
   );
