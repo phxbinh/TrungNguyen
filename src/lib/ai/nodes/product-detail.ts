@@ -1,6 +1,6 @@
 export async function productDetail(state: any) {
   return {
-    ...state,
+    //...state,
     product: {
       id: 1,
       name: "Áo hoodie",
