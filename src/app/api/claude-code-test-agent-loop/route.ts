@@ -46,6 +46,7 @@ function queryDB(params: z.infer<typeof searchProductsSchema>) {
 // ============================================================
 // 3. TOOL - trả kèm "hint" để model tự đánh giá có nên thử lại không
 // ============================================================
+/*
 const searchProductsTool = tool(
   async (params) => {
     const results = queryDB(params);
@@ -63,6 +64,44 @@ const searchProductsTool = tool(
     name: "search_products",
     description: "Tìm sản phẩm theo filter",
     schema: searchProductsSchema,
+  }
+);
+*/
+
+const searchProductsTool = tool(
+  async (params) => {
+    const results = queryDB(params);
+
+    return JSON.stringify({
+      results,
+      resultCount: results.length,
+      hint:
+        results.length === 0
+          ? "Không có kết quả. Filter đang quá chặt. Hãy nới lỏng MỘT điều kiện ít quan trọng nhất rồi thử lại."
+          : "Kết quả hợp lý, có thể trả lời người dùng.",
+    });
+  },
+  {
+    name: "search_products",
+    description: "Tìm sản phẩm theo filter",
+    schema: {
+      type: "object",
+      properties: {
+        category: {
+          type: "string",
+          description: "Loại sản phẩm, vd: ao-thun",
+        },
+        price_min: {
+          type: "number",
+        },
+        price_max: {
+          type: "number",
+        },
+        color: {
+          type: "string",
+        },
+      },
+    },
   }
 );
 
