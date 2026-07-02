@@ -11,7 +11,7 @@
 Nếu cần hỗ trợ thêm thông tin gì, anh/chị cứ hỏi nhé.
 
 ---
-Detected intent: [ "DOCS" ]
+Detected intent: [ "DOCS" ]  
 Full Agent state: 
 ```json
 {
@@ -45,7 +45,7 @@ Full Agent state:
 **AI:** Chào anh/chị, bên em tìm thấy mẫu iPhone 16 Pro ạ. Sản phẩm này có giá 28.990.000đ. Anh/chị tham khảo sản phẩm này nhé!
 
 ---
-Detected intent: [ "PRODUCT_SEARCH" ]
+Detected intent: [ "PRODUCT_SEARCH" ]  
 Full Agent state:
 ```json
 {
