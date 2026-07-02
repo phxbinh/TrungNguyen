@@ -63,8 +63,17 @@ const toolNode = new ToolNode(tools);
 // ============================================================
 const model = new ChatGoogleGenerativeAI({
   model: "gemini-2.0-flash",
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
   temperature: 0,
 }).bindTools(tools);
+
+/*
+export const model = new ChatGoogleGenerativeAI({
+  model: "gemini-2.5-flash",
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
+});
+*/
+
 
 // ============================================================
 // 5. STATE - thêm stepCount để giới hạn vòng lặp theo rate limit
