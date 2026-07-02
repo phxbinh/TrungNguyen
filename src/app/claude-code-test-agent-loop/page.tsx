@@ -9,6 +9,7 @@ const SAMPLE_INPUTS = [
   "áo màu tím",
 ];
 
+//src/app/claude-code-test-agent-loop/page.tsx
 export default function AgentTester() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ export default function AgentTester() {
     setData(null);
 
     try {
-      const res = await fetch("/api/product-search", {
+      const res = await fetch("/api/claude-code-test-agent-loop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ input: value }),
