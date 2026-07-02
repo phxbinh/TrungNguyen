@@ -69,7 +69,7 @@ const searchProductsTool = tool(
 */
 
 const searchProductsTool = tool(
-  async (params: SearchProductsParams) => {
+  async (params: searchProductsSchema) => {
     const results = queryDB(params);
 
     return JSON.stringify({
