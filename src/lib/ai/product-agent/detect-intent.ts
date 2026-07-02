@@ -54,7 +54,7 @@ ${state.input}
 `);
 
   return {
-    ...state,
+    //...state,
     intents: res.intents,
   };
 }
