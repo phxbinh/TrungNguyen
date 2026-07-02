@@ -64,8 +64,15 @@ const toolNode = new ToolNode(tools);
 // ============================================================
 // 4. MODEL - Gemini qua LangChain, bind tool vào model
 // ============================================================
+/*
 const model = new ChatGoogleGenerativeAI({
   model: "gemini-2.0-flash",
+  temperature: 0,
+}).bindTools(tools);
+*/
+const model = new ChatGoogleGenerativeAI({
+  model: "gemini-2.0-flash",
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
   temperature: 0,
 }).bindTools(tools);
 
