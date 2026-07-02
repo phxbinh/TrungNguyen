@@ -58,6 +58,7 @@ ${JSON.stringify({
   products: state.products,
   product: state.product,
   docs: state.docs,
+  productAnswer: state.productAnswer,
   answer: state.answer,
 })}
 
