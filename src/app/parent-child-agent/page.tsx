@@ -8,8 +8,8 @@ import {
   type UIMessage,
 } from 'ai';
 
-import type { AgentStateType } from "@/lib/parent-child-agent/state-agent-child";
-
+import type { AgentStateType } from "@/lib/parent-child-agent/state";
+//src/lib/parent-child-agent/graph-agent-child.ts
 const initialMessages: UIMessage[] = [
   {
     id: 'welcome',
