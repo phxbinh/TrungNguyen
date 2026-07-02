@@ -102,8 +102,8 @@ const searchProductsTool = tool(
           type: "string",
         },
       },
-    },
-  }*/
+    },*/
+  }
 );
 
 const tools = [searchProductsTool];
