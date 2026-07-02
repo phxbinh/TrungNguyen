@@ -25,7 +25,7 @@ Rules:
 `);
 
   return {
-    ...state,
+    //...state,
     productQuery: res.productQuery,
     docsQuery: res.docsQuery,
   };
