@@ -136,6 +136,19 @@ Khai báo các tools, sau đó:
 - 🔸path: app/parent-child-agent`,
     status: 'done',
   },
+{
+    href: '/claude-code-test-agent-loop',
+    title: '✅✳️✳️Tạo agent LOOP',
+    summary:
+      `Kiểm tra Agent loop:
+ 	1.	Structured signal thay vì text hint — trả về { resultCount: 0, triedFilters: [...], suggestedRelax: "price_max" } rõ ràng thay vì câu văn mô tả. Model dễ bám đúng field hơn là phải tự “đọc hiểu” câu hint.
+	2.	Code tự quyết logic nới lỏng, không để model tự nghĩ — ví dụ: nếu resultCount === 0, code tự động thử lại theo thứ tự ưu tiên đã định sẵn (bỏ color trước, rồi bỏ price, rồi bỏ category) — đây lại quay về hướng deterministic retry, ít linh hoạt hơn nhưng chắc chắn hơn so với để model tự quyết.
+	3.	So sánh embedding similarity score — nếu dùng semantic search, trả về điểm similarity của top kết quả. Nếu điểm thấp (dù có kết quả), đó là tín hiệu tốt hơn “resultCount” để biết kết quả có thực sự sát ý người dùng hay không — vì resultCount > 0 không có nghĩa là kết quả đúng.
+	4.	Giới hạn số lần “retry cùng 1 kiểu” — tránh model cứ loop hoài kiểu na ná nhau (dù đã dặn “không lặp y hệt” nhưng model vẫn có thể lặp gần giống).
+`,
+    status: 'done',
+  },
+//src/app/api/claude-code-test-agent-loop
 ];
 
 export default function HomePage() {
