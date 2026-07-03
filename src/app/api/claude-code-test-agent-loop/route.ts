@@ -127,6 +127,7 @@ const model = new ChatGoogleGenerativeAI({
 }).bindTools(tools);
 
   //apiKey: process.env.GOOGLE_GEMINI_KEY_API_LANGCHAIN!,
+  //apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
 
 // ============================================================
 // 5. STATE - thêm stepCount để giới hạn vòng lặp theo rate limit
