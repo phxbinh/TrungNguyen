@@ -120,9 +120,13 @@ const model = new ChatGoogleGenerativeAI({
 */
 const model = new ChatGoogleGenerativeAI({
   model: "gemini-2.0-flash",
-  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
+  //apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
+  //Joined 11:09am 2 jul 2026
+  apiKey: process.env.GOOGLE_GEMINI_KEY_API_LANGCHAIN!,
   temperature: 0,
 }).bindTools(tools);
+
+  //apiKey: process.env.GOOGLE_GEMINI_KEY_API_LANGCHAIN!,
 
 // ============================================================
 // 5. STATE - thêm stepCount để giới hạn vòng lặp theo rate limit
