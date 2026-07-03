@@ -34,6 +34,7 @@
 
 ## Error type 2
 - Lỗi hiển thị thông tin cho AirPods pro 2 (Nó chỉ trả id).
+**Fixed:** Đã sửa nhẹ ở prompt.
 ```json
 {
   "input": "Tìm AirPods pro 2 và chi tiết iphone 16. hướng dẫn giặt áo sợi tre và quần jean",
@@ -70,7 +71,46 @@
   "answer": "Chào anh/chị,\n\nBên em xin gửi thông tin anh/chị yêu cầu như sau ạ:\n\n*   **Về AirPods Pro 2:** Hiện tại, bên em chưa tìm thấy thông tin chi tiết về sản phẩm AirPods Pro 2 trong hệ thống. Rất tiếc chưa thể hỗ trợ anh/chị ngay được ạ.\n*   **Về iPhone 16 Pro:**\n    *   Tên: iPhone 16 Pro\n    *   Giá: 28.990.000 VNĐ\n    *   Thông số kỹ thuật: Màn hình 6.3 inch, Chip A18 Pro, Camera 48MP\n    *   Tình trạng: Còn hàng\n*   **Hướng dẫn giặt áo sợi tre:** Anh/chị nên giặt áo ở nhiệt độ dưới 35 độ.\n*   **Hướng dẫn giặt quần jean:** Anh/chị giặt ở nhiệt độ dưới 35 độ và ưu tiên giặt bằng tay với chất tẩy nhẹ ạ.\n\nNếu anh/chị cần hỗ trợ thêm thông tin nào khác, đừng ngần ngại báo bên em nhé!"
 }
 ```
-
+## Error type 3
+- Lỗi việc agent con detect intent để gọi tool:
+  - Hiện nó chưa phân tách được gọi một lúc hai tool
+```json
+{
+  "input": "Tìm sản phẩm AirPods pro 2, chi tiết iphone 16. hướng dẫn giặt áo sợi tre và quần jean",
+  "intents": [
+    "PRODUCT_SEARCH",
+    "PRODUCT_DETAIL",
+    "DOCS"
+  ],
+  "productQuery": "AirPods pro 2, iphone 16",
+  "docsQuery": "giặt áo sợi tre và quần jean",
+  "products": [
+    {
+      "id": "1",
+      "name": "iPhone 16 Pro",
+      "price": "28.990.000",
+      "category": "Điện thoại"
+    }
+  ],
+  "product": [],
+  "docs": [
+    {
+      "title": "Hướng dẫn giặt áo hoodie",
+      "content": "Giặt ở nhiệt độ dưới 30 độ"
+    },
+    {
+      "title": "Hướng dẫn giặt áo sợi tre",
+      "content": "Giặt ở nhiệt độ dưới 35 độ"
+    },
+    {
+      "title": "Hướng dẫn giặt quần jean",
+      "content": "Giặt ở nhiệt độ dưới 35 độ, giặt bằng tay với chất giặt có chất tẩy nhẹ"
+    }
+  ],
+  "productAnswer": "Chúng tôi đã tìm thấy những sản phẩm sau:\nAirPods Pro 2 - Giá: 5.990.000 VNĐ\niPhone 16 Pro - Giá: 28.990.000 VNĐ",
+  "answer": "Chào anh/chị, bên em rất vui được hỗ trợ ạ!\n\nVề các sản phẩm anh/chị đang tìm:\n*   **AirPods Pro 2:** Hiện có giá 5.990.000 VNĐ.\n*   **iPhone 16:** Bên em có thông tin về **iPhone 16 Pro** với giá 28.990.000 VNĐ. Nếu anh/chị muốn tìm hiểu chi tiết hơn về các dòng iPhone 16, vui lòng cho bên em biết cụ thể hơn nhé.\n\nVề hướng dẫn giặt đồ:\n*   **Áo sợi tre:** Anh/chị nên giặt ở nhiệt độ dưới 35 độ C ạ.\n*   **Quần jean:** Anh/chị hãy giặt ở nhiệt độ dưới 35 độ C, giặt bằng tay với chất giặt có chất tẩy nhẹ để bảo quản tốt nhất nhé.\n\nNếu anh/chị cần hỗ trợ thêm thông tin gì, đừng ngần ngại cho bên em biết ạ!"
+}
+```
 
 
 
