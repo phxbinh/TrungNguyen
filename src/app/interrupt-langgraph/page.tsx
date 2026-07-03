@@ -1,5 +1,5 @@
 import AgeInterruptForm from "./component";
-import SumInterruptForm from "@/components/SumInterruptForm";
+import SumInterruptForm from "./SumInterruptForm";
 
 
 export default function Page() {
