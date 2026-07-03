@@ -75,10 +75,18 @@ export default function SumInterruptForm() {
       }
 
       // Workflow finished
+/*
       if (data.sum !== undefined) {
         setSum(data.sum);
         setQuestion("");
       }
+*/
+      if (!data.__interrupt__ && data.sum !== undefined) {
+        setSum(data.sum);
+        setQuestion("");
+      }
+
+
     } catch (error) {
       console.error(error);
     } finally {
