@@ -122,7 +122,7 @@ const model = new ChatGoogleGenerativeAI({
   model: "gemini-2.0-flash",
   //apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
   //Joined 11:09am 2 jul 2026
-  apiKey: process.env.GOOGLE_GEMINI_KEY_API_LANGCHAIN!,
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
   temperature: 0,
 }).bindTools(tools);
 
