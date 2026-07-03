@@ -5,6 +5,15 @@ import React from 'react';
 
 const routes = [
   {
+    href: '/interrupt-langgraph',
+    title: '__interrupt__',
+    summary:
+      `Ngắt ngoài khi chạy với graph node edge
+- 🔸lib: src/lib/interrupt-langgraph/...
+- 🔸path: /interrupt-langgraph`,
+    status: 'test',
+  },
+  {
     href: '/chat-langgraph',
     title: 'LangGraph route',
     summary:
