@@ -1,20 +1,27 @@
 import {
-  StateGraph,
-  StateSchema,
-  START,
+  Annotation,
+  Command,
   END,
   interrupt,
-  Command,
   MemorySaver,
+  START,
+  StateGraph,
 } from "@langchain/langgraph";
-import * as z from "zod";
 
-const FormState = new StateSchema({
-  age: z.number().nullable(),
-  pendingQuestion: z.string().nullable(),
+export const FormState = Annotation.Root({
+  age: Annotation<number | null>({
+    reducer: (_, right) => right,
+    default: () => null,
+  }),
+
+  pendingQuestion: Annotation<string | null>({
+    reducer: (_, right) => right,
+    default: () => null,
+  }),
 });
 
 const builder = new StateGraph(FormState)
+
   .addNode("collectAge", (state) => {
     const question =
       state.pendingQuestion ?? "What is your age?";
@@ -35,10 +42,16 @@ const builder = new StateGraph(FormState)
       pendingQuestion: `'${answer}' is not valid. Please enter a positive number.`,
     };
   })
+
   .addEdge(START, "collectAge")
-  .addConditionalEdges("collectAge", (state) =>
-    state.age !== null ? END : "collectAge"
-  );
+
+  .addConditionalEdges("collectAge", (state) => {
+    if (state.age !== null) {
+      return END;
+    }
+
+    return "collectAge";
+  });
 
 export const graph = builder.compile({
   checkpointer: new MemorySaver(),
