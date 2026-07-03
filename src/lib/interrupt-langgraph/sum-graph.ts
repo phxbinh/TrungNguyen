@@ -85,9 +85,25 @@ const builder = new StateGraph(SumState)
     return "step2";
   })
 
+/*
   .addConditionalEdges("step3", (state) => {
     return END;
   });
+*/
+  .addConditionalEdges("step3", (state) => {
+    if (state.stopped) {
+      return END;
+    }
+  
+    // valid thì end
+    if (state.pendingQuestion === null) {
+      return END;
+    }
+  
+    // invalid thì retry step3
+    return "step3";
+  });
+
 
 export const graph = builder.compile({
   checkpointer: new MemorySaver(),
