@@ -9,12 +9,14 @@ agent.
 - State có reduce
 - Kết quả trả về từ các node và child agent
 ## RESULT
-**AI:** Xin chào! Tôi là trợ lý AI. Hôm nay bạn cần hỗ trợ gì?  
-**USER:** Tìm iphone 16 và hướng dẫn giặt áo sợi tre  
+**AI:** Xin chào anh/chị! Em là trợ lý AI. Hôm nay anh/chị cần hỗ trợ gì ạ?  
+**USER:** Tìm iPhone 16 và hướng dẫn giặt áo sợi tre  
 **AI:** Chào anh/chị,  
-Bên em tìm thấy sản phẩm iPhone 16 Pro với giá 28.990.000 thuộc danh mục Điện thoại ạ.  
-Về hướng dẫn giặt áo sợi tre, anh/chị vui lòng giặt ở nhiệt độ dưới 35 độ nhé.  
-Nếu anh/chị cần thêm thông tin gì, cứ báo bên em ạ!  
+Bên em tìm thấy sản phẩm **iPhone 16 Pro** với giá **28.990.000đ** thuộc danh mục *Điện thoại* ạ.  
+
+Về hướng dẫn giặt áo sợi tre, anh/chị vui lòng giặt ở nhiệt độ dưới **35°C** nhé.  
+Nếu anh/chị cần thêm thông tin gì, cứ báo bên em ạ!
+
 ---
 Detected intent: [ "PRODUCT_SEARCH", "DOCS" ]  
 ---
