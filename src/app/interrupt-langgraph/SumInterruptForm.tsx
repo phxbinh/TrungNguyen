@@ -11,6 +11,161 @@ type GraphResponse = {
 };
 
 export default function SumInterruptForm() {
+  const [threadId, setThreadId] = useState("");
+  const [question, setQuestion] = useState("");
+  const [input, setInput] = useState("");
+  const [sum, setSum] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const startWorkflow = async () => {
+    const newThreadId = crypto.randomUUID();
+    setThreadId(newThreadId);
+
+    try {
+      setLoading(true);
+
+      const res = await fetch(
+        "/api/interrupt-langgraph/sum-form",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            threadId: newThreadId,
+          }),
+        }
+      );
+
+      const data: GraphResponse = await res.json();
+
+      console.log("START:", data);
+
+      if (data.__interrupt__) {
+        setQuestion(data.__interrupt__[0].value);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const submitValue = async () => {
+    if (!input.trim()) return;
+
+    try {
+      setLoading(true);
+
+      const res = await fetch(
+        "/api/interrupt-langgraph/sum-form",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            threadId,
+            resume: {
+              value: input,
+              id: crypto.randomUUID(),
+            },
+          }),
+        }
+      );
+
+      const data: GraphResponse = await res.json();
+
+      console.log("RESUME:", data);
+
+      // Continue workflow
+      if (data.__interrupt__) {
+        setQuestion(data.__interrupt__[0].value);
+        setInput("");
+        return;
+      }
+
+      // Finished
+      if (!data.__interrupt__ && data.sum !== undefined) {
+        setSum(data.sum);
+        setQuestion("");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetWorkflow = () => {
+    setThreadId("");
+    setQuestion("");
+    setInput("");
+    setSum(null);
+  };
+
+  return (
+    <div
+      style={{
+        maxWidth: 500,
+        margin: "40px auto",
+        padding: 20,
+        border: "1px solid #ddd",
+        borderRadius: 12,
+      }}
+    >
+      <h2>LangGraph Interrupt Sum Demo</h2>
+
+      {!question && sum === null && (
+        <button onClick={startWorkflow} disabled={loading}>
+          {loading ? "Starting..." : "Start"}
+        </button>
+      )}
+
+      {question && (
+        <div>
+          <p>{question}</p>
+
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Enter number or stop"
+          />
+
+          <button
+            onClick={submitValue}
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Submit"}
+          </button>
+        </div>
+      )}
+
+      {sum !== null && (
+        <div>
+          <h3>Workflow Finished</h3>
+          <p>Total Sum: {sum}</p>
+
+          <button onClick={resetWorkflow}>
+            Restart
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/*
+"use client";
+
+import { useState } from "react";
+
+type GraphResponse = {
+  sum?: number;
+  stopped?: boolean;
+  __interrupt__?: {
+    value: string;
+  }[];
+};
+*/
+//export default 
+function SumInterruptForm_() {
   const [threadId] = useState(() => crypto.randomUUID());
 
   const [question, setQuestion] = useState("");
