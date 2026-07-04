@@ -131,7 +131,52 @@ export const SumState = Annotation.Root({
   }),
 });
 
+
+
 function createStepNode(stepNumber: number) {
+  return (state: typeof SumState.State) => {
+    // reset valid ngay khi vào node mới
+    state.valid = false;
+
+    const question =
+      state.pendingQuestion ??
+      `Step ${stepNumber}: Enter a number (or 'stop')`;
+
+    const payload = interrupt(question);
+
+    const answer =
+      typeof payload === "object" && payload !== null
+        ? payload.value
+        : payload;
+
+    if (
+      typeof answer === "string" &&
+      answer.trim().toLowerCase() === "stop"
+    ) {
+      return {
+        stopped: true,
+        valid: false,
+      };
+    }
+
+    const parsed = Number(answer);
+
+    if (Number.isNaN(parsed)) {
+      return {
+        pendingQuestion: `'${answer}' is invalid. Enter a number.`,
+        valid: false,
+      };
+    }
+
+    return {
+      sum: state.sum + parsed,
+      pendingQuestion: null,
+      valid: true,
+    };
+  };
+}
+
+function createStepNode_(stepNumber: number) {
   return (state: typeof SumState.State) => {
     const question =
       state.pendingQuestion ??
