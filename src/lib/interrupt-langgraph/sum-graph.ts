@@ -126,7 +126,7 @@ export const SumState = Annotation.Root({
   }),
 
   valid: Annotation<boolean>({
-    reducer: (left, right) => right ?? left,
+    reducer: (_, right) => right,
     default: () => false,
   }),
 });
