@@ -25,9 +25,11 @@ export const model = new ChatGoogleGenerativeAI({
   apiKey: process.env.GOOGLE_GEMINI_KEY_API_LANGCHAIN!,
   temperature: 0,
   thinkingConfig: {
-    thinkingBudget: 5000, // <--- ĐÂY LÀ CHÌA KHÓA TIẾT KIỆM TOKEN
+    thinkingBudget: 2048, // <--- ĐÂY LÀ CHÌA KHÓA TIẾT KIỆM TOKEN
   },
 });
-
+// 256 512 1024 2048 3072
+// Các con số trên được lựa chọn dựa trên phần cứng
+// để tối ưu tính toán và hiệu suất sử dụng phần cứng.
 
 
