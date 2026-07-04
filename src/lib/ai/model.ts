@@ -5,4 +5,15 @@ export const model = new ChatGoogleGenerativeAI({
   //apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
   apiKey: process.env.GOOGLE_GEMINI_KEY_API_LANGCHAIN!,
 });
-//Gemini 3.1 Flash Lite
+
+//gemini-2.5-flash
+//-> 
+
+//gemini-3.5-flash
+//-> 
+
+//gemini-3.1-flash-lite
+//-> 
+
+//gemma-4-31b-it
+//-> Trả kết quà kém
