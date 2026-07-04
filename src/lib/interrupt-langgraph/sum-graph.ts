@@ -111,22 +111,22 @@ export { Command };
 
 export const SumState = Annotation.Root({
   sum: Annotation<number>({
-    reducer: (_, right) => right,
+    reducer: (left, right) => right ?? left,
     default: () => 0,
   }),
 
   pendingQuestion: Annotation<string | null>({
-    reducer: (_, right) => right,
+    reducer: (left, right) => right ?? left,
     default: () => null,
   }),
 
   stopped: Annotation<boolean>({
-    reducer: (_, right) => right,
+    reducer: (left, right) => right ?? left,
     default: () => false,
   }),
 
   valid: Annotation<boolean>({
-    reducer: (_, right) => right,
+    reducer: (left, right) => right ?? left,
     default: () => false,
   }),
 });
