@@ -23,7 +23,15 @@ export async function POST(req: NextRequest) {
       );
     } else {
       // Start graph
-      result = await graph.invoke({}, config);
+      result = await graph.invoke(
+        {
+          sum: 0,
+          currentStep: 1,
+          pendingQuestion: null,
+          stopped: false,
+        },
+        config
+      );
     }
 
     console.log("Graph result:", result);
