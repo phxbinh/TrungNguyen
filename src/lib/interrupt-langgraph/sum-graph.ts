@@ -190,12 +190,27 @@ const builder = new StateGraph(SumState)
   if (state.valid) return "step3";
   return "step2";
 })
-
+/*
 .addConditionalEdges("step3", (state) => {
   if (state.stopped) return END;
   if (state.valid) return END;
   return "step3";
 });
+*/
+  .addConditionalEdges("step3", (state) => {
+    if (state.stopped) {
+      return END;
+    }
+  
+    // valid thì end
+    if (state.pendingQuestion === null) {
+      return END;
+    }
+  
+    // invalid thì retry step3
+    return "step3";
+  });
+
 /*
   .addConditionalEdges("step1", (state) => {
     if (state.stopped) return END;
