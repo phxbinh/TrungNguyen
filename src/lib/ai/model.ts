@@ -25,7 +25,7 @@ export const model = new ChatGoogleGenerativeAI({
   apiKey: process.env.GOOGLE_GEMINI_KEY_API_LANGCHAIN!,
   temperature: 0,
   thinkingConfig: {
-    thinkingBudget: 0, // <--- ĐÂY LÀ CHÌA KHÓA TIẾT KIỆM TOKEN
+    thinkingBudget: 5000, // <--- ĐÂY LÀ CHÌA KHÓA TIẾT KIỆM TOKEN
   },
 });
 
