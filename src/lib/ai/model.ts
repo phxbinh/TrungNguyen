@@ -13,10 +13,11 @@ export const model_ = new ChatGoogleGenerativeAI({
 //-> 
 
 //gemini-3.1-flash-lite
-//-> 
+//-> Cài đặt thinkBudget: 2048 -> Cho kết quả chính xác hơn so với
+// thinkBudget: 0 và gemini-2.5-flash, gemini-3.5-flash
 
 //gemma-4-31b-it
-//-> Trả kết quà kém
+//-> Trả kết quà có cấu trúc khác với các model Gemini
 
 
 export const model = new ChatGoogleGenerativeAI({
