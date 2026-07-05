@@ -1,80 +1,41 @@
 import { NextResponse } from 'next/server';
-import { EconomicEvent, NewsSource } from './forex';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  // Mặc định lấy nguồn từ Forex Factory và xem lịch theo Tuần (week) hoặc Hôm nay (today)
-  const source = (searchParams.get('source') as NewsSource) || 'forexfactory';
-  const timeframe = searchParams.get('timeframe') || 'week'; // 'today' hoặc 'week'
+  const source = searchParams.get('source') || 'forex-factory'; // Theo docs mới: 'forex-factory', 'mql5', hoặc 'fxstreet'
+  const timeframe = searchParams.get('timeframe') || 'today';   // 'today' hoặc 'week'
 
   const apiKey = process.env.JBLANKED_API_KEY;
 
   if (!apiKey) {
-    return NextResponse.json({ error: 'API key is missing' }, { status: 500 });
+    return NextResponse.json({ error: 'Chưa cấu hình JBLANKED_API_KEY trong file .env.local' }, { status: 500 });
   }
 
   try {
-    // Endpoint chuẩn của JBlanked: https://api.jblanked.com/v1/news
-/*
-    const response = await fetch(
-      `https://api.jblanked.com/v1/news?source=${source}&timeframe=${timeframe}`,
-      {
-        method: 'GET',
-        headers: {
-          'x-api-key': apiKey, // Truyền key qua header theo tài liệu của JBlanked
-          'Content-Type': 'application/json',
-        },
-        next: { revalidate: 900 } // Cache dữ liệu trong 15 phút để tối ưu hiệu năng (Core Web Vitals)
-      }
-    );
-*/
-// Thay vì endpoint chung, hãy thử endpoint tường minh này:
-/*
-const response = await fetch(
-  `https://api.jblanked.com/v1/forexfactory/today`, // Gọi trực tiếp nguồn/timeframe trên URL
-  {
-    method: 'GET',
-    headers: {
-      'x-api-key': apiKey,
-      'Content-Type': 'application/json',
-    },
-  }
-);
-*/
+    // 1. Cấu hình đúng URL chuẩn từ tài liệu JBlanked
+    const url = `https://www.jblanked.com/news/api/${source}/calendar/${timeframe}/`;
 
-
-// ❌ ENDPOINT CŨ BỊ LỖI ENOTFOUND:
-// const response = await fetch(`https://api.jblanked.com/v1/news?source=${source}...`);
-
-//  ENDPOINT MỚI (Sử dụng trực tiếp sub-domain lịch của họ):
-const baseUrl = "https://news.jblanked.com"; // Hoặc endpoint dự phòng: https://jblanked.com/api/news
-
-// Tùy biến URL theo timeframe (today hoặc week)
-const response = await fetch(
-  `${baseUrl}/forexfactory/today`, 
-  {
-    method: 'GET',
-    headers: {
-      'x-api-key': apiKey,
-      'Content-Type': 'application/json',
-    },
-    next: { revalidate: 900 } // Giữ nguyên cache 15 phút
-  }
-);
-
-
-
-
-
+    // 2. Gọi fetch với Header Authorization theo đúng chuẩn "Api-Key ..." của hệ thống mới
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Api-Key ${apiKey}`, 
+      },
+      next: { revalidate: 900 } // Cache 15 phút tránh tốn request
+    });
 
     if (!response.ok) {
-      throw new Error(`JBlanked API responded with status: ${response.status}`);
+      // Nếu API trả lỗi (Ví dụ: 401 do sai Key), đọc text lỗi gửi về Client
+      const errText = await response.text();
+      return NextResponse.json({ error: `JBlanked API Error (${response.status}): ${errText}` }, { status: response.status });
     }
 
-    const data: EconomicEvent[] = await response.json();
+    const data = await response.json();
     return NextResponse.json(data);
-  } catch (error) {
+
+  } catch (error: any) {
     console.error('Fetch forex news error:', error);
-    return NextResponse.json({ error: 'Failed to fetch forex news' }, { status: 500 });
+    return NextResponse.json({ error: `Server Fetch Failed: ${error.message}` }, { status: 500 });
   }
 }
