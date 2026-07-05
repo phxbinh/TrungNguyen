@@ -13,8 +13,11 @@ export default function ForexCalendar() {
       try {
         setErrorLog(null);
         // source truyền vào khớp với định dạng url mới của JBlanked: forex-factory
-        const res = await fetch('/api/forex-new?source=forex-factory&timeframe=today');
-        
+        //const res = await fetch('/api/forex-new?source=forex-factory&timeframe=today');
+       
+//  Đổi thành (lấy tin cả tuần):
+const res = await fetch('/api/forex-new?source=forex-factory&timeframe=week');
+
         if (!res.ok) {
           const errData = await res.json();
           throw new Error(errData.error || `HTTP Error! Status: ${res.status}`);
