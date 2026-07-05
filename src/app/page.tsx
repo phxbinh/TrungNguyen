@@ -5,6 +5,15 @@ import React from 'react';
 
 const routes = [
   {
+    href: '/tools-finnhub',
+    title: 'Phân tích gold usd/asd',
+    summary:
+      `Phân tích giá
+- 🔸lib: src/lib/tools-finnhub/...
+- 🔸path: /tools-finnhub`,
+    status: 'test',
+  },
+  {
     href: '/interrupt-langgraph',
     title: '__interrupt__',
     summary:
