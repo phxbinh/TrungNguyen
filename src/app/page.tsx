@@ -7,6 +7,15 @@ import React from 'react';
 
 const routes = [
   {
+    href: '/alpha-vantage',
+    title: 'Ⓜ️Phân tích tin tức alpha-vantage',
+    summary:
+      `Phân tích tin tức
+- 🔹api: api/alpha-vantage/route.ts
+- 🔹path: /alpha-vantage`,
+    status: 'test',
+  },
+  {
     href: '/forex-new',
     title: '🚼Phân tích tin tức JBlanked',
     summary:
