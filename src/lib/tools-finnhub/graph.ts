@@ -1,8 +1,8 @@
 // lib/tools-finnhub/graph.ts
 import { StateGraph, Annotation, END, START } from "@langchain/langgraph";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
-import { fetchForexNews, filterNewsBySymbol, type NewsItem } from "@/lib/tools/finnhub";
-import { AnalysisOutputSchema, type AnalysisOutput } from "@/lib/agent/schema";
+import { fetchForexNews, filterNewsBySymbol, type NewsItem } from "./finnhub";
+import { AnalysisOutputSchema, type AnalysisOutput } from "./schema";
 
 const GraphState = Annotation.Root({
   symbol: Annotation<string>(),
