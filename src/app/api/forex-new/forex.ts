@@ -1,12 +1,18 @@
 export interface EconomicEvent {
-  title: string;
-  country: string; // Ví dụ: "USD", "EUR"
-  date: string;    // ISO string hoặc định dạng ngày từ API
-  time: string;    // Giờ diễn ra tin tức
-  impact: 'High' | 'Medium' | 'Low' | 'Holiday';
-  forecast: string;
-  previous: string;
-  actual: string;
+  Name: string;       // Tên sự kiện (Ví dụ: Non-Farm Employment Change)
+  Currency: string;   // Đồng tiền ảnh hưởng (USD, EUR...)
+  Impact: 'High' | 'Medium' | 'Low' | 'None';
+  Date: string;       // Ngày giờ diễn ra tin tức
+  Actual?: string | number;
+  Forecast?: string | number;
+  Previous?: string | number;
+  
+  // Các trường bổ sung nếu bạn cần dùng sau này
+  time?: string;      
+  title?: string;
+  country?: string;
+  impact?: string;
+  forecast?: string;
+  previous?: string;
+  actual?: string;
 }
-
-export type NewsSource = 'forexfactory' | 'mql5' | 'fxstreet';
