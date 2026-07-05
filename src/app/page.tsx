@@ -7,17 +7,26 @@ import React from 'react';
 
 const routes = [
   {
-    href: '/economic-calendar',
-    title: 'Phân tích tin tức',
+    href: '/forex-new',
+    title: '🚼Phân tích tin tức JBlanked',
     summary:
-      `Phân tích giá tin tức
+      `Phân tích tin tức
+- 🔹api: api/forex-new/route.ts
+- 🔹path: /forex-new`,
+    status: 'test',
+  },
+  {
+    href: '/economic-calendar',
+    title: '🚺Phân tích tin tức',
+    summary:
+      `Phân tích tin tức
 - 🔸api: api/fxstreet/calendar/route.ts
 - 🔸path: /economic-calendar`,
     status: 'test',
   },
   {
     href: '/tools-finnhub',
-    title: 'Phân tích gold usd/asd',
+    title: '💠Phân tích gold usd/asd',
     summary:
       `Phân tích giá
 - 🔸lib: src/lib/tools-finnhub/...
