@@ -15,6 +15,7 @@ export async function GET(request: Request) {
 
   try {
     // Endpoint chuẩn của JBlanked: https://api.jblanked.com/v1/news
+/*
     const response = await fetch(
       `https://api.jblanked.com/v1/news?source=${source}&timeframe=${timeframe}`,
       {
@@ -26,6 +27,21 @@ export async function GET(request: Request) {
         next: { revalidate: 900 } // Cache dữ liệu trong 15 phút để tối ưu hiệu năng (Core Web Vitals)
       }
     );
+*/
+// Thay vì endpoint chung, hãy thử endpoint tường minh này:
+const response = await fetch(
+  `https://api.jblanked.com/v1/forexfactory/today`, // Gọi trực tiếp nguồn/timeframe trên URL
+  {
+    method: 'GET',
+    headers: {
+      'x-api-key': apiKey,
+      'Content-Type': 'application/json',
+    },
+  }
+);
+
+
+
 
     if (!response.ok) {
       throw new Error(`JBlanked API responded with status: ${response.status}`);
