@@ -6,7 +6,7 @@ import { EconomicEvent } from '../api/forex-new/forex';
 export default function ForexCalendar() {
   const [events, setEvents] = useState<EconomicEvent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
+/*
   useEffect(() => {
     async function fetchNews() {
       try {
@@ -23,6 +23,37 @@ export default function ForexCalendar() {
     }
     fetchNews();
   }, []);
+*/
+// Sửa lại đoạn useEffect trong Component của bạn
+useEffect(() => {
+  async function fetchNews() {
+    try {
+      const res = await fetch('/api/forex-new?source=forexfactory&timeframe=today');
+      const rawData = await res.json();
+      
+      console.log("Dữ liệu thực tế từ API:", rawData); // <--- Bật F12 lên xem dòng này trả về cái gì
+
+      // Nếu API trả về dạng { data: [...] } hoặc { news: [...] }
+      if (Array.isArray(rawData)) {
+        setEvents(rawData);
+      } else if (rawData.data && Array.isArray(rawData.data)) {
+        setEvents(rawData.data);
+      } else if (rawData.news && Array.isArray(rawData.news)) {
+        setEvents(rawData.news);
+      } else {
+        console.error("Cấu trúc data không đúng dạng Array mong muốn", rawData);
+      }
+    } catch (err) {
+      console.error("Lỗi fetch:", err);
+    } finally {
+      setLoading(false);
+    }
+  }
+  fetchNews();
+}, []);
+
+
+
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
