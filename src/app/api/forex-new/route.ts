@@ -29,6 +29,7 @@ export async function GET(request: Request) {
     );
 */
 // Thay vì endpoint chung, hãy thử endpoint tường minh này:
+/*
 const response = await fetch(
   `https://api.jblanked.com/v1/forexfactory/today`, // Gọi trực tiếp nguồn/timeframe trên URL
   {
@@ -39,6 +40,29 @@ const response = await fetch(
     },
   }
 );
+*/
+
+
+// ❌ ENDPOINT CŨ BỊ LỖI ENOTFOUND:
+// const response = await fetch(`https://api.jblanked.com/v1/news?source=${source}...`);
+
+//  ENDPOINT MỚI (Sử dụng trực tiếp sub-domain lịch của họ):
+const baseUrl = "https://news.jblanked.com"; // Hoặc endpoint dự phòng: https://jblanked.com/api/news
+
+// Tùy biến URL theo timeframe (today hoặc week)
+const response = await fetch(
+  `${baseUrl}/forexfactory/today`, 
+  {
+    method: 'GET',
+    headers: {
+      'x-api-key': apiKey,
+      'Content-Type': 'application/json',
+    },
+    next: { revalidate: 900 } // Giữ nguyên cache 15 phút
+  }
+);
+
+
 
 
 
