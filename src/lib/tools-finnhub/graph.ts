@@ -140,9 +140,9 @@ async function synthesisNode(state: typeof GraphState.State) {
   if (state.error) return {};
 
   const model = new ChatGoogleGenerativeAI({
-    model: "gemini-2.0-flash", // dùng model ổn định, tránh tên model không tồn tại
-    temperature: 0.2,
-    apiKey: process.env.GOOGLE_API_KEY,
+    model: "gemini-3.1-flash-lite",
+    temperature: 1.0,
+    apiKey: process.env.GOOGLE_GEMINI_KEY_API_LANGCHAIN!,
   });
 
   const structuredModel = model.withStructuredOutput(AnalysisOutputSchema);
