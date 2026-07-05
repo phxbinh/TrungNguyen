@@ -21,7 +21,8 @@ const url = `https://www.alphavantage.co/query?function=MARKET_NEWS&tickers=FORE
 
     const response = await fetch(url, {
       method: 'GET',
-      next: { revalidate: 900 } // Cache 15 phút bảo vệ rate limit
+      cache: 'no-store'
+      //next: { revalidate: 900 } // Cache 15 phút bảo vệ rate limit
     });
 
     if (!response.ok) {
