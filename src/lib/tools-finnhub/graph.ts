@@ -139,11 +139,28 @@ async function fetchNewsNode(state: typeof GraphState.State) {
 async function synthesisNode(state: typeof GraphState.State) {
   if (state.error) return {};
 
+/*
   const model = new ChatGoogleGenerativeAI({
     model: "gemini-3.1-flash-lite",
     temperature: 1.0,
     apiKey: process.env.GOOGLE_GEMINI_KEY_API_LANGCHAIN!,
   });
+*/
+  const model = new ChatGoogleGenerativeAI({
+    // aistudio.google.com -> project: Gemini Langchain Langgraph 2
+    model: "gemini-3.1-flash-lite",
+    //apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
+    apiKey: process.env.GOOGLE_GEMINI_KEY_API_LANGCHAIN!,
+    temperature: 0,
+    thinkingConfig: {
+      thinkingBudget: 1024, // <--- ĐÂY LÀ CHÌA KHÓA TIẾT KIỆM TOKEN
+    },
+  });
+  
+
+
+
+
 
   const structuredModel = model.withStructuredOutput(AnalysisOutputSchema);
 
