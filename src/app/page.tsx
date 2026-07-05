@@ -3,7 +3,18 @@
 import Link from 'next/link';
 import React from 'react';
 
+// src/app/economic-calendar
+
 const routes = [
+  {
+    href: '/economic-calendar',
+    title: 'Phân tích tin tức',
+    summary:
+      `Phân tích giá tin tức
+- 🔸api: api/fxstreet/calendar/route.ts
+- 🔸path: /economic-calendar`,
+    status: 'test',
+  },
   {
     href: '/tools-finnhub',
     title: 'Phân tích gold usd/asd',
