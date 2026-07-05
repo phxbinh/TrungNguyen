@@ -62,7 +62,7 @@ Rules:
 3. productQuery: only product-related part
 4. docsQuery: only docs/policy/guide/instruction-related part
 
-Examples:
+Examples 1:
 
 Input:
 "Tìm iPhone 16, hướng dẫn giặt áo sợi tre và quần jean"
@@ -71,6 +71,16 @@ Output:
 {
   "productQuery": "iPhone 16",
   "docsQuery": "hướng dẫn giặt áo sợi tre, quần jean"
+}
+
+Examples 2:
+Input:
+"Tìm AirPods pro 2 chi tiết iPhone 16 pro hướng dẫn giặt áo sợi tre và quần jean"
+Output:
+{
+  "productQuery": "AirPods pro 2, iPhone 16 pro",
+  "docsQuery": "hướng dẫn giặt áo sợi tre, quần jean"
+
 }
 
 `);
