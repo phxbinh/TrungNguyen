@@ -102,7 +102,7 @@ export async function runAnalysis(symbol: string) {
 import { StateGraph, Annotation, END, START } from "@langchain/langgraph";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { fetchForexNews, filterNewsBySymbol, type NewsItem } from "./finnhub";
-import { AnalysisOutputSchema, DISCLAIMER_TEXT, type FullAnalysis } from "./schema";
+import { AnalysisOutputSchema, DISCLAIMER_TEXT, type FullAnalysis, type AnalysisOutput } from "./schema";
 
 const GraphState = Annotation.Root({
   symbol: Annotation<string>(),
