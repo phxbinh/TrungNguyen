@@ -9,7 +9,15 @@ export async function GET() {
 
   try {
     // Endpoint lấy tin tức thị trường tài chính chuyên sâu về Forex/Vĩ mô
-    const url = `https://www.alphavantage.co/query?function=MARKET_NEWS&topics=forex,economy_macro&apikey=${apiKey}`;
+    //const url = `https://www.alphavantage.co/query?function=MARKET_NEWS&topics=forex,economy_macro&apikey=${apiKey}`;
+
+// ❌ Dòng cũ của bạn (bị rỗng data):
+// const url = `https://www.alphavantage.co/query?function=MARKET_NEWS&topics=forex,economy_macro&apikey=${apiKey}`;
+
+//  Dòng mới thay thế (Mở rộng phạm vi lấy tin để CHẮC CHẮN luôn có data):
+const url = `https://www.alphavantage.co/query?function=MARKET_NEWS&tickers=FOREX&apikey=${apiKey}`;
+
+
 
     const response = await fetch(url, {
       method: 'GET',
