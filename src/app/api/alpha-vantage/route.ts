@@ -17,8 +17,6 @@ export async function GET() {
 //  Dòng mới thay thế (Mở rộng phạm vi lấy tin để CHẮC CHẮN luôn có data):
 const url = `https://www.alphavantage.co/query?function=MARKET_NEWS&tickers=FOREX&apikey=${apiKey}`;
 
-
-
     const response = await fetch(url, {
       method: 'GET',
       cache: 'no-store'
