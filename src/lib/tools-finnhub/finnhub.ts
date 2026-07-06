@@ -123,6 +123,12 @@ export async function fetchForexNews(): Promise<NewsItem[]> {
   }
 
   const raw = await res.json();
+
+// DEBUG: in toàn bộ raw response để xem thực tế Finnhub trả về gì
+  console.log(`[RAW FINNHUB] Tổng số item: ${Array.isArray(raw) ? raw.length : "không phải array"}`);
+  console.log(`[RAW FINNHUB] Full data:`, JSON.stringify(raw, null, 2));
+
+
   const parsed = z.array(NewsItemSchema).safeParse(raw);
 
   if (!parsed.success) {
