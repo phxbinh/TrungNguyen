@@ -21,7 +21,13 @@ export async function GET() {
     // Lấy thêm giá vàng hiện tại để hiển thị lên UI
     let xauPrice = { bid: 0, ask: 0 };
     try {
-      const price = await connection.getSymbolPrice('XAUUSD');
+      //const price = await connection.getSymbolPrice('XAUUSD');
+// Sửa dòng cũ:
+//const price = await connection.getSymbolPrice('XAUUSD');
+
+// Thành dòng mới:
+const price = await connection.getSymbolPrice('XAUUSD', false);
+
       xauPrice = { bid: price.bid, ask: price.ask };
     } catch (e) {
       console.log('Chưa sub được giá vàng');
