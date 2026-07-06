@@ -1,5 +1,5 @@
 // lib/tools-finnhub/finnhub.ts
-/*
+//*
 import { z } from "zod";
 
 const FINNHUB_BASE_URL = "https://finnhub.io/api/v1";
@@ -80,10 +80,11 @@ export function filterNewsBySymbol(news: NewsItem[], symbol: string): NewsItem[]
     return keywords.some((kw) => text.includes(kw));
   });
 }
-*/
+//*/
 
 
 // lib/tools-finnhub/finnhub.ts
+/*
 import { z } from "zod";
 
 const FINNHUB_BASE_URL = "https://finnhub.io/api/v1";
@@ -195,7 +196,7 @@ export function filterNewsBySymbol(news: NewsItem[], symbol: string): NewsItem[]
   });
 }
 
-
+*/
 
 
 
