@@ -7,6 +7,15 @@ import React from 'react';
 
 const routes = [
   {
+    href: '/gnews',
+    title: 'Ⓜ️Phân tích tin tức GNEW',
+    summary:
+      `Phân tích tin tức
+- 🔹api: api/gnews/route.ts
+- 🔹path: /gnews`,
+    status: 'test',
+  },
+  {
     href: '/alpha-vantage',
     title: 'Ⓜ️Phân tích tin tức alpha-vantage',
     summary:
