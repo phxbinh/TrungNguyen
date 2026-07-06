@@ -73,6 +73,25 @@ function getKeywordsForSymbol(symbol: string): string[] {
 }
 
 export function filterNewsBySymbol(news: NewsItem[], symbol: string): NewsItem[] {
+  const kw = getKeywordsForSymbol(symbol);
+
+  const result = news.filter((item) => {
+    const text = (item.headline + " " + item.summary).toLowerCase();
+    const matched = isRelevant(text, kw);
+    
+    // DEBUG LOG - xóa sau khi xong
+    console.log(`[FILTER] "${item.headline.slice(0, 60)}..." -> ${matched ? "MATCH" : "skip"}`);
+    
+    return matched;
+  });
+
+  console.log(`[FILTER SUMMARY] ${symbol}: ${result.length}/${news.length} tin khớp`);
+  return result;
+}
+
+
+/*
+export function filterNewsBySymbol(news: NewsItem[], symbol: string): NewsItem[] {
   const keywords = getKeywordsForSymbol(symbol);
 
   return news.filter((item) => {
@@ -80,6 +99,10 @@ export function filterNewsBySymbol(news: NewsItem[], symbol: string): NewsItem[]
     return keywords.some((kw) => text.includes(kw));
   });
 }
+*/
+
+
+
 //*/
 
 
