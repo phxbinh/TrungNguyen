@@ -1,10 +1,11 @@
 // app/api/fxstreet/calendar/route.ts
 
+
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-interface EconomicEvent {
+interface EconomicEvent_ {
   time: string;
   currency: string;
   event: string;
@@ -15,7 +16,7 @@ interface EconomicEvent {
   link?: string;
 }
 
-export async function GET(request: NextRequest) {
+export async function GET_(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const date = searchParams.get('date') || new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
@@ -30,7 +31,7 @@ export async function GET(request: NextRequest) {
     });
 
     const $ = cheerio.load(data);
-    const events: EconomicEvent[] = [];
+    const events: EconomicEvent_[] = [];
 
     // Các selector chính (có thể cần update theo thời gian)
     $('tr.economic-calendar__row, .calendar__row, tbody tr').each((_, el) => {
@@ -87,8 +88,8 @@ export async function GET(request: NextRequest) {
 
 
 
-/*
-import { NextRequest, NextResponse } from 'next/server';
+
+//import { NextRequest, NextResponse } from 'next/server';
 import puppeteer from 'puppeteer';
 
 interface EconomicEvent {
@@ -178,7 +179,7 @@ export async function GET() {
   }
 }
 
-*/
+//*/
 
 
 
