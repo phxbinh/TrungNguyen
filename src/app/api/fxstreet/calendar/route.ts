@@ -113,7 +113,7 @@ export async function GET() {
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
 
-    await page.goto('https://www.fxstreet.com/economic-calendar', {
+    await page.goto('https://www.fxstreet-vn.com/economic-calendar', {
       waitUntil: 'networkidle2',
       timeout: 30000,
     });
