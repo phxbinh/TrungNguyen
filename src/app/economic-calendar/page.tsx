@@ -165,7 +165,7 @@ export default function EconomicCalendar() {
   );
 }
 
-
+/*
 export function EconomicCalendar_() {
   return (
     <div className="flex flex-col items-center py-8">
@@ -198,4 +198,45 @@ export function EconomicCalendar_() {
     </div>
   );
 }
+*/
+
+
+
+export function EconomicCalendar_() {
+  return (
+    <div className="flex flex-col items-center py-8 px-4 w-full">
+      {/* Wrapper để khống chế chiều rộng tối đa và căn giữa iframe */}
+      <div className="w-full max-w-[650px] overflow-x-auto">
+        <iframe
+          src="https://sslecal2.investing.com?columns=exc_flags,exc_currency,exc_importance,exc_actual,exc_forecast,exc_previous&features=datepicker,timezone&countries=25,32,6,37,72,22,17,39,14,10,35,43,56,36,110,11,26,12,4,5&calType=week&timeZone=8&lang=1"
+          height={467}
+          className="w-full"
+          style={{ 
+            backgroundColor: "transparent", 
+            border: "none",
+            minWidth: "600px" // Đảm bảo bảng dữ liệu không bị bóp quá hẹp trên mobile
+          }}
+          title="Investing Economic Calendar"
+        />
+      </div>
+
+      <div className="mt-2 text-center text-xs text-gray-600 font-sans">
+        Real Time Economic Calendar provided by{" "}
+        <a
+          href="https://www.investing.com/"
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          className="font-bold text-blue-700 hover:underline"
+        >
+          Investing.com
+        </a>
+        .
+      </div>
+    </div>
+  );
+}
+
+
+
+
 
