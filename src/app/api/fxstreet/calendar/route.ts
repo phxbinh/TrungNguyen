@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-interface EconomicEvent_ {
+interface EconomicEvent {
   time: string;
   currency: string;
   event: string;
@@ -16,7 +16,7 @@ interface EconomicEvent_ {
   link?: string;
 }
 
-export async function GET_(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const date = searchParams.get('date') || new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
@@ -31,7 +31,7 @@ export async function GET_(request: NextRequest) {
     });
 
     const $ = cheerio.load(data);
-    const events: EconomicEvent_[] = [];
+    const events: EconomicEvent[] = [];
 
     // Các selector chính (có thể cần update theo thời gian)
     $('tr.economic-calendar__row, .calendar__row, tbody tr').each((_, el) => {
@@ -88,7 +88,7 @@ export async function GET_(request: NextRequest) {
 
 
 
-
+/*
 //import { NextRequest, NextResponse } from 'next/server';
 import puppeteer from 'puppeteer';
 
