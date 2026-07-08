@@ -166,7 +166,7 @@ export default function EconomicCalendar() {
 }
 
 
-export default function EconomicCalendar_() {
+export function EconomicCalendar_() {
   return (
     <div className="flex flex-col items-center py-8">
       <iframe
