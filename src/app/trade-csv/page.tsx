@@ -115,6 +115,7 @@ function parseMtDate(value: string): Date {
 */
 
 
+/*
 "use client";
 
 import { useState } from "react";
@@ -238,4 +239,125 @@ export default function Page() {
     </div>
   );
 }
+*/
+
+
+"use client";
+
+import { useState } from "react";
+
+interface Candle {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+export default function Page() {
+  const [rows, setRows] = useState<Candle[]>([]);
+  const [reading, setReading] = useState(false);
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setRows([]);
+    setReading(true);
+
+    const reader = file
+      .stream()
+      .pipeThrough(new TextDecoderStream())
+      .getReader();
+
+    let buffer = "";
+    const preview: Candle[] = [];
+    let firstLine = true;
+
+    while (true) {
+      const { value, done } = await reader.read();
+
+      if (done) break;
+
+      buffer += value;
+
+      const lines = buffer.split(/\r?\n/);
+
+      buffer = lines.pop() ?? "";
+
+      for (const line of lines) {
+        if (!line.trim()) continue;
+
+        // bỏ header
+        if (firstLine) {
+          firstLine = false;
+          continue;
+        }
+
+        const cols = line.split(",");
+
+        if (cols.length !== 6) continue;
+
+        preview.push({
+          date: cols[0],
+          open: Number(cols[1]),
+          high: Number(cols[2]),
+          low: Number(cols[3]),
+          close: Number(cols[4]),
+          volume: Number(cols[5]),
+        });
+
+        if (preview.length >= 50) {
+          await reader.cancel();
+          setRows(preview);
+          setReading(false);
+          return;
+        }
+      }
+    }
+
+    setRows(preview);
+    setReading(false);
+  }
+
+  return (
+    <div style={{ padding: 20 }}>
+      <input
+        type="file"
+        accept=".csv"
+        onChange={handleFile}
+      />
+
+      <p>{reading ? "Reading..." : "Done"}</p>
+
+      <table border={1} cellPadding={5}>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i}>
+              <td>{r.date}</td>
+              <td>{r.open}</td>
+              <td>{r.high}</td>
+              <td>{r.low}</td>
+              <td>{r.close}</td>
+              <td>{r.volume}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 
