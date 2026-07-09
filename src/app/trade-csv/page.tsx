@@ -330,7 +330,7 @@ export default function Page() {
       />
 
       <p>{reading ? "Reading..." : "Done"}</p>
-
+{/*
       <table border={1} cellPadding={5}>
         <thead>
           <tr>
@@ -356,6 +356,39 @@ export default function Page() {
           ))}
         </tbody>
       </table>
+*/}
+
+<div className="mt-5 overflow-x-auto">
+  <table className="w-full border-collapse border border-gray-300">
+    <thead>
+      <tr className="bg-gray-100">
+        <th className="border border-gray-300 p-2">Date</th>
+        <th className="border border-gray-300 p-2">Open</th>
+        <th className="border border-gray-300 p-2">High</th>
+        <th className="border border-gray-300 p-2">Low</th>
+        <th className="border border-gray-300 p-2">Close</th>
+        <th className="border border-gray-300 p-2">Volume</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {rows.map((row, index) => (
+        <tr key={index}>
+          <td className="border border-gray-300 p-2">{row.date}</td>
+          <td className="border border-gray-300 p-2">{row.open}</td>
+          <td className="border border-gray-300 p-2">{row.high}</td>
+          <td className="border border-gray-300 p-2">{row.low}</td>
+          <td className="border border-gray-300 p-2">{row.close}</td>
+          <td className="border border-gray-300 p-2">{row.volume}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+
+
+
     </div>
   );
 }
