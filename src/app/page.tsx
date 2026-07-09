@@ -7,6 +7,14 @@ import React from 'react';
 
 const routes = [
   {
+    href: '/trade-csv',
+    title: '️Đọc file csv',
+    summary:
+      `Đọc file csv
+- 🔹path: /trade-csv`,
+    status: 'test',
+  },
+  {
     href: '/gnews',
     title: 'Ⓜ️Phân tích tin tức GNEW',
     summary:
