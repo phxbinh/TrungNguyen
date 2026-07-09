@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Papa from "papaparse";
 
 export interface Candle {
   date: Date;
@@ -18,47 +19,68 @@ interface CsvReaderProps {
 export default function CsvReader({
   onLoaded,
 }: CsvReaderProps) {
-  const [data, setData] = useState<Candle[]>([]);
+  const [count, setCount] = useState(0);
+  const [preview, setPreview] = useState<Candle[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleFile = async (
+  const handleFile = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const text = await file.text();
+    setLoading(true);
+    setCount(0);
+    setPreview([]);
 
-    const lines = text
-      .split(/\r?\n/)
-      .filter((line) => line.trim().length > 0);
+    const candles: Candle[] = [];
+    let total = 0;
 
-    if (lines.length < 2) return;
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      worker: true,
 
-    // Bỏ header
-    const rows = lines.slice(1);
+      step: (result) => {
+        const row = result.data as Record<string, string>;
 
-    const candles: Candle[] = rows.map((row) => {
-      const [
-        date,
-        open,
-        high,
-        low,
-        close,
-        volume,
-      ] = row.split(",");
+        const candle: Candle = {
+          date: parseMtDate(row.Date),
+          open: Number(row.Open),
+          high: Number(row.High),
+          low: Number(row.Low),
+          close: Number(row.Close),
+          volume: Number(row.Volume),
+        };
 
-      return {
-        date: parseMtDate(date),
-        open: Number(open),
-        high: Number(high),
-        low: Number(low),
-        close: Number(close),
-        volume: Number(volume),
-      };
+        total++;
+
+        // Chỉ giữ 5 dòng đầu để preview
+        if (preview.length < 5) {
+          candles.push(candle);
+        }
+
+        // Cập nhật UI mỗi 10.000 dòng
+        if (total % 10000 === 0) {
+          setCount(total);
+        }
+      },
+
+      complete: () => {
+        setPreview(candles);
+        setCount(total);
+        setLoading(false);
+
+        // Chỉ trả preview.
+        // Nếu muốn trả toàn bộ dữ liệu thì xem lưu ý bên dưới.
+        onLoaded?.(candles);
+      },
+
+      error: (err) => {
+        console.error(err);
+        setLoading(false);
+      },
     });
-
-    setData(candles);
-    onLoaded?.(candles);
   };
 
   return (
@@ -69,21 +91,35 @@ export default function CsvReader({
         onChange={handleFile}
       />
 
-      <p>Loaded: {data.length} candles</p>
+      <p>
+        {loading
+          ? `Processing ${count.toLocaleString()} rows...`
+          : `Processed ${count.toLocaleString()} rows`}
+      </p>
 
-      <pre>
-        {JSON.stringify(data.slice(0, 5), null, 2)}
-      </pre>
+      <pre>{JSON.stringify(preview, null, 2)}</pre>
     </div>
   );
 }
 
 function parseMtDate(value: string): Date {
-  // 2004.06.11 07:18
   const [d, t] = value.trim().split(" ");
 
-  const [year, month, day] = d.split(".").map(Number);
-  const [hour, minute] = t.split(":").map(Number);
+  // Hỗ trợ cả 2004.06.11 và 2004-06-11
+  const parts = d.includes(".")
+    ? d.split(".")
+    : d.split("-");
 
-  return new Date(year, month - 1, day, hour, minute);
+  const [year, month, day] = parts.map(Number);
+
+  const [hour, minute, second = "0"] = t.split(":");
+
+  return new Date(
+    year,
+    month - 1,
+    day,
+    Number(hour),
+    Number(minute),
+    Number(second)
+  );
 }
