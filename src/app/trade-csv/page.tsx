@@ -1,3 +1,5 @@
+
+/*
 "use client";
 
 import React, { useState } from "react";
@@ -110,3 +112,130 @@ function parseMtDate(value: string): Date {
     Number(s)
   );
 }
+*/
+
+
+"use client";
+
+import { useState } from "react";
+import Papa from "papaparse";
+
+export interface Candle {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+export default function Page() {
+  const [rows, setRows] = useState<Candle[]>([]);
+  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const handleFile = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setRows([]);
+    setCount(0);
+    setLoading(true);
+
+    const preview: Candle[] = [];
+    let total = 0;
+
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      worker: true,
+      dynamicTyping: true,
+
+      step({ data }) {
+        const row = data as any;
+
+        total++;
+
+        if (preview.length < 50) {
+          preview.push({
+            date: row.Date,
+            open: row.Open,
+            high: row.High,
+            low: row.Low,
+            close: row.Close,
+            volume: row.Volume,
+          });
+        }
+
+        if (total % 10000 === 0) {
+          setCount(total);
+        }
+      },
+
+      complete() {
+        setRows(preview);
+        setCount(total);
+        setLoading(false);
+      },
+
+      error(err) {
+        console.error(err);
+        setLoading(false);
+      },
+    });
+  };
+
+  return (
+    <div style={{ padding: 20 }}>
+      <h2>CSV Reader</h2>
+
+      <input
+        type="file"
+        accept=".csv"
+        onChange={handleFile}
+      />
+
+      <p>
+        {loading
+          ? `Reading... ${count.toLocaleString()} rows`
+          : `Finished: ${count.toLocaleString()} rows`}
+      </p>
+
+      <table
+        border={1}
+        cellPadding={6}
+        style={{
+          borderCollapse: "collapse",
+          width: "100%",
+        }}
+      >
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={index}>
+              <td>{row.date}</td>
+              <td>{row.open}</td>
+              <td>{row.high}</td>
+              <td>{row.low}</td>
+              <td>{row.close}</td>
+              <td>{row.volume}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
