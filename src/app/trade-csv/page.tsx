@@ -31,6 +31,7 @@ export default function Page() {
     let buffer = "";
     const preview: Candle[] = [];
     let firstLine = true;
+    let delimiter = "";
 
     while (true) {
       const { value, done } = await reader.read();
@@ -56,7 +57,6 @@ export default function Page() {
         const cols = line.split(",");
 */
 
-
   // Tự động phát hiện dấu phân cách từ dòng header đầu tiên
   if (firstLine) {
     if (line.includes(";")) {
@@ -70,7 +70,6 @@ export default function Page() {
 
   // Sử dụng delimiter đã tìm được
   const cols = line.split(delimiter);
-
 
         if (cols.length !== 6) continue;
 
