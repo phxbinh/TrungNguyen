@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState } from "react";
@@ -47,6 +46,7 @@ export default function Page() {
       for (const line of lines) {
         if (!line.trim()) continue;
 
+/*
         // bỏ header
         if (firstLine) {
           firstLine = false;
@@ -54,6 +54,23 @@ export default function Page() {
         }
 
         const cols = line.split(",");
+*/
+
+
+  // Tự động phát hiện dấu phân cách từ dòng header đầu tiên
+  if (firstLine) {
+    if (line.includes(";")) {
+      delimiter = ";";
+    } else {
+      delimiter = ",";
+    }
+    firstLine = false;
+    continue; // Bỏ qua dòng header
+  }
+
+  // Sử dụng delimiter đã tìm được
+  const cols = line.split(delimiter);
+
 
         if (cols.length !== 6) continue;
 
